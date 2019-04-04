@@ -1463,8 +1463,8 @@ SMD power inductor</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
-<class number="1" name="Diff" width="0.254" drill="0">
-<clearance class="1" value="0.0508"/>
+<class number="1" name="Diff" width="1.27" drill="0">
+<clearance class="1" value="0.381"/>
 </class>
 </classes>
 <parts>
@@ -2426,12 +2426,11 @@ SMD power inductor</description>
 <wire x1="157.48" y1="35.56" x2="185.42" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="CLOCK" class="0">
+<net name="N$6" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="CLOCK"/>
 <pinref part="U$2" gate="G$1" pin="OUTPUT"/>
 <wire x1="10.16" y1="27.94" x2="-53.34" y2="27.94" width="0.1524" layer="91"/>
-<label x="-53.34" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TDC_LPBK" class="0">
@@ -2467,7 +2466,7 @@ SMD power inductor</description>
 <pinref part="L1" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="RXL_P" class="1">
+<net name="RXL_P" class="0">
 <segment>
 <pinref part="SFP_DOWNSTREAM" gate="G$1" pin="RD+"/>
 <wire x1="30.48" y1="276.86" x2="35.56" y2="276.86" width="0.1524" layer="91"/>
@@ -2477,7 +2476,7 @@ SMD power inductor</description>
 <label x="40.64" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXL_N" class="1">
+<net name="RXL_N" class="0">
 <segment>
 <pinref part="SFP_DOWNSTREAM" gate="G$1" pin="RD-"/>
 <wire x1="30.48" y1="271.78" x2="33.02" y2="271.78" width="0.1524" layer="91"/>
@@ -2487,7 +2486,7 @@ SMD power inductor</description>
 <label x="40.64" y="152.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXL_N" class="1">
+<net name="TXL_N" class="0">
 <segment>
 <pinref part="SFP_DOWNSTREAM" gate="G$1" pin="TD-"/>
 <wire x1="30.48" y1="307.34" x2="43.18" y2="307.34" width="0.1524" layer="91"/>
@@ -2507,7 +2506,7 @@ SMD power inductor</description>
 <label x="45.72" y="208.28" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXD_P" class="1">
+<net name="RXD_P" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="DI+"/>
 <wire x1="144.78" y1="198.12" x2="215.9" y2="198.12" width="0.1524" layer="91"/>
@@ -2517,7 +2516,7 @@ SMD power inductor</description>
 <label x="185.42" y="198.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXD_N" class="1">
+<net name="RXD_N" class="0">
 <segment>
 <pinref part="U3" gate="G$1" pin="DI-"/>
 <wire x1="144.78" y1="195.58" x2="213.36" y2="195.58" width="0.1524" layer="91"/>
@@ -2527,7 +2526,7 @@ SMD power inductor</description>
 <label x="185.42" y="195.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXD_P" class="1">
+<net name="TXD_P" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="DO+"/>
 <wire x1="144.78" y1="154.94" x2="220.98" y2="154.94" width="0.1524" layer="91"/>
@@ -2537,7 +2536,7 @@ SMD power inductor</description>
 <label x="190.5" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXD_N" class="1">
+<net name="TXD_N" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="DO-"/>
 <wire x1="144.78" y1="152.4" x2="223.52" y2="152.4" width="0.1524" layer="91"/>

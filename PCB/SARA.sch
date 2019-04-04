@@ -1463,7 +1463,8 @@ SMD power inductor</description>
 <classes>
 <class number="0" name="default" width="0" drill="0">
 </class>
-<class number="1" name="Diff" width="1.27" drill="0">
+<class number="1" name="Diff" width="0.254" drill="0">
+<clearance class="1" value="0.0508"/>
 </class>
 </classes>
 <parts>
@@ -1515,8 +1516,8 @@ SMD power inductor</description>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="SUPPLY22" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="U$3" library="zSFP+" deviceset="ZSFP+" device=""/>
-<part name="U$4" library="zSFP+" deviceset="ZSFP+" device=""/>
+<part name="SFP_DOWNSTREAM" library="zSFP+" deviceset="ZSFP+" device=""/>
+<part name="SFP_UPSTREAM" library="zSFP+" deviceset="ZSFP+" device=""/>
 <part name="SUPPLY23" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY24" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY25" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
@@ -1599,8 +1600,8 @@ SMD power inductor</description>
 <attribute name="NAME" x="48.26" y="43.815" size="1.524" layer="95"/>
 <attribute name="VALUE" x="48.26" y="41.021" size="1.524" layer="96"/>
 </instance>
-<instance part="SUPPLY2" gate="GND" x="5.08" y="17.78" smashed="yes">
-<attribute name="VALUE" x="3.175" y="14.605" size="1.778" layer="96"/>
+<instance part="SUPPLY2" gate="GND" x="5.08" y="20.32" smashed="yes" rot="R270">
+<attribute name="VALUE" x="1.905" y="22.225" size="1.778" layer="96" rot="R270"/>
 </instance>
 <instance part="U$2" gate="G$1" x="-68.58" y="12.7" smashed="yes">
 <attribute name="VALUE" x="-73.66" y="17.78" size="1.778" layer="96"/>
@@ -1701,29 +1702,29 @@ SMD power inductor</description>
 <instance part="+3V6" gate="G$1" x="157.48" y="68.58" smashed="yes">
 <attribute name="VALUE" x="154.94" y="63.5" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY1" gate="GND" x="60.96" y="279.4" smashed="yes">
-<attribute name="VALUE" x="59.055" y="276.225" size="1.778" layer="96"/>
+<instance part="SUPPLY1" gate="GND" x="33.02" y="281.94" smashed="yes" rot="R90">
+<attribute name="VALUE" x="36.195" y="280.035" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY5" gate="GND" x="60.96" y="264.16" smashed="yes">
-<attribute name="VALUE" x="59.055" y="260.985" size="1.778" layer="96"/>
+<instance part="SUPPLY5" gate="GND" x="53.34" y="266.7" smashed="yes" rot="R90">
+<attribute name="VALUE" x="56.515" y="264.795" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY14" gate="GND" x="60.96" y="309.88" smashed="yes">
-<attribute name="VALUE" x="59.055" y="306.705" size="1.778" layer="96"/>
+<instance part="SUPPLY14" gate="GND" x="33.02" y="312.42" smashed="yes" rot="R90">
+<attribute name="VALUE" x="36.195" y="310.515" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY15" gate="GND" x="-40.64" y="309.88" smashed="yes">
-<attribute name="VALUE" x="-42.545" y="306.705" size="1.778" layer="96"/>
+<instance part="SUPPLY15" gate="GND" x="-15.24" y="312.42" smashed="yes" rot="R270">
+<attribute name="VALUE" x="-17.145" y="314.325" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY16" gate="GND" x="-40.64" y="264.16" smashed="yes">
-<attribute name="VALUE" x="-42.545" y="260.985" size="1.778" layer="96"/>
+<instance part="SUPPLY16" gate="GND" x="-17.78" y="266.7" smashed="yes" rot="R270">
+<attribute name="VALUE" x="-19.685" y="268.605" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY17" gate="GND" x="231.14" y="279.4" smashed="yes">
-<attribute name="VALUE" x="229.235" y="276.225" size="1.778" layer="96"/>
+<instance part="SUPPLY17" gate="GND" x="205.74" y="281.94" smashed="yes" rot="R90">
+<attribute name="VALUE" x="208.915" y="280.035" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY18" gate="GND" x="231.14" y="264.16" smashed="yes">
-<attribute name="VALUE" x="229.235" y="260.985" size="1.778" layer="96"/>
+<instance part="SUPPLY18" gate="GND" x="205.74" y="266.7" smashed="yes" rot="R90">
+<attribute name="VALUE" x="208.915" y="264.795" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY19" gate="GND" x="231.14" y="309.88" smashed="yes">
-<attribute name="VALUE" x="229.235" y="306.705" size="1.778" layer="96"/>
+<instance part="SUPPLY19" gate="GND" x="205.74" y="312.42" smashed="yes" rot="R90">
+<attribute name="VALUE" x="208.915" y="310.515" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="SUPPLY20" gate="GND" x="129.54" y="309.88" smashed="yes">
 <attribute name="VALUE" x="127.635" y="306.705" size="1.778" layer="96"/>
@@ -1742,19 +1743,19 @@ SMD power inductor</description>
 <instance part="SUPPLY22" gate="GND" x="-142.24" y="162.56" smashed="yes">
 <attribute name="VALUE" x="-144.145" y="159.385" size="1.778" layer="96"/>
 </instance>
-<instance part="U$3" gate="G$1" x="7.62" y="289.56" smashed="yes"/>
-<instance part="U$4" gate="G$1" x="177.8" y="289.56" smashed="yes"/>
-<instance part="SUPPLY23" gate="GND" x="63.5" y="294.64" smashed="yes">
-<attribute name="VALUE" x="61.595" y="291.465" size="1.778" layer="96"/>
+<instance part="SFP_DOWNSTREAM" gate="G$1" x="7.62" y="289.56" smashed="yes"/>
+<instance part="SFP_UPSTREAM" gate="G$1" x="177.8" y="289.56" smashed="yes"/>
+<instance part="SUPPLY23" gate="GND" x="33.02" y="297.18" smashed="yes" rot="R90">
+<attribute name="VALUE" x="36.195" y="295.275" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY24" gate="GND" x="236.22" y="294.64" smashed="yes">
-<attribute name="VALUE" x="234.315" y="291.465" size="1.778" layer="96"/>
+<instance part="SUPPLY24" gate="GND" x="205.74" y="297.18" smashed="yes" rot="R90">
+<attribute name="VALUE" x="208.915" y="295.275" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="SUPPLY25" gate="GND" x="63.5" y="45.72" smashed="yes">
 <attribute name="VALUE" x="61.595" y="42.545" size="1.778" layer="96"/>
 </instance>
-<instance part="SUPPLY26" gate="GND" x="50.8" y="40.64" smashed="yes">
-<attribute name="VALUE" x="48.895" y="37.465" size="1.778" layer="96"/>
+<instance part="SUPPLY26" gate="GND" x="53.34" y="43.18" smashed="yes" rot="R90">
+<attribute name="VALUE" x="56.515" y="41.275" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="JP6" gate="G$1" x="132.08" y="38.1" smashed="yes" rot="R180">
 <attribute name="NAME" x="138.43" y="34.925" size="1.778" layer="95" rot="R180"/>
@@ -1848,8 +1849,8 @@ SMD power inductor</description>
 <instance part="SUPPLY31" gate="GND" x="160.02" y="157.48" smashed="yes">
 <attribute name="VALUE" x="158.115" y="154.305" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V18" gate="G$1" x="-81.28" y="314.96" smashed="yes">
-<attribute name="VALUE" x="-83.82" y="309.88" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V18" gate="G$1" x="-81.28" y="317.5" smashed="yes">
+<attribute name="VALUE" x="-83.82" y="312.42" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="C10" gate="G$1" x="-81.28" y="304.8" smashed="yes" rot="R90">
 <attribute name="NAME" x="-81.915" y="307.34" size="1.524" layer="95" rot="R90"/>
@@ -1858,8 +1859,8 @@ SMD power inductor</description>
 <instance part="SUPPLY32" gate="GND" x="-81.28" y="299.72" smashed="yes">
 <attribute name="VALUE" x="-83.185" y="296.545" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V16" gate="G$1" x="-66.04" y="284.48" smashed="yes">
-<attribute name="VALUE" x="-68.58" y="279.4" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V16" gate="G$1" x="-66.04" y="289.56" smashed="yes">
+<attribute name="VALUE" x="-68.58" y="284.48" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="C11" gate="G$1" x="-66.04" y="274.32" smashed="yes" rot="R90">
 <attribute name="NAME" x="-66.675" y="276.86" size="1.524" layer="95" rot="R90"/>
@@ -1868,25 +1869,25 @@ SMD power inductor</description>
 <instance part="SUPPLY33" gate="GND" x="-66.04" y="269.24" smashed="yes">
 <attribute name="VALUE" x="-67.945" y="266.065" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V14" gate="G$1" x="68.58" y="312.42" smashed="yes">
-<attribute name="VALUE" x="66.04" y="307.34" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V14" gate="G$1" x="58.42" y="312.42" smashed="yes">
+<attribute name="VALUE" x="55.88" y="307.34" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C12" gate="G$1" x="68.58" y="302.26" smashed="yes" rot="R90">
-<attribute name="NAME" x="67.945" y="304.8" size="1.524" layer="95" rot="R90"/>
-<attribute name="VALUE" x="70.739" y="304.8" size="1.524" layer="96" rot="R90"/>
+<instance part="C12" gate="G$1" x="58.42" y="302.26" smashed="yes" rot="R90">
+<attribute name="NAME" x="57.785" y="304.8" size="1.524" layer="95" rot="R90"/>
+<attribute name="VALUE" x="60.579" y="304.8" size="1.524" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY34" gate="GND" x="68.58" y="297.18" smashed="yes">
-<attribute name="VALUE" x="66.675" y="294.005" size="1.778" layer="96"/>
+<instance part="SUPPLY34" gate="GND" x="58.42" y="297.18" smashed="yes">
+<attribute name="VALUE" x="56.515" y="294.005" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V19" gate="G$1" x="76.2" y="297.18" smashed="yes">
-<attribute name="VALUE" x="73.66" y="292.1" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V19" gate="G$1" x="66.04" y="297.18" smashed="yes">
+<attribute name="VALUE" x="63.5" y="292.1" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C13" gate="G$1" x="76.2" y="287.02" smashed="yes" rot="R90">
-<attribute name="NAME" x="75.565" y="289.56" size="1.524" layer="95" rot="R90"/>
-<attribute name="VALUE" x="78.359" y="289.56" size="1.524" layer="96" rot="R90"/>
+<instance part="C13" gate="G$1" x="66.04" y="284.48" smashed="yes" rot="R90">
+<attribute name="NAME" x="65.405" y="287.02" size="1.524" layer="95" rot="R90"/>
+<attribute name="VALUE" x="68.199" y="287.02" size="1.524" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY35" gate="GND" x="76.2" y="281.94" smashed="yes">
-<attribute name="VALUE" x="74.295" y="278.765" size="1.778" layer="96"/>
+<instance part="SUPPLY35" gate="GND" x="66.04" y="279.4" smashed="yes">
+<attribute name="VALUE" x="64.135" y="276.225" size="1.778" layer="96"/>
 </instance>
 <instance part="+3V20" gate="G$1" x="106.68" y="325.12" smashed="yes">
 <attribute name="VALUE" x="104.14" y="320.04" size="1.778" layer="96" rot="R90"/>
@@ -1908,25 +1909,25 @@ SMD power inductor</description>
 <instance part="SUPPLY37" gate="GND" x="109.22" y="269.24" smashed="yes">
 <attribute name="VALUE" x="107.315" y="266.065" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V22" gate="G$1" x="261.62" y="307.34" smashed="yes">
-<attribute name="VALUE" x="259.08" y="302.26" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V22" gate="G$1" x="248.92" y="307.34" smashed="yes">
+<attribute name="VALUE" x="246.38" y="302.26" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C16" gate="G$1" x="261.62" y="297.18" smashed="yes" rot="R90">
-<attribute name="NAME" x="260.985" y="299.72" size="1.524" layer="95" rot="R90"/>
-<attribute name="VALUE" x="263.779" y="299.72" size="1.524" layer="96" rot="R90"/>
+<instance part="C16" gate="G$1" x="248.92" y="297.18" smashed="yes" rot="R90">
+<attribute name="NAME" x="248.285" y="299.72" size="1.524" layer="95" rot="R90"/>
+<attribute name="VALUE" x="251.079" y="299.72" size="1.524" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY38" gate="GND" x="261.62" y="292.1" smashed="yes">
-<attribute name="VALUE" x="259.715" y="288.925" size="1.778" layer="96"/>
+<instance part="SUPPLY38" gate="GND" x="248.92" y="292.1" smashed="yes">
+<attribute name="VALUE" x="247.015" y="288.925" size="1.778" layer="96"/>
 </instance>
-<instance part="+3V23" gate="G$1" x="248.92" y="292.1" smashed="yes">
-<attribute name="VALUE" x="246.38" y="287.02" size="1.778" layer="96" rot="R90"/>
+<instance part="+3V23" gate="G$1" x="236.22" y="292.1" smashed="yes">
+<attribute name="VALUE" x="233.68" y="287.02" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C17" gate="G$1" x="248.92" y="281.94" smashed="yes" rot="R90">
-<attribute name="NAME" x="248.285" y="284.48" size="1.524" layer="95" rot="R90"/>
-<attribute name="VALUE" x="251.079" y="284.48" size="1.524" layer="96" rot="R90"/>
+<instance part="C17" gate="G$1" x="236.22" y="281.94" smashed="yes" rot="R90">
+<attribute name="NAME" x="235.585" y="284.48" size="1.524" layer="95" rot="R90"/>
+<attribute name="VALUE" x="238.379" y="284.48" size="1.524" layer="96" rot="R90"/>
 </instance>
-<instance part="SUPPLY39" gate="GND" x="248.92" y="276.86" smashed="yes">
-<attribute name="VALUE" x="247.015" y="273.685" size="1.778" layer="96"/>
+<instance part="SUPPLY39" gate="GND" x="236.22" y="276.86" smashed="yes">
+<attribute name="VALUE" x="234.315" y="273.685" size="1.778" layer="96"/>
 </instance>
 <instance part="L1" gate="G$1" x="-111.76" y="193.04" smashed="yes">
 <attribute name="NAME" x="-115.57" y="194.818" size="1.778" layer="95"/>
@@ -1941,6 +1942,7 @@ SMD power inductor</description>
 <pinref part="+3V7" gate="G$1" pin="+3V3"/>
 <pinref part="U5" gate="G$1" pin="VOUT"/>
 <wire x1="-17.78" y1="193.04" x2="-30.48" y2="193.04" width="0.1524" layer="91"/>
+<label x="-33.02" y="195.58" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="+3V8" gate="G$1" pin="+3V3"/>
@@ -1970,6 +1972,7 @@ SMD power inductor</description>
 <wire x1="53.34" y1="45.72" x2="53.34" y2="55.88" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="55.88" x2="63.5" y2="55.88" width="0.1524" layer="91"/>
 <junction x="63.5" y="55.88"/>
+<label x="50.8" y="55.88" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U2" gate="G$1" pin="VCC"/>
@@ -1986,6 +1989,7 @@ SMD power inductor</description>
 <junction x="20.32" y="160.02"/>
 <pinref part="U4" gate="G$1" pin="VCC"/>
 <wire x1="50.8" y1="160.02" x2="20.32" y2="160.02" width="0.1524" layer="91"/>
+<label x="40.64" y="160.02" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="160.02" y1="208.28" x2="160.02" y2="213.36" width="0.1524" layer="91"/>
@@ -1995,6 +1999,96 @@ SMD power inductor</description>
 <wire x1="144.78" y1="203.2" x2="144.78" y2="208.28" width="0.1524" layer="91"/>
 <wire x1="144.78" y1="208.28" x2="160.02" y2="208.28" width="0.1524" layer="91"/>
 <junction x="160.02" y="208.28"/>
+<label x="147.32" y="208.28" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="248.92" y1="299.72" x2="248.92" y2="304.8" width="0.1524" layer="91"/>
+<pinref part="+3V22" gate="G$1" pin="+3V3"/>
+<pinref part="C16" gate="G$1" pin="2"/>
+<wire x1="228.6" y1="292.1" x2="200.66" y2="292.1" width="0.1524" layer="91"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="VCCT"/>
+<wire x1="228.6" y1="292.1" x2="228.6" y2="299.72" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="299.72" x2="248.92" y2="299.72" width="0.1524" layer="91"/>
+<junction x="248.92" y="299.72"/>
+<label x="231.14" y="299.72" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="236.22" y1="284.48" x2="236.22" y2="287.02" width="0.1524" layer="91"/>
+<pinref part="+3V23" gate="G$1" pin="+3V3"/>
+<pinref part="C17" gate="G$1" pin="2"/>
+<wire x1="236.22" y1="287.02" x2="236.22" y2="289.56" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="287.02" x2="200.66" y2="287.02" width="0.1524" layer="91"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="VCCR"/>
+<junction x="236.22" y="287.02"/>
+<label x="226.06" y="287.02" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="106.68" y1="317.5" x2="106.68" y2="322.58" width="0.1524" layer="91"/>
+<pinref part="+3V20" gate="G$1" pin="+3V3"/>
+<pinref part="C14" gate="G$1" pin="2"/>
+<pinref part="R7" gate="G$1" pin="1"/>
+<wire x1="137.16" y1="307.34" x2="119.38" y2="307.34" width="0.1524" layer="91"/>
+<wire x1="119.38" y1="307.34" x2="119.38" y2="317.5" width="0.1524" layer="91"/>
+<wire x1="119.38" y1="317.5" x2="106.68" y2="317.5" width="0.1524" layer="91"/>
+<junction x="106.68" y="317.5"/>
+<label x="114.3" y="317.5" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="109.22" y1="276.86" x2="109.22" y2="281.94" width="0.1524" layer="91"/>
+<pinref part="+3V21" gate="G$1" pin="+3V3"/>
+<pinref part="C15" gate="G$1" pin="2"/>
+<pinref part="R4" gate="G$1" pin="1"/>
+<wire x1="137.16" y1="276.86" x2="109.22" y2="276.86" width="0.1524" layer="91"/>
+<junction x="109.22" y="276.86"/>
+<label x="129.54" y="276.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="58.42" y1="304.8" x2="58.42" y2="309.88" width="0.1524" layer="91"/>
+<pinref part="+3V14" gate="G$1" pin="+3V3"/>
+<pinref part="C12" gate="G$1" pin="2"/>
+<wire x1="50.8" y1="292.1" x2="30.48" y2="292.1" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="VCCT"/>
+<wire x1="50.8" y1="292.1" x2="50.8" y2="304.8" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="304.8" x2="58.42" y2="304.8" width="0.1524" layer="91"/>
+<junction x="58.42" y="304.8"/>
+<label x="48.26" y="304.8" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="66.04" y1="287.02" x2="66.04" y2="294.64" width="0.1524" layer="91"/>
+<pinref part="+3V19" gate="G$1" pin="+3V3"/>
+<pinref part="C13" gate="G$1" pin="2"/>
+<wire x1="66.04" y1="287.02" x2="30.48" y2="287.02" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="VCCR"/>
+<junction x="66.04" y="287.02"/>
+<label x="50.8" y="287.02" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="-81.28" y1="307.34" x2="-81.28" y2="314.96" width="0.1524" layer="91"/>
+<pinref part="+3V18" gate="G$1" pin="+3V3"/>
+<pinref part="C10" gate="G$1" pin="2"/>
+<pinref part="R6" gate="G$1" pin="1"/>
+<wire x1="-33.02" y1="307.34" x2="-81.28" y2="307.34" width="0.1524" layer="91"/>
+<junction x="-81.28" y="307.34"/>
+<label x="-63.5" y="307.34" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="-66.04" y1="276.86" x2="-66.04" y2="287.02" width="0.1524" layer="91"/>
+<pinref part="+3V16" gate="G$1" pin="+3V3"/>
+<pinref part="C11" gate="G$1" pin="2"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+<wire x1="-33.02" y1="276.86" x2="-66.04" y2="276.86" width="0.1524" layer="91"/>
+<junction x="-66.04" y="276.86"/>
+<label x="-55.88" y="276.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="160.02" y1="165.1" x2="160.02" y2="170.18" width="0.1524" layer="91"/>
+<pinref part="+3V10" gate="G$1" pin="+3V3"/>
+<pinref part="C9" gate="G$1" pin="2"/>
+<pinref part="U1" gate="G$1" pin="VCC"/>
+<wire x1="160.02" y1="165.1" x2="144.78" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="165.1" x2="144.78" y2="160.02" width="0.1524" layer="91"/>
+<junction x="160.02" y="165.1"/>
+<label x="144.78" y="165.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -2014,7 +2108,7 @@ SMD power inductor</description>
 <segment>
 <pinref part="SUPPLY2" gate="GND" pin="GND"/>
 <pinref part="U$1" gate="G$1" pin="GND"/>
-<wire x1="5.08" y1="20.32" x2="10.16" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="20.32" x2="10.16" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY4" gate="GND" pin="GND"/>
@@ -2081,48 +2175,45 @@ SMD power inductor</description>
 </segment>
 <segment>
 <pinref part="SUPPLY1" gate="GND" pin="GND"/>
-<wire x1="60.96" y1="281.94" x2="30.48" y2="281.94" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND_4"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_4"/>
 </segment>
 <segment>
 <pinref part="SUPPLY5" gate="GND" pin="GND"/>
-<wire x1="60.96" y1="266.7" x2="30.48" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND_3"/>
+<wire x1="50.8" y1="266.7" x2="30.48" y2="266.7" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_3"/>
 </segment>
 <segment>
 <pinref part="SUPPLY14" gate="GND" pin="GND"/>
-<wire x1="60.96" y1="312.42" x2="30.48" y2="312.42" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND_6"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_6"/>
 </segment>
 <segment>
 <pinref part="SUPPLY15" gate="GND" pin="GND"/>
-<wire x1="-40.64" y1="312.42" x2="-12.7" y2="312.42" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND_1"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_1"/>
 </segment>
 <segment>
 <pinref part="SUPPLY16" gate="GND" pin="GND"/>
-<wire x1="-40.64" y1="266.7" x2="-12.7" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="GND_2"/>
+<wire x1="-15.24" y1="266.7" x2="-12.7" y2="266.7" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_2"/>
 </segment>
 <segment>
 <pinref part="SUPPLY17" gate="GND" pin="GND"/>
-<wire x1="231.14" y1="281.94" x2="200.66" y2="281.94" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="GND_4"/>
+<wire x1="203.2" y1="281.94" x2="200.66" y2="281.94" width="0.1524" layer="91"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_4"/>
 </segment>
 <segment>
 <pinref part="SUPPLY18" gate="GND" pin="GND"/>
-<wire x1="231.14" y1="266.7" x2="200.66" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="GND_3"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_3"/>
+<wire x1="203.2" y1="266.7" x2="200.66" y2="266.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY19" gate="GND" pin="GND"/>
-<wire x1="231.14" y1="312.42" x2="200.66" y2="312.42" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="GND_6"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_6"/>
+<wire x1="203.2" y1="312.42" x2="200.66" y2="312.42" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY20" gate="GND" pin="GND"/>
 <wire x1="129.54" y1="312.42" x2="157.48" y2="312.42" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="GND_1"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_1"/>
 <junction x="157.48" y="312.42"/>
 </segment>
 <segment>
@@ -2131,13 +2222,12 @@ SMD power inductor</description>
 </segment>
 <segment>
 <pinref part="SUPPLY23" gate="GND" pin="GND"/>
-<pinref part="U$3" gate="G$1" pin="GND_5"/>
-<wire x1="63.5" y1="297.18" x2="30.48" y2="297.18" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_5"/>
 </segment>
 <segment>
 <pinref part="SUPPLY24" gate="GND" pin="GND"/>
-<pinref part="U$4" gate="G$1" pin="GND_5"/>
-<wire x1="236.22" y1="297.18" x2="200.66" y2="297.18" width="0.1524" layer="91"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_5"/>
+<wire x1="203.2" y1="297.18" x2="200.66" y2="297.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY25" gate="GND" pin="GND"/>
@@ -2266,7 +2356,7 @@ SMD power inductor</description>
 <pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="106.68" y1="50.8" x2="114.3" y2="50.8" width="0.1524" layer="91"/>
 <junction x="114.3" y="50.8"/>
-<pinref part="U$3" gate="G$1" pin="SDA"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="SDA"/>
 <wire x1="-12.7" y1="297.18" x2="-48.26" y2="297.18" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="297.18" x2="-48.26" y2="238.76" width="0.1524" layer="91"/>
 <wire x1="-48.26" y1="238.76" x2="-48.26" y2="213.36" width="0.1524" layer="91"/>
@@ -2279,7 +2369,7 @@ SMD power inductor</description>
 <wire x1="-48.26" y1="238.76" x2="116.84" y2="238.76" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="238.76" x2="116.84" y2="297.18" width="0.1524" layer="91"/>
 <junction x="-48.26" y="238.76"/>
-<pinref part="U$4" gate="G$1" pin="SDA"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="SDA"/>
 <wire x1="116.84" y1="297.18" x2="157.48" y2="297.18" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -2291,10 +2381,10 @@ SMD power inductor</description>
 <wire x1="99.06" y1="22.86" x2="99.06" y2="198.12" width="0.1524" layer="91"/>
 <pinref part="U3" gate="G$1" pin="DOUT"/>
 <wire x1="99.06" y1="198.12" x2="119.38" y2="198.12" width="0.1524" layer="91"/>
-<wire x1="99.06" y1="22.86" x2="99.06" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="99.06" y1="22.86" x2="99.06" y2="10.16" width="0.1524" layer="91"/>
 <junction x="99.06" y="22.86"/>
-<wire x1="99.06" y1="-10.16" x2="-7.62" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="-7.62" y1="-10.16" x2="-7.62" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="99.06" y1="10.16" x2="-7.62" y2="10.16" width="0.1524" layer="91"/>
+<wire x1="-7.62" y1="10.16" x2="-7.62" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="STOP"/>
 <wire x1="-7.62" y1="33.02" x2="10.16" y2="33.02" width="0.1524" layer="91"/>
 </segment>
@@ -2314,20 +2404,20 @@ SMD power inductor</description>
 <wire x1="205.74" y1="17.78" x2="193.04" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="JP5" gate="A" pin="18"/>
 <label x="198.12" y="17.78" size="1.778" layer="95"/>
-<wire x1="205.74" y1="17.78" x2="205.74" y2="0" width="0.1524" layer="91"/>
-<wire x1="205.74" y1="0" x2="66.04" y2="0" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="0" x2="66.04" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="205.74" y1="17.78" x2="205.74" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="205.74" y1="-2.54" x2="53.34" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="-2.54" x2="53.34" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="SCLK"/>
-<wire x1="66.04" y1="35.56" x2="43.18" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="35.56" x2="43.18" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SPI_MOSI" class="0">
 <segment>
 <pinref part="JP5" gate="A" pin="16"/>
 <label x="198.12" y="20.32" size="1.778" layer="95"/>
-<wire x1="193.04" y1="20.32" x2="215.9" y2="20.32" width="0.1524" layer="91"/>
-<wire x1="215.9" y1="20.32" x2="215.9" y2="-5.08" width="0.1524" layer="91"/>
-<wire x1="215.9" y1="-5.08" x2="50.8" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="193.04" y1="20.32" x2="208.28" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="20.32" x2="208.28" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="-5.08" x2="50.8" y2="-5.08" width="0.1524" layer="91"/>
 <wire x1="50.8" y1="-5.08" x2="50.8" y2="27.94" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="DIN"/>
 <wire x1="50.8" y1="27.94" x2="43.18" y2="27.94" width="0.1524" layer="91"/>
@@ -2343,11 +2433,11 @@ SMD power inductor</description>
 <wire x1="96.52" y1="5.08" x2="96.52" y2="154.94" width="0.1524" layer="91"/>
 <pinref part="U1" gate="G$1" pin="DIN"/>
 <wire x1="96.52" y1="154.94" x2="119.38" y2="154.94" width="0.1524" layer="91"/>
-<wire x1="96.52" y1="5.08" x2="-15.24" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="5.08" x2="-12.7" y2="5.08" width="0.1524" layer="91"/>
 <junction x="96.52" y="5.08"/>
 <pinref part="U$1" gate="G$1" pin="START"/>
-<wire x1="-15.24" y1="5.08" x2="-15.24" y2="35.56" width="0.1524" layer="91"/>
-<wire x1="-15.24" y1="35.56" x2="10.16" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="5.08" x2="-12.7" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="-12.7" y1="35.56" x2="10.16" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="I2C_SCL" class="0">
@@ -2367,14 +2457,14 @@ SMD power inductor</description>
 <wire x1="157.48" y1="48.26" x2="180.34" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="180.34" y1="48.26" x2="180.34" y2="254" width="0.1524" layer="91"/>
 <wire x1="180.34" y1="254" x2="124.46" y2="254" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="SCL"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="SCL"/>
 <wire x1="124.46" y1="254" x2="124.46" y2="292.1" width="0.1524" layer="91"/>
 <wire x1="124.46" y1="292.1" x2="157.48" y2="292.1" width="0.1524" layer="91"/>
-<wire x1="124.46" y1="254" x2="-55.88" y2="254" width="0.1524" layer="91"/>
-<wire x1="-55.88" y1="254" x2="-55.88" y2="292.1" width="0.1524" layer="91"/>
+<wire x1="124.46" y1="254" x2="-40.64" y2="254" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="254" x2="-40.64" y2="292.1" width="0.1524" layer="91"/>
 <junction x="124.46" y="254"/>
-<pinref part="U$3" gate="G$1" pin="SCL"/>
-<wire x1="-55.88" y1="292.1" x2="-12.7" y2="292.1" width="0.1524" layer="91"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="SCL"/>
+<wire x1="-40.64" y1="292.1" x2="-12.7" y2="292.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="TDC_TRIG" class="0">
@@ -2383,10 +2473,10 @@ SMD power inductor</description>
 <label x="198.12" y="27.94" size="1.778" layer="95"/>
 <wire x1="193.04" y1="27.94" x2="228.6" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="228.6" y1="27.94" x2="228.6" y2="-17.78" width="0.1524" layer="91"/>
-<wire x1="228.6" y1="-17.78" x2="0" y2="-17.78" width="0.1524" layer="91"/>
-<wire x1="0" y1="-17.78" x2="0" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="-17.78" x2="-15.24" y2="-17.78" width="0.1524" layer="91"/>
+<wire x1="-15.24" y1="-17.78" x2="-15.24" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="TRIGG"/>
-<wire x1="0" y1="40.64" x2="10.16" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="-15.24" y1="40.64" x2="10.16" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GPIO_SP4" class="0">
@@ -2429,11 +2519,12 @@ SMD power inductor</description>
 <wire x1="157.48" y1="35.56" x2="185.42" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="CLOCK" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="CLOCK"/>
 <pinref part="U$2" gate="G$1" pin="OUTPUT"/>
 <wire x1="10.16" y1="27.94" x2="-53.34" y2="27.94" width="0.1524" layer="91"/>
+<label x="-53.34" y="27.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="TDC_LPBK" class="0">
@@ -2449,7 +2540,7 @@ SMD power inductor</description>
 <segment>
 <pinref part="SUPPLY21" gate="GND" pin="GND"/>
 <wire x1="129.54" y1="266.7" x2="157.48" y2="266.7" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="GND_2"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="GND_2"/>
 <junction x="157.48" y="266.7"/>
 </segment>
 </net>
@@ -2469,9 +2560,9 @@ SMD power inductor</description>
 <pinref part="L1" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="RXL_P" class="0">
+<net name="RXL_P" class="1">
 <segment>
-<pinref part="U$3" gate="G$1" pin="RD+"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="RD+"/>
 <wire x1="30.48" y1="276.86" x2="35.56" y2="276.86" width="0.1524" layer="91"/>
 <wire x1="35.56" y1="276.86" x2="35.56" y2="154.94" width="0.1524" layer="91"/>
 <pinref part="U4" gate="G$1" pin="DI+"/>
@@ -2479,9 +2570,9 @@ SMD power inductor</description>
 <label x="40.64" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXL_N" class="0">
+<net name="RXL_N" class="1">
 <segment>
-<pinref part="U$3" gate="G$1" pin="RD-"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="RD-"/>
 <wire x1="30.48" y1="271.78" x2="33.02" y2="271.78" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="271.78" x2="33.02" y2="152.4" width="0.1524" layer="91"/>
 <pinref part="U4" gate="G$1" pin="DI-"/>
@@ -2489,9 +2580,9 @@ SMD power inductor</description>
 <label x="40.64" y="152.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXL_N" class="0">
+<net name="TXL_N" class="1">
 <segment>
-<pinref part="U$3" gate="G$1" pin="TD-"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="TD-"/>
 <wire x1="30.48" y1="307.34" x2="43.18" y2="307.34" width="0.1524" layer="91"/>
 <wire x1="43.18" y1="307.34" x2="43.18" y2="195.58" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="DO-"/>
@@ -2499,9 +2590,9 @@ SMD power inductor</description>
 <label x="43.18" y="210.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXL_P" class="0">
+<net name="TXL_P" class="1">
 <segment>
-<pinref part="U$3" gate="G$1" pin="TD+"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="TD+"/>
 <wire x1="30.48" y1="302.26" x2="45.72" y2="302.26" width="0.1524" layer="91"/>
 <wire x1="45.72" y1="302.26" x2="45.72" y2="198.12" width="0.1524" layer="91"/>
 <pinref part="U2" gate="G$1" pin="DO+"/>
@@ -2509,42 +2600,42 @@ SMD power inductor</description>
 <label x="45.72" y="208.28" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXD_P" class="0">
+<net name="RXD_P" class="1">
 <segment>
 <pinref part="U3" gate="G$1" pin="DI+"/>
 <wire x1="144.78" y1="198.12" x2="215.9" y2="198.12" width="0.1524" layer="91"/>
 <wire x1="215.9" y1="198.12" x2="215.9" y2="276.86" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="RD+"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="RD+"/>
 <wire x1="215.9" y1="276.86" x2="200.66" y2="276.86" width="0.1524" layer="91"/>
 <label x="185.42" y="198.12" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXD_N" class="0">
+<net name="RXD_N" class="1">
 <segment>
 <pinref part="U3" gate="G$1" pin="DI-"/>
-<wire x1="144.78" y1="195.58" x2="208.28" y2="195.58" width="0.1524" layer="91"/>
-<wire x1="208.28" y1="195.58" x2="208.28" y2="271.78" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="RD-"/>
-<wire x1="208.28" y1="271.78" x2="200.66" y2="271.78" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="195.58" x2="213.36" y2="195.58" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="195.58" x2="213.36" y2="271.78" width="0.1524" layer="91"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="RD-"/>
+<wire x1="213.36" y1="271.78" x2="200.66" y2="271.78" width="0.1524" layer="91"/>
 <label x="185.42" y="195.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXD_P" class="0">
+<net name="TXD_P" class="1">
 <segment>
 <pinref part="U1" gate="G$1" pin="DO+"/>
 <wire x1="144.78" y1="154.94" x2="220.98" y2="154.94" width="0.1524" layer="91"/>
 <wire x1="220.98" y1="154.94" x2="220.98" y2="302.26" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="TD+"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="TD+"/>
 <wire x1="220.98" y1="302.26" x2="200.66" y2="302.26" width="0.1524" layer="91"/>
 <label x="190.5" y="154.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXD_N" class="0">
+<net name="TXD_N" class="1">
 <segment>
 <pinref part="U1" gate="G$1" pin="DO-"/>
 <wire x1="144.78" y1="152.4" x2="223.52" y2="152.4" width="0.1524" layer="91"/>
 <wire x1="223.52" y1="152.4" x2="223.52" y2="307.34" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="TD-"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="TD-"/>
 <wire x1="223.52" y1="307.34" x2="200.66" y2="307.34" width="0.1524" layer="91"/>
 <label x="190.5" y="152.4" size="1.778" layer="95"/>
 </segment>
@@ -2560,7 +2651,7 @@ SMD power inductor</description>
 </net>
 <net name="N$1" class="0">
 <segment>
-<pinref part="U$4" gate="G$1" pin="RX_LOS"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="RX_LOS"/>
 <pinref part="R4" gate="G$1" pin="2"/>
 <wire x1="157.48" y1="276.86" x2="152.4" y2="276.86" width="0.1524" layer="91"/>
 </segment>
@@ -2569,27 +2660,27 @@ SMD power inductor</description>
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
 <wire x1="-12.7" y1="276.86" x2="-17.78" y2="276.86" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="RX_LOS"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="RX_LOS"/>
 </segment>
 </net>
 <net name="N$20" class="0">
 <segment>
 <pinref part="R6" gate="G$1" pin="2"/>
 <wire x1="-12.7" y1="307.34" x2="-17.78" y2="307.34" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="TX_FAULT"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="TX_FAULT"/>
 </segment>
 </net>
 <net name="N$21" class="0">
 <segment>
 <pinref part="R7" gate="G$1" pin="2"/>
 <wire x1="157.48" y1="307.34" x2="152.4" y2="307.34" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="TX_FAULT"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="TX_FAULT"/>
 </segment>
 </net>
 <net name="TX_DISABL_B" class="0">
 <segment>
 <pinref part="JP10" gate="G$1" pin="1"/>
-<pinref part="U$4" gate="G$1" pin="TX_DISABLE"/>
+<pinref part="SFP_UPSTREAM" gate="G$1" pin="TX_DISABLE"/>
 <wire x1="106.68" y1="302.26" x2="157.48" y2="302.26" width="0.1524" layer="91"/>
 <label x="121.92" y="302.26" size="1.778" layer="95"/>
 </segment>
@@ -2598,7 +2689,7 @@ SMD power inductor</description>
 <segment>
 <pinref part="JP11" gate="G$1" pin="1"/>
 <wire x1="-63.5" y1="302.26" x2="-12.7" y2="302.26" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="TX_DISABLE"/>
+<pinref part="SFP_DOWNSTREAM" gate="G$1" pin="TX_DISABLE"/>
 <label x="-50.8" y="302.26" size="1.778" layer="95"/>
 </segment>
 </net>
@@ -2611,92 +2702,6 @@ SMD power inductor</description>
 <wire x1="-121.92" y1="193.04" x2="-116.84" y2="193.04" width="0.1524" layer="91"/>
 <junction x="-121.92" y="193.04"/>
 <pinref part="L1" gate="G$1" pin="1"/>
-</segment>
-</net>
-<net name="+3V1" class="0">
-<segment>
-<wire x1="160.02" y1="165.1" x2="160.02" y2="170.18" width="0.1524" layer="91"/>
-<pinref part="+3V10" gate="G$1" pin="+3V3"/>
-<pinref part="C9" gate="G$1" pin="2"/>
-<pinref part="U1" gate="G$1" pin="VCC"/>
-<wire x1="160.02" y1="165.1" x2="144.78" y2="165.1" width="0.1524" layer="91"/>
-<wire x1="144.78" y1="165.1" x2="144.78" y2="160.02" width="0.1524" layer="91"/>
-<junction x="160.02" y="165.1"/>
-</segment>
-</net>
-<net name="+3V2" class="0">
-<segment>
-<wire x1="-81.28" y1="307.34" x2="-81.28" y2="312.42" width="0.1524" layer="91"/>
-<pinref part="+3V18" gate="G$1" pin="+3V3"/>
-<pinref part="C10" gate="G$1" pin="2"/>
-<pinref part="R6" gate="G$1" pin="1"/>
-<wire x1="-33.02" y1="307.34" x2="-81.28" y2="307.34" width="0.1524" layer="91"/>
-<junction x="-81.28" y="307.34"/>
-</segment>
-<segment>
-<wire x1="-66.04" y1="276.86" x2="-66.04" y2="281.94" width="0.1524" layer="91"/>
-<pinref part="+3V16" gate="G$1" pin="+3V3"/>
-<pinref part="C11" gate="G$1" pin="2"/>
-<pinref part="R5" gate="G$1" pin="1"/>
-<wire x1="-33.02" y1="276.86" x2="-66.04" y2="276.86" width="0.1524" layer="91"/>
-<junction x="-66.04" y="276.86"/>
-</segment>
-<segment>
-<wire x1="68.58" y1="304.8" x2="68.58" y2="309.88" width="0.1524" layer="91"/>
-<pinref part="+3V14" gate="G$1" pin="+3V3"/>
-<pinref part="C12" gate="G$1" pin="2"/>
-<wire x1="60.96" y1="292.1" x2="30.48" y2="292.1" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="VCCT"/>
-<wire x1="60.96" y1="292.1" x2="60.96" y2="304.8" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="304.8" x2="68.58" y2="304.8" width="0.1524" layer="91"/>
-<junction x="68.58" y="304.8"/>
-</segment>
-<segment>
-<wire x1="76.2" y1="289.56" x2="76.2" y2="294.64" width="0.1524" layer="91"/>
-<pinref part="+3V19" gate="G$1" pin="+3V3"/>
-<pinref part="C13" gate="G$1" pin="2"/>
-<wire x1="68.58" y1="287.02" x2="30.48" y2="287.02" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="VCCR"/>
-<wire x1="68.58" y1="287.02" x2="68.58" y2="289.56" width="0.1524" layer="91"/>
-<wire x1="68.58" y1="289.56" x2="76.2" y2="289.56" width="0.1524" layer="91"/>
-<junction x="76.2" y="289.56"/>
-</segment>
-<segment>
-<wire x1="106.68" y1="317.5" x2="106.68" y2="322.58" width="0.1524" layer="91"/>
-<pinref part="+3V20" gate="G$1" pin="+3V3"/>
-<pinref part="C14" gate="G$1" pin="2"/>
-<pinref part="R7" gate="G$1" pin="1"/>
-<wire x1="137.16" y1="307.34" x2="119.38" y2="307.34" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="307.34" x2="119.38" y2="317.5" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="317.5" x2="106.68" y2="317.5" width="0.1524" layer="91"/>
-<junction x="106.68" y="317.5"/>
-</segment>
-<segment>
-<wire x1="109.22" y1="276.86" x2="109.22" y2="281.94" width="0.1524" layer="91"/>
-<pinref part="+3V21" gate="G$1" pin="+3V3"/>
-<pinref part="C15" gate="G$1" pin="2"/>
-<pinref part="R4" gate="G$1" pin="1"/>
-<wire x1="137.16" y1="276.86" x2="109.22" y2="276.86" width="0.1524" layer="91"/>
-<junction x="109.22" y="276.86"/>
-</segment>
-<segment>
-<wire x1="261.62" y1="299.72" x2="261.62" y2="304.8" width="0.1524" layer="91"/>
-<pinref part="+3V22" gate="G$1" pin="+3V3"/>
-<pinref part="C16" gate="G$1" pin="2"/>
-<wire x1="243.84" y1="292.1" x2="200.66" y2="292.1" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="VCCT"/>
-<wire x1="243.84" y1="292.1" x2="243.84" y2="299.72" width="0.1524" layer="91"/>
-<wire x1="243.84" y1="299.72" x2="261.62" y2="299.72" width="0.1524" layer="91"/>
-<junction x="261.62" y="299.72"/>
-</segment>
-<segment>
-<wire x1="248.92" y1="284.48" x2="248.92" y2="287.02" width="0.1524" layer="91"/>
-<pinref part="+3V23" gate="G$1" pin="+3V3"/>
-<pinref part="C17" gate="G$1" pin="2"/>
-<wire x1="248.92" y1="287.02" x2="248.92" y2="289.56" width="0.1524" layer="91"/>
-<wire x1="248.92" y1="287.02" x2="200.66" y2="287.02" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="VCCR"/>
-<junction x="248.92" y="287.02"/>
 </segment>
 </net>
 </nets>
