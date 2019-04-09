@@ -89,7 +89,7 @@
 #include "string.h"
 
 bool connectedToWorkstation = false;
-int workstationIP[] = {192, 168, 0, 2};
+int workstationIP[] = {192, 168, 50, 7};
 
 static void client_close(struct tcp_pcb *pcb);
 static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err);
@@ -97,6 +97,7 @@ static err_t server_accept(void *arg, struct tcp_pcb *pcb, err_t err);
 static err_t server_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
 static err_t server_poll(void *arg, struct tcp_pcb *pcb);
 static err_t server_err(void *arg, err_t err);
+static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len);
 
 static void client_close(struct tcp_pcb *pcb)
 {
@@ -111,9 +112,24 @@ static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
    
    connectedToWorkstation = true;
    
-   client_close(pcb);
+//add the following into client connect, removing client_close, to send Hello string
+char *string = "Hello!";
+tcp_sent(pcb, client_sent);
+tcp_write(pcb, string, sizeof(string)+4 , 0);
 
+	
    return err;
+}
+
+static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
+{
+	LWIP_UNUSED_ARG(arg);
+
+	printf("\nclient_sent(): Number of bytes ACK'ed is %d", len);
+
+	client_close(pcb);
+
+	return ERR_OK;
 }
 
 static void server_close(struct tcp_pcb *pcb)

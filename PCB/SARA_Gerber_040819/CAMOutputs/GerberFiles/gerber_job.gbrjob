@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-04-09T02:46:46Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.3.0"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "SARA"
+        },
+        "Owner": "Cameron Tim <ctim@uccs.edu>",
+        "Size": {
+            "X": 76.2,
+            "Y": 76.2
+        }
+    }
+}

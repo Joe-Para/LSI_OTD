@@ -1455,6 +1455,169 @@ SMD power inductor</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="Screw Block">
+<packages>
+<package name="PHOENIX_1935161">
+<wire x1="-5" y1="4" x2="5" y2="4" width="0.127" layer="21"/>
+<wire x1="5" y1="4" x2="5" y2="-4.3" width="0.127" layer="21"/>
+<wire x1="5" y1="-4.3" x2="-5" y2="-4.3" width="0.127" layer="21"/>
+<wire x1="-5" y1="-4.3" x2="-5" y2="4" width="0.127" layer="21"/>
+<wire x1="-5" y1="-4.3" x2="-5" y2="4" width="0.127" layer="51"/>
+<wire x1="-5" y1="4" x2="5" y2="4" width="0.127" layer="51"/>
+<wire x1="5" y1="4" x2="5" y2="-4.3" width="0.127" layer="51"/>
+<wire x1="5" y1="-4.3" x2="-5" y2="-4.3" width="0.127" layer="51"/>
+<circle x="-3.8" y="1.5" radius="0.14" width="0.28" layer="21"/>
+<circle x="-3.8" y="1.5" radius="0.14" width="0.28" layer="51"/>
+<wire x1="-5.25" y1="4.25" x2="5.25" y2="4.25" width="0.05" layer="39"/>
+<wire x1="5.25" y1="4.25" x2="5.25" y2="-4.55" width="0.05" layer="39"/>
+<wire x1="5.25" y1="-4.55" x2="-5.25" y2="-4.55" width="0.05" layer="39"/>
+<wire x1="-5.25" y1="-4.55" x2="-5.25" y2="4.25" width="0.05" layer="39"/>
+<text x="-5.08705" y="5.08705" size="1.27176875" layer="25">NAME</text>
+<text x="-5.09283125" y="-6.366040625" size="1.273209375" layer="27">VALUE</text>
+<pad name="1" x="-2.5" y="0" drill="1.3" shape="square"/>
+<pad name="2" x="2.5" y="0" drill="1.3"/>
+</package>
+</packages>
+<symbols>
+<symbol name="1935161">
+<wire x1="-2.54" y1="5.08" x2="2.54" y2="5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="5.08" x2="2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-5.08" x2="-2.54" y2="-5.08" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-5.08" x2="-2.54" y2="5.08" width="0.254" layer="94"/>
+<text x="-2.54548125" y="5.727340625" size="1.272740625" layer="95">&gt;NAME</text>
+<text x="-2.54808125" y="-7.64423125" size="1.274040625" layer="96">&gt;VALUE</text>
+<pin name="1" x="-7.62" y="2.54" length="middle" direction="pas"/>
+<pin name="2" x="-7.62" y="-2.54" length="middle" direction="pas"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="1935161" prefix="J">
+<description>Conn Terminal Blocks 2 POS 5mm Solder ST Thru-Hole 16A</description>
+<gates>
+<gate name="G$1" symbol="1935161" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="PHOENIX_1935161">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="AVAILABILITY" value="Unavailable"/>
+<attribute name="DESCRIPTION" value=" Conn Terminal Blocks 2 POS 5mm Solder ST Thru-Hole 16A "/>
+<attribute name="MF" value="Phoenix Contact"/>
+<attribute name="MP" value="1935161"/>
+<attribute name="PACKAGE" value="None"/>
+<attribute name="PRICE" value="None"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="PJ-002AH">
+<packages>
+<package name="CUI_PJ-002AH">
+<text x="-0.69003125" y="6.130290625" size="1.270059375" layer="25">&gt;NAME</text>
+<text x="-0.690915625" y="-6.4185" size="1.27168125" layer="27">&gt;VALUE</text>
+<wire x1="0.5" y1="-1.75" x2="-0.5" y2="-1.75" width="0.0001" layer="46"/>
+<wire x1="-0.5" y1="-1.75" x2="-0.5" y2="1.75" width="0.0001" layer="46"/>
+<wire x1="-0.5" y1="1.75" x2="0.5" y2="1.75" width="0.0001" layer="46"/>
+<wire x1="0.5" y1="1.75" x2="0.5" y2="-1.75" width="0.0001" layer="46"/>
+<wire x1="6.5" y1="-1.5" x2="5.5" y2="-1.5" width="0.0001" layer="46"/>
+<wire x1="5.5" y1="-1.5" x2="5.5" y2="1.5" width="0.0001" layer="46"/>
+<wire x1="5.5" y1="1.5" x2="6.5" y2="1.5" width="0.0001" layer="46"/>
+<wire x1="6.5" y1="1.5" x2="6.5" y2="-1.5" width="0.0001" layer="46"/>
+<wire x1="1.5" y1="4.2" x2="1.5" y2="5.2" width="0.0001" layer="46"/>
+<wire x1="1.5" y1="5.2" x2="4.5" y2="5.2" width="0.0001" layer="46"/>
+<wire x1="4.5" y1="5.2" x2="4.5" y2="4.2" width="0.0001" layer="46"/>
+<wire x1="4.5" y1="4.2" x2="1.5" y2="4.2" width="0.0001" layer="46"/>
+<wire x1="-0.7" y1="4.5" x2="13.7" y2="4.5" width="0.127" layer="51"/>
+<wire x1="13.7" y1="4.5" x2="13.7" y2="-4.5" width="0.127" layer="51"/>
+<wire x1="13.7" y1="-4.5" x2="-0.7" y2="-4.5" width="0.127" layer="51"/>
+<wire x1="-0.7" y1="-4.5" x2="-0.7" y2="4.5" width="0.127" layer="51"/>
+<wire x1="13.7" y1="4.5" x2="13.7" y2="-4.5" width="0.127" layer="21"/>
+<wire x1="13.7" y1="-4.5" x2="-0.7" y2="-4.5" width="0.127" layer="21"/>
+<wire x1="-0.7" y1="4.5" x2="0.45" y2="4.5" width="0.127" layer="21"/>
+<wire x1="-0.7" y1="-4.5" x2="-0.7" y2="-2.65" width="0.127" layer="21"/>
+<wire x1="5.55" y1="4.5" x2="13.7" y2="4.5" width="0.127" layer="21"/>
+<wire x1="-0.7" y1="2.55" x2="-0.7" y2="4.5" width="0.127" layer="21"/>
+<wire x1="-1" y1="4.75" x2="0.45" y2="4.75" width="0.05" layer="39"/>
+<wire x1="0.45" y1="4.75" x2="0.45" y2="6.1" width="0.05" layer="39"/>
+<wire x1="0.45" y1="6.1" x2="5.55" y2="6.1" width="0.05" layer="39"/>
+<wire x1="5.55" y1="6.1" x2="5.55" y2="4.75" width="0.05" layer="39"/>
+<wire x1="5.55" y1="4.75" x2="14" y2="4.75" width="0.05" layer="39"/>
+<wire x1="14" y1="4.75" x2="14" y2="-4.75" width="0.05" layer="39"/>
+<wire x1="14" y1="-4.75" x2="-1" y2="-4.75" width="0.05" layer="39"/>
+<wire x1="-1" y1="-4.75" x2="-1" y2="-2.35" width="0.05" layer="39"/>
+<circle x="-2" y="0" radius="0.2" width="0.4" layer="21"/>
+<wire x1="-1" y1="2.25" x2="-1" y2="4.75" width="0.05" layer="39"/>
+<wire x1="-1" y1="2.25" x2="-1.55" y2="2.25" width="0.05" layer="39"/>
+<wire x1="-1.55" y1="2.25" x2="-1.55" y2="-2.35" width="0.05" layer="39"/>
+<wire x1="-1.55" y1="-2.35" x2="-1" y2="-2.35" width="0.05" layer="39"/>
+<pad name="1" x="0" y="0" drill="1" diameter="2.5" shape="long" rot="R90"/>
+<pad name="2" x="6" y="0" drill="1" diameter="2.25" shape="long" rot="R90"/>
+<pad name="3" x="3" y="4.7" drill="1" diameter="2.25" shape="long" rot="R180"/>
+</package>
+</packages>
+<symbols>
+<symbol name="PJ-002AH">
+<wire x1="-5.715" y1="1.27" x2="-5.715" y2="3.81" width="0.1524" layer="94" curve="-180"/>
+<wire x1="-5.715" y1="3.81" x2="-1.27" y2="3.81" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="3.81" x2="-1.27" y2="1.27" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="1.27" x2="-5.715" y2="1.27" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="1.27" x2="-1.27" y2="0.635" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="0.635" x2="0" y2="0.635" width="0.1524" layer="94"/>
+<wire x1="0" y1="0.635" x2="0" y2="4.445" width="0.1524" layer="94"/>
+<wire x1="0" y1="4.445" x2="-1.27" y2="4.445" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="4.445" x2="-1.27" y2="3.81" width="0.1524" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-3.175" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="-3.175" y1="-2.54" x2="-3.81" y2="-1.27" width="0.1524" layer="94"/>
+<wire x1="-3.81" y1="-1.27" x2="-4.445" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="-2.54" width="0.1524" layer="94"/>
+<text x="-7.62723125" y="5.08481875" size="1.779690625" layer="95">&gt;NAME</text>
+<text x="-7.631259375" y="-5.0875" size="1.78063125" layer="96">&gt;VALUE</text>
+<polygon width="0.1524" layer="94">
+<vertex x="0" y="-2.54"/>
+<vertex x="-0.508" y="-1.27"/>
+<vertex x="0.508" y="-1.27"/>
+</polygon>
+<pin name="1" x="5.08" y="2.54" visible="pad" length="middle" direction="pas" rot="R180"/>
+<pin name="3" x="5.08" y="0" visible="pad" length="middle" direction="pas" rot="R180"/>
+<pin name="2" x="5.08" y="-2.54" visible="pad" length="middle" direction="pas" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="PJ-002AH" prefix="J">
+<description>2.0 mm Center Pin, 5.0 A, Right Angle, Through Hole, Dc Power Jack Connector</description>
+<gates>
+<gate name="G$1" symbol="PJ-002AH" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="CUI_PJ-002AH">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="AVAILABILITY" value="Unavailable"/>
+<attribute name="CUI_PURCHASE_URL" value="https://www.cui.com/product/interconnect/dc-power-connectors/jacks/2.0-mm-center-pin/pj-002ah?utm_source=snapeda.com&amp;utm_medium=referral&amp;utm_campaign=snapedaBOM"/>
+<attribute name="DESCRIPTION" value=" 2.0 mm Center Pin, 5.0 A, Right Angle, Through Hole, Dc Power Jack Connector "/>
+<attribute name="MF" value="CUI Inc."/>
+<attribute name="MP" value="PJ-002AH"/>
+<attribute name="PACKAGE" value="None"/>
+<attribute name="PRICE" value="None"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1513,8 +1676,6 @@ SMD power inductor</description>
 <part name="SUPPLY19" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY20" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SUPPLY21" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
-<part name="JP2" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X1" device="" package3d_urn="urn:adsk.eagle:package:22485/2"/>
 <part name="SUPPLY22" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 <part name="SFP_DOWNSTREAM" library="zSFP+" deviceset="ZSFP+" device=""/>
 <part name="SFP_UPSTREAM" library="zSFP+" deviceset="ZSFP+" device=""/>
@@ -1571,16 +1732,15 @@ SMD power inductor</description>
 <part name="+3V23" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="C17" library="capsmd" deviceset="C0603" device="" value="100nF"/>
 <part name="SUPPLY39" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
-<part name="L1" library="inductor-neosid" library_urn="urn:adsk.eagle:library:241" deviceset="MS50" device="" package3d_urn="urn:adsk.eagle:package:14699/1" value="10uF"/>
+<part name="L1" library="inductor-neosid" library_urn="urn:adsk.eagle:library:241" deviceset="MS50" device="" package3d_urn="urn:adsk.eagle:package:14699/1" value="10uH"/>
+<part name="J1" library="Screw Block" deviceset="1935161" device=""/>
+<part name="J2" library="PJ-002AH" deviceset="PJ-002AH" device=""/>
+<part name="SUPPLY40" library="supply2" library_urn="urn:adsk.eagle:library:372" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="116.84" y="86.36" size="1.778" layer="91">JP3 is middle of board</text>
-<rectangle x1="-182.88" y1="162.56" x2="-154.94" y2="200.66" layer="91"/>
-<text x="-177.8" y="180.34" size="1.778" layer="91">Molex Power Conn</text>
-<text x="-177.8" y="180.34" size="1.778" layer="91">Molex Power Conn</text>
-<text x="-177.8" y="203.2" size="1.778" layer="91">Molex Power Conn</text>
 <text x="182.88" y="2.54" size="1.778" layer="91">EXT1 MCU</text>
 </plain>
 <instances>
@@ -1732,16 +1892,8 @@ SMD power inductor</description>
 <instance part="SUPPLY21" gate="GND" x="129.54" y="264.16" smashed="yes">
 <attribute name="VALUE" x="127.635" y="260.985" size="1.778" layer="96"/>
 </instance>
-<instance part="JP1" gate="G$1" x="-144.78" y="193.04" smashed="yes" rot="R180">
-<attribute name="NAME" x="-138.43" y="189.865" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="-138.43" y="198.12" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="JP2" gate="G$1" x="-139.7" y="165.1" smashed="yes">
-<attribute name="NAME" x="-146.05" y="168.275" size="1.778" layer="95"/>
-<attribute name="VALUE" x="-146.05" y="160.02" size="1.778" layer="96"/>
-</instance>
-<instance part="SUPPLY22" gate="GND" x="-142.24" y="162.56" smashed="yes">
-<attribute name="VALUE" x="-144.145" y="159.385" size="1.778" layer="96"/>
+<instance part="SUPPLY22" gate="GND" x="-147.32" y="208.28" smashed="yes">
+<attribute name="VALUE" x="-149.225" y="205.105" size="1.778" layer="96"/>
 </instance>
 <instance part="SFP_DOWNSTREAM" gate="G$1" x="7.62" y="289.56" smashed="yes"/>
 <instance part="SFP_UPSTREAM" gate="G$1" x="177.8" y="289.56" smashed="yes"/>
@@ -1932,6 +2084,17 @@ SMD power inductor</description>
 <instance part="L1" gate="G$1" x="-111.76" y="193.04" smashed="yes">
 <attribute name="NAME" x="-115.57" y="194.818" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-115.57" y="189.484" size="1.778" layer="96"/>
+</instance>
+<instance part="J1" gate="G$1" x="-119.38" y="215.9" smashed="yes">
+<attribute name="NAME" x="-121.92548125" y="221.627340625" size="1.272740625" layer="95"/>
+<attribute name="VALUE" x="-121.92808125" y="208.25576875" size="1.274040625" layer="96"/>
+</instance>
+<instance part="J2" gate="G$1" x="-152.4" y="218.44" smashed="yes">
+<attribute name="NAME" x="-160.02723125" y="223.52481875" size="1.779690625" layer="95"/>
+<attribute name="VALUE" x="-160.031259375" y="213.3525" size="1.78063125" layer="96"/>
+</instance>
+<instance part="SUPPLY40" gate="GND" x="-134.62" y="210.82" smashed="yes">
+<attribute name="VALUE" x="-136.525" y="207.645" size="1.778" layer="96"/>
 </instance>
 </instances>
 <busses>
@@ -2217,10 +2380,6 @@ SMD power inductor</description>
 <junction x="157.48" y="312.42"/>
 </segment>
 <segment>
-<pinref part="SUPPLY22" gate="GND" pin="GND"/>
-<pinref part="JP2" gate="G$1" pin="1"/>
-</segment>
-<segment>
 <pinref part="SUPPLY23" gate="GND" pin="GND"/>
 <pinref part="SFP_DOWNSTREAM" gate="G$1" pin="GND_5"/>
 </segment>
@@ -2294,6 +2453,19 @@ SMD power inductor</description>
 <segment>
 <pinref part="SUPPLY39" gate="GND" pin="GND"/>
 <pinref part="C17" gate="G$1" pin="1"/>
+</segment>
+<segment>
+<pinref part="J2" gate="G$1" pin="3"/>
+<pinref part="J2" gate="G$1" pin="2"/>
+<wire x1="-147.32" y1="218.44" x2="-147.32" y2="215.9" width="0.1524" layer="91"/>
+<pinref part="SUPPLY22" gate="GND" pin="GND"/>
+<wire x1="-147.32" y1="210.82" x2="-147.32" y2="215.9" width="0.1524" layer="91"/>
+<junction x="-147.32" y="215.9"/>
+</segment>
+<segment>
+<pinref part="J1" gate="G$1" pin="2"/>
+<pinref part="SUPPLY40" gate="GND" pin="GND"/>
+<wire x1="-127" y1="213.36" x2="-134.62" y2="213.36" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="RESET" class="0">
@@ -2695,18 +2867,48 @@ SMD power inductor</description>
 </net>
 <net name="N$22" class="0">
 <segment>
-<pinref part="JP1" gate="G$1" pin="1"/>
 <wire x1="-142.24" y1="193.04" x2="-121.92" y2="193.04" width="0.1524" layer="91"/>
 <pinref part="C4" gate="G$1" pin="2"/>
 <wire x1="-121.92" y1="193.04" x2="-121.92" y2="190.5" width="0.1524" layer="91"/>
 <wire x1="-121.92" y1="193.04" x2="-116.84" y2="193.04" width="0.1524" layer="91"/>
 <junction x="-121.92" y="193.04"/>
 <pinref part="L1" gate="G$1" pin="1"/>
+<pinref part="J2" gate="G$1" pin="1"/>
+<wire x1="-147.32" y1="220.98" x2="-142.24" y2="220.98" width="0.1524" layer="91"/>
+<wire x1="-142.24" y1="220.98" x2="-142.24" y2="218.44" width="0.1524" layer="91"/>
+<pinref part="J1" gate="G$1" pin="1"/>
+<wire x1="-142.24" y1="218.44" x2="-142.24" y2="193.04" width="0.1524" layer="91"/>
+<wire x1="-127" y1="218.44" x2="-142.24" y2="218.44" width="0.1524" layer="91"/>
+<junction x="-142.24" y="218.44"/>
 </segment>
 </net>
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="201,1,129.54,266.7,GND,GND\, N$7,,,,"/>
+<approved hash="208,1,-17.78,193.04,+3V3,sup,,,,"/>
+<approved hash="208,1,-30.48,193.04,+3V3,out,,,,"/>
+<approved hash="208,1,-88.9,33.02,+3V3,sup,,,,"/>
+<approved hash="208,1,106.68,68.58,+3V3,sup,,,,"/>
+<approved hash="208,1,157.48,66.04,+3V3,sup,,,,"/>
+<approved hash="208,1,63.5,60.96,+3V3,sup,,,,"/>
+<approved hash="208,1,40.64,208.28,+3V3,sup,,,,"/>
+<approved hash="208,1,20.32,165.1,+3V3,sup,,,,"/>
+<approved hash="208,1,160.02,213.36,+3V3,sup,,,,"/>
+<approved hash="208,1,248.92,304.8,+3V3,sup,,,,"/>
+<approved hash="208,1,236.22,289.56,+3V3,sup,,,,"/>
+<approved hash="208,1,106.68,322.58,+3V3,sup,,,,"/>
+<approved hash="208,1,109.22,281.94,+3V3,sup,,,,"/>
+<approved hash="208,1,58.42,309.88,+3V3,sup,,,,"/>
+<approved hash="208,1,66.04,294.64,+3V3,sup,,,,"/>
+<approved hash="208,1,-81.28,314.96,+3V3,sup,,,,"/>
+<approved hash="208,1,-66.04,287.02,+3V3,sup,,,,"/>
+<approved hash="208,1,160.02,170.18,+3V3,sup,,,,"/>
+<approved hash="208,1,-30.48,170.18,+5V,out,,,,"/>
+<approved hash="208,1,-17.78,170.18,+5V,sup,,,,"/>
+<approved hash="208,1,111.76,99.06,+5V,sup,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>
