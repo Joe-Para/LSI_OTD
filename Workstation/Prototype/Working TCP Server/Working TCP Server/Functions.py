@@ -3,7 +3,6 @@ import socket
 def Initialize():
     print ("Initializing...")
 
-    # Empty host works for windows with multipule interfaces
     HOST = ''  # Symbolic name meaning all available interfaces
     PORT = 8000  # Arbitrary non-privileged port
 
@@ -16,7 +15,10 @@ def Initialize():
             conn, addr = s.accept()
             print('Connected by', addr)
             recdata = conn.recv(1024)
-            print('message: ', recdata)
+            print('Message:', recdata)
+            while 1:
+                message = input('Type on/off to switch LED: ')
+                conn.send(str.encode(message))
         except socket.error as e:
             print('socket error: ', e)
         except:
