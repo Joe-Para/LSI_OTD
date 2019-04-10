@@ -1,5 +1,4 @@
-src/raw_http_basic_example.d src/raw_http_basic_example.o: \
- ../src/raw_http_basic_example.c \
+src/main.d src/main.o: ../src/main.c \
  ../src/ASF/common/services/clock/sysclk.h \
  ../src/ASF/common/utils/parts.h ../src/config/conf_clock.h \
  ../src/ASF/common/services/clock/same70/sysclk.h \

@@ -1751,7 +1751,7 @@
     <None Include="src\network\timer_mgt.h">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="src\raw_http_basic_example.c">
+    <Compile Include="src\main.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
