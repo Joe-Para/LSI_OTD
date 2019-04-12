@@ -1,33 +1,26 @@
-from Functions import SetUp, RunAll, PrintLastRun, Initialize
+import socket
 
-Initialize()
+HOST = ''  # Symbolic name meaning all available interfaces
+PORT = 8000  # Arbitrary non-privileged port
 
-choice = ''
-while choice != '4':
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(5)
 
-    print("\n")
-    print("[1] Set Up")
-    print("[2] Run All")
-    print("[3] Print Last Run")
-    print("[4] Quit")
-
-    # Ask for the user's choice.
-    choice = input("\nWhat would you like to do? ")
-
-    # Respond to the user's choice.
-    if choice == '1':
-        SetUp()
-    elif choice == '2':
-        RunAll()
-    elif choice == '3':
-        PrintLastRun()
-    elif choice == '4':
-        print("\nQuitting Application.\n")
-    else:
-        print("\nNot a valid option, please try again.")
-print("Thanks again, bye now.")
-
-
-
-
-
+while 1:
+    try:
+        print("Waiting for a connection on port: " + str(PORT))
+        conn, addr = s.accept()
+        print('Connected by', addr)
+        while 1:
+            message = input('Type in a command: ')
+            conn.send(str.encode(message))
+            reply = conn.recv(2048).decode("utf-8") 
+            if not reply: break
+            print(reply)
+    except socket.error as e:
+        print('socket error: ', e)
+    except:
+        print('something else is wrong')
+print("Closing")
+#s.close()
