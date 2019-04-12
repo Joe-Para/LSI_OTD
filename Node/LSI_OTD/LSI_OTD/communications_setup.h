@@ -35,7 +35,5 @@ void start_ethernet();
 void runCommand(char *string, struct tcp_pcb *pcb);
 extern int connectionCount;
 
-
-
-
 #endif /* COMMUNICATIONS_SETUP_H_ */
+

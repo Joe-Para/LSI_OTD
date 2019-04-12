@@ -66,21 +66,25 @@ void runCommand(char *string, struct tcp_pcb *pcb)
 {
 	if(compareString(string, "Input", strlen("Input")) )
 	{
+		//calls function to check input fiber
 		printf("Input = True");
 		tcp_write(pcb, "true", strlen("true"), 0);
 	}
 	else if (compareString(string, "Output", strlen("Output")))
 	{
+		//calls function to check output fiber
 		printf("Output = False");
 		tcp_write(pcb, "false", strlen("false"), 0);
 	}
 	else if (compareString(string, "Send Ping", strlen("Send Ping")))
 	{
+		//calls function to send ping
 		printf("Ping Sent");
 		gpio_toggle_pin_level(LED0);
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
+		//calls function to listen for ping (use code below for function)
 		printf("Listening");
 		
 		struct tcp_pcb *tempPCB;
@@ -102,14 +106,17 @@ void runCommand(char *string, struct tcp_pcb *pcb)
 	}
 	else if (compareString(string, "Run", strlen("Run")))
 	{
+		//calls function to do time delay run
 		printf("Running");
 		tcp_write(pcb, "100ns", strlen("100ns"), 0);
 	}
-	else if (compareString(string, "Shut Down", strlen("Shut Down")))
+	else if (compareString(string, "Close Connection", strlen("Close Connection")))
 	{
-		printf("Shutting Down");
-		gpio_toggle_pin_level(LED0);
+		//closes TCP connection
+		printf("Closing connection");
+		client_close(pcb);
 	}
+	//on & off are for debugging
 	else if (compareString(string, "On", strlen("On")))
 	{
 		printf("LED On");
