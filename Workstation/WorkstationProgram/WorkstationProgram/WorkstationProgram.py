@@ -1,5 +1,7 @@
 import socket
 import threading
+import datetime
+from config import *
 
 Connections = []
 
@@ -8,6 +10,8 @@ def main():
     choice = ''
     NodeList = []
     global isRunning
+    global errorFile
+    errorFile = open(ERROR_FILE, 'w')
     isRunning = True
 
     socketThread = threading.Thread(target = startSocket)
@@ -37,6 +41,9 @@ def main():
             PrintConnections()
         else:
             print("\nNot a valid option, please try again.")  
+    errorFile.close()
+    print("Closing TCP Server...")
+    socketThread.join()
     print("Thanks again, bye now.")
 
 #runs time delay on each node
@@ -101,7 +108,8 @@ def SetUp():
                 node.Output = False
             setupNodes.append(node)
 
-        except socket.error:
+        except socket.error as e:
+            errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
             node.conn.close()
             Connections.remove(node)
 
@@ -149,13 +157,14 @@ def SetUp():
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(10.0)
-                s.bind(('', 9000))
+                s.bind(('', SC_PORT))
                 s.listen(1)
                 conn, addr = s.accept()
                 nextIP = str(addr[0])
                 conn.close()
                 s.close()
-        except socket.error:
+        except socket.error as e:
+            errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
             print("Setup incomplete: Cannot find next node.")
             print("Check node after node " + str(nodeCount))
             return []
@@ -212,7 +221,11 @@ def PrintLastRun(NodeList):
 def quitApp(NodeList):
     print("Closing all connections...")
     for node in NodeList:
-        node.conn.Close()
+        try:
+            node.conn.Close()
+        except socket.error as e:
+            errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
+            continue
 
 
 class Node:
@@ -255,19 +268,16 @@ def toContinue():
 def startSocket():
 
     HOST = ''  # Symbolic name meaning all available interfaces
-    PORT = 8000  # Arbitrary non-privileged port
     count = 0
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(5.0)
-    s.bind((HOST, PORT))
+    s.bind((HOST, MC_PORT))
     s.listen(10)
     while 1:
-        if not isRunning:
-            break
+        if not isRunning: break
         try:
             conn, addr = s.accept()
-            recdata = conn.recv(1024)
-            conn.settimeout(5.0)
+            conn.settimeout(GEN_TIMEOUT)
             Connections.append(Node(conn, addr))
         except socket.error:
             count += 1
