@@ -9,7 +9,7 @@
 // <q> Enable DHCP
 // <id> lwip_dhcp
 #ifndef LWIP_DHCP
-#define LWIP_DHCP 0
+#define LWIP_DHCP 1
 #endif
 
 // <q> NO RTOS
@@ -174,7 +174,7 @@
 // <q> Enables application layer to hook into the IP layer itself
 // <id> lwip_raw
 #ifndef LWIP_RAW
-#define LWIP_RAW 0
+#define LWIP_RAW 1
 #endif
 
 // <q> Enable interface up/down status callback
@@ -626,7 +626,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_debug
 #ifndef TCP_DEBUG
-#define TCP_DEBUG LWIP_DBG_OFF
+#define TCP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP input Debug option
@@ -635,7 +635,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_input_debug
 #ifndef TCP_INPUT_DEBUG
-#define TCP_INPUT_DEBUG LWIP_DBG_OFF
+#define TCP_INPUT_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP in for fast retransmit Debug option
@@ -653,7 +653,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_rto_debug
 #ifndef TCP_RTO_DEBUG
-#define TCP_RTO_DEBUG LWIP_DBG_OFF
+#define TCP_RTO_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP congestion window Debug option
@@ -662,7 +662,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_cwnd_debug
 #ifndef TCP_CWND_DEBUG
-#define TCP_CWND_DEBUG LWIP_DBG_OFF
+#define TCP_CWND_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP window updating Debug option
@@ -671,7 +671,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_wnd_debug
 #ifndef TCP_WND_DEBUG
-#define TCP_WND_DEBUG LWIP_DBG_OFF
+#define TCP_WND_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP out Debug option
@@ -680,7 +680,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_output_debug
 #ifndef TCP_OUTPUT_DEBUG
-#define TCP_OUTPUT_DEBUG LWIP_DBG_OFF
+#define TCP_OUTPUT_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> TCP RST Debug option
@@ -716,7 +716,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcpip_debug
 #ifndef TCPIP_DEBUG
-#define TCPIP_DEBUG LWIP_DBG_OFF
+#define TCPIP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> PPP Debug option
@@ -743,7 +743,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_dhcp_debug
 #ifndef DHCP_DEBUG
-#define DHCP_DEBUG LWIP_DBG_OFF
+#define DHCP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> AUTOIP Debug option

@@ -679,7 +679,7 @@
  * LWIP_DHCP==1: Enable DHCP module.
  */
 #ifndef LWIP_DHCP
-#define LWIP_DHCP 0
+#define LWIP_DHCP 1
 #endif
 
 /**
@@ -981,7 +981,7 @@
  * as much as (2 * TCP_SND_BUF/TCP_MSS) for things to work.
  */
 #ifndef TCP_SND_QUEUELEN
-#define TCP_SND_QUEUELEN ((4 * (TCP_SND_BUF) + (TCP_MSS - 1)) / (TCP_MSS))
+#define TCP_SND_QUEUELEN ((6 * (TCP_SND_BUF) + (TCP_MSS - 1)) / (TCP_MSS))
 #endif
 
 /**
@@ -1112,7 +1112,7 @@
  * field.
  */
 #ifndef LWIP_NETIF_HOSTNAME
-#define LWIP_NETIF_HOSTNAME 0
+#define LWIP_NETIF_HOSTNAME 1
 #endif
 
 /**

@@ -316,10 +316,18 @@ void system_init(void)
 
 	gpio_set_pin_function(GPIO_SPARE1, GPIO_PIN_FUNCTION_OFF);
 
+	// Set pin direction to output
+	gpio_set_pin_direction(LED0, GPIO_DIRECTION_OUT);
+	gpio_set_pin_function(LED0, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_level(LED0, true);
+
 	EXTERNAL_IRQ_0_PC_init();
 	EXTERNAL_IRQ_1_PD_init();
 
 	SPI_0_init();
+	gpio_set_pin_function(LED0, GPIO_PIN_FUNCTION_OFF);
+	
+	gpio_set_pin_level(LED0, true);
 
 	I2C_AT24MAC_init();
 

@@ -40,6 +40,19 @@
 #include <lwip/timers.h>
 #include "lwip_demo_config.h"
 #include <string.h>
+#include <lwip/tcp.h>
+#include <lwip/dhcp.h>
+
+
+int workstationIP[] = {192, 168, 0, 2};
+	
+static void client_close(struct tcp_pcb *pcb);
+static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err);
+static err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
+static err_t client_poll(void *arg, struct tcp_pcb *pcb);
+static err_t client_err(void *arg, err_t err);
+static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len);
+static bool compareString(char *string1, char *string2, int string2Len);
 
 /* Saved total time in mS since timer was enabled */
 volatile static u32_t systick_timems;
@@ -62,47 +75,31 @@ void systick_enable(void)
 	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
 }
 
-void mac_receive_cb(struct mac_async_descriptor *desc)
-{
-	recv_flag = true;
-}
-static void print_ipaddress(void)
-{
-	static char tmp_buff[16];
-	printf("IP_ADDR    : %s\r\n", ipaddr_ntoa_r((const ip_addr_t *)&(LWIP_MACIF_desc.ip_addr), tmp_buff, 16));
-	printf("NET_MASK   : %s\r\n", ipaddr_ntoa_r((const ip_addr_t *)&(LWIP_MACIF_desc.netmask), tmp_buff, 16));
-	printf("GATEWAY_IP : %s\r\n", ipaddr_ntoa_r((const ip_addr_t *)&(LWIP_MACIF_desc.gw), tmp_buff, 16));
-}
-
 static void read_macaddress(u8_t *mac)
 {
-#if CONF_AT24MAC_ADDRESS != 0
+	#if CONF_AT24MAC_ADDRESS != 0
 	uint8_t addr = 0x9A;
 
 	i2c_m_sync_enable(&I2C_AT24MAC);
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, CONF_AT24MAC_ADDRESS, I2C_M_SEVEN);
 	io_write(&(I2C_AT24MAC.io), &addr, 1);
 	io_read(&(I2C_AT24MAC.io), mac, 6);
-#else
+	#else
 	/* set mac to 0x11 if no EEPROM mounted */
 	memset(mac, 0x11, 6);
-#endif
+	#endif
 }
 
-int main(void)
+static void start_ethernet()
 {
 	int32_t ret;
 	u8_t    mac[6];
-
-	atmel_start_init();
-
 	/* Read MacAddress from EEPROM */
 	read_macaddress(mac);
 
 	systick_enable();
 
 	printf("\r\nHello ATMEL World!\r\n");
-	mac_async_register_callback(&MACIF, MAC_ASYNC_RECEIVE_CB, (FUNC_PTR)mac_receive_cb);
 
 	eth_ipstack_init();
 	do {
@@ -117,19 +114,127 @@ int main(void)
 
 	netif_set_default(&LWIP_MACIF_desc);
 	mac_async_enable(&MACIF);
+	dhcp_start(&LWIP_MACIF_desc);
+	
+	while(LWIP_MACIF_desc.ip_addr.addr == 0)
+	{
+		ethernetif_mac_input(&LWIP_MACIF_desc);
+		sys_check_timeouts();
+	}
+	
+	
+}
 
-	while (true) {
-		if (recv_flag) {
-			recv_flag = false;
-			ethernetif_mac_input(&LWIP_MACIF_desc);
+static void client_close(struct tcp_pcb *pcb)
+{
+	tcp_arg(pcb, NULL);
+	tcp_sent(pcb, NULL);
+	tcp_recv(pcb, NULL);
+	tcp_close(pcb);
+}
+
+static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
+{
+	LWIP_UNUSED_ARG(arg);
+	
+	tcp_sent(pcb, client_sent);
+	tcp_recv(pcb, client_recv);
+	tcp_poll(pcb, client_poll, 4);
+	tcp_err(pcb, client_err);
+	
+	char *string = "Hello";
+	tcp_write(pcb, string, strlen(string), 0);
+
+	return err;
+}
+
+static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
+{
+	LWIP_UNUSED_ARG(arg);
+
+	return ERR_OK;
+}
+
+static err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
+{
+	char *string;
+	int length;
+	LWIP_UNUSED_ARG(arg);
+
+	if (err == ERR_OK && p != NULL)
+	{
+		tcp_recved(pcb, p->tot_len);
+
+		string = p->payload;
+		length = strlen(string);
+		
+		if(compareString(string, "On", strlen("On")) || compareString(string, "on", strlen("on")))
+		{
+			gpio_set_pin_level(LED0, false);
 		}
+		else if (compareString(string, "Off", strlen("Off")) || compareString(string, "off", strlen("off")))
+		{
+			gpio_set_pin_level(LED0, true);
+		}
+		
+		pbuf_free(p);
+	}
+	else
+	{
+		pbuf_free(p);
+	}
+
+	return ERR_OK;
+}
+
+static err_t client_poll(void *arg, struct tcp_pcb *pcb)
+{
+	static int counter = 1;
+	LWIP_UNUSED_ARG(arg);
+	LWIP_UNUSED_ARG(pcb);
+
+	counter++;
+
+	return ERR_OK;
+}
+
+static err_t client_err(void *arg, err_t err)
+{
+	LWIP_UNUSED_ARG(arg);
+	LWIP_UNUSED_ARG(err);
+
+	return ERR_OK;
+}
+
+static bool compareString(char *string1, char *string2, int string2Len)
+{
+	for(int i = 0; i < string2Len; i++)
+	if(string1[i] != string2[i])
+	return false;
+	
+	return true;
+}
+
+int main(void)
+{
+
+	atmel_start_init();
+	start_ethernet();
+	
+	//sets up new TCP
+	struct tcp_pcb *pcb;
+	struct ip_addr dest;
+	IP4_ADDR(&dest, workstationIP[0], workstationIP[1], workstationIP[2], workstationIP[3]);
+	pcb = tcp_new();
+	tcp_arg(pcb, NULL);
+	tcp_connect(pcb, &dest, 8000, client_connected);
+	
+	while (true) {
+		
+		ethernetif_mac_input(&LWIP_MACIF_desc);	
+		
 		/* LWIP timers - ARP, DHCP, TCP, etc. */
 		sys_check_timeouts();
-
-		/* Print IP address info */
-		if (link_up && LWIP_MACIF_desc.ip_addr.addr) {
-			link_up = false;
-			print_ipaddress();
-		}
+		
 	}
 }

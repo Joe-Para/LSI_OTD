@@ -11,7 +11,7 @@
 // <i> Set by the DHCP code when starting or stopping DHCP.
 // <id> macif_dhcp
 #ifndef CONF_LWIP_MACIF_DHCP
-#define CONF_LWIP_MACIF_DHCP 0
+#define CONF_LWIP_MACIF_DHCP 1
 #endif
 
 // <q> Enable Broadcast
@@ -60,7 +60,7 @@
 // <i> the hostname for this ethernet interface
 // <id> macif_hostname
 #ifndef CONF_LWIP_MACIF_HOSTNAME
-#define CONF_LWIP_MACIF_HOSTNAME "lwip"
+#define CONF_LWIP_MACIF_HOSTNAME "LSI Node"
 #endif
 
 // <s> Host Name descriptive abbreviation
@@ -101,7 +101,7 @@
 // <i> Static Gateway Address
 // <id> macif_gateway
 #ifndef CONF_LWIP_MACIF_GATEWAY
-#define CONF_LWIP_MACIF_GATEWAY "192.168.1.1"
+#define CONF_LWIP_MACIF_GATEWAY "192.168.1.50"
 #endif
 
 // </e>
