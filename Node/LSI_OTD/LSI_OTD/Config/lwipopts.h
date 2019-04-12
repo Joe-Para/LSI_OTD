@@ -465,6 +465,9 @@
 #define LWIP_NOASSERT 1
 #endif
 
+//enable LWIF debugging
+#define LWIP_DEBUG 1
+
 // <y> Debug level
 //    <LWIP_DBG_LEVEL_ALL"> All
 //    <LWIP_DBG_LEVEL_WARNING"> warning
@@ -482,7 +485,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_etharp_debug
 #ifndef ETHARP_DEBUG
-#define ETHARP_DEBUG LWIP_DBG_OFF
+#define ETHARP_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Netif Debug option
@@ -491,7 +494,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_netif_debug
 #ifndef NETIF_DEBUG
-#define NETIF_DEBUG LWIP_DBG_OFF
+#define NETIF_DEBUG LWIP_DBG_ON
 #endif
 
 // <y> Pbuf Debug option
