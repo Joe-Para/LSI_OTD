@@ -370,4 +370,7 @@ healthchecksdb
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
 
+# Error File from workstation
+*.error
+
 # End of https://www.gitignore.io/api/atmelstudio,visualstudio
