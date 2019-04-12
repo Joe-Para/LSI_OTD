@@ -45,17 +45,18 @@ def RunAll(NodeList):
     print ("Runing All...")
 
     if len(NodeList) == 0:
-        print("Run failed: There are nodes setup.")
+        print("Run failed: There are no nodes setup.")
         return []
 
     for node in NodeList:
         try:
-            node.conn.settimeout(30.0)
+            node.conn.settimeout(RUN_TIMEOUT)
             node.conn.sendall(b"Run")
             node.Time = str(node.conn.recv(2048))
-            node.conn.settimeout(5.0)
-        except socket.error:
-            print("Running failed. ")
+            node.conn.settimeout(GEN_TIMEOUT)
+        except socket.error as e:
+            print("Running failed: Could not get responce from node " + str(node.NodeNumber))
+            errorFile.write(str(datetime.datetime.now()) + " " + e)
             return[]
 
     #print the run data
@@ -78,7 +79,7 @@ def SetUp():
     nodeCount = 1
 
     if len(Connections) == 0:
-        print("Setup incomplete: There are nodes found.")
+        print("Setup incomplete: There are no nodes found.")
         return []
 
 
@@ -114,13 +115,13 @@ def SetUp():
             if nextNode == None:
                 nextNode = node
             else:
-                print("Setup incomplete: There are 2+ nodes without an input.")
+                print("Setup incomplete: There are 2+ nodes without an input (1st node).")
                 return []
         elif node.Input and not node.Output:
             if lastNode == None:
                 lastNode = node
             else:
-                print("Setup incomplete: There are 2+ nodes without an output.")
+                print("Setup incomplete: There are 2+ nodes without an output (last node).")
                 return []
         elif not node.Input and not node.Output:
             print("Setup incomplete: There is a node without any connections.")
