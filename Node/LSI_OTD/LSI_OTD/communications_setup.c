@@ -92,6 +92,7 @@ void client_close(struct tcp_pcb *TCPpcb)
 	tcp_sent(TCPpcb, NULL);
 	tcp_recv(TCPpcb, NULL);
 	tcp_close(TCPpcb);
+	connectionCount -= 1;
 }
 
 err_t client_connected(void *arg, struct tcp_pcb *TCPpcb, err_t err)

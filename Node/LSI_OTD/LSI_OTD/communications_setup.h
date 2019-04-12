@@ -14,6 +14,10 @@
 #define workstationIP_2		0
 #define workstationIP_3		18
 
+//main and secondary connection ports
+#define MC_PORT				8000
+#define SC_PORT				9000
+
 #include <atmel_start.h>
 #include <peripheral_clk_config.h>
 #include <lwip/netif.h>

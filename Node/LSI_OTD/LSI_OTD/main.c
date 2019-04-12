@@ -51,7 +51,7 @@ int main(void)
 	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
 	TCPpcb = tcp_new();
 	tcp_arg(TCPpcb, NULL);
-	tcp_connect(TCPpcb, &dest, 8000, client_connected);
+	tcp_connect(TCPpcb, &dest, MC_PORT, client_connected);
 	
 	while (true) {
 		
@@ -94,7 +94,7 @@ void runCommand(char *string)
 		IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
 		tempPCB = tcp_new();
 		tcp_arg(tempPCB, NULL);
-		tcp_connect(tempPCB, &dest, 9000, client_connected);
+		tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
 		
 		while (connectionCount != 2) {
 			
