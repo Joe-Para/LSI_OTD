@@ -1,81 +1,237 @@
 import socket
+import threading
 
-class Node:
-    def __init__(self, nodeNumber, IP):
-        self.nodeNumber = nodeNumber
-        self.IP = IP
-        self.Time = "NULL"
+Connections = []
 
-    def PrintNode(self):
-        print("Node: " + self.nodeNumber + " IP: " +  self.IP + " Time: " + self.Time)
+def main():
 
-#Might be able to get rid of Initialization
-def Initialize():
-    clear()
-    print("Initializing...")
-    print ("Initialization Complete.")
-    toContinue()
-    return
+    choice = ''
+    NodeList = []
+    global isRunning
+    isRunning = True
 
-#Use UDP communication to send Run to all nodes
+    socketThread = threading.Thread(target = startSocket)
+    socketThread.start()
+
+    while isRunning:
+
+        print("[1] Set Up")
+        print("[2] Run All") 
+        print("[3] Print Last Run")
+        print("[4] Quit")
+    
+        # Ask for the user's choice.
+        choice = input("\nWhat would you like to do? ")
+
+        # Respond to the user's choice.
+        if choice == '1':
+            NodeList = SetUp()
+        elif choice == '2':
+            NodeList = RunAll(NodeList)
+        elif choice == '3':
+            PrintLastRun(NodeList)
+        elif choice == '4': 
+            quitApp(NodeList)
+            isRunning = False
+        elif choice == 'c':
+            PrintConnections()
+        else:
+            print("\nNot a valid option, please try again.")  
+    print("Thanks again, bye now.")
+
+#runs time delay on each node
 def RunAll(NodeList):
     clear()
     print ("Runing All...")
 
-    #ForEach Node, send Run
+    if len(NodeList) == 0:
+        print("Run failed: There are nodes setup.")
+        return []
 
-    #while count < Nodelist
-        #UDP Recieve data from each Node & store
-
-    #Autofill fake data
     for node in NodeList:
-        node.Time = "100s"
+        try:
+            node.conn.settimeout(30.0)
+            node.conn.sendall(b"Run")
+            node.Time = str(node.conn.recv(2048))
+            node.conn.settimeout(5.0)
+        except socket.error:
+            print("Running failed. ")
+            return[]
 
     #print the run data
     PrintRun(NodeList)
     print("Done Running.")
     toContinue()
+    clear()
     return NodeList
-
-#Looks for TCP connections & added to NodeList
-#Send 
-def SetUp(NodeList):
+ 
+#setsup nodes and puts them in a list in order
+def SetUp():
     clear()
     print("Setting up...")
 
-    #restarts nodes (nodes still connected)
-    for node in NodeList:
-        #send restart command
-        print("Restarting devices")
+    nextNode = None
+    lastNode = None
+    nextIP = None
+    setupNodes = []
+    nodesInOrder = []
+    nodeCount = 1
 
-    #Listen for TDC sockets, create node for each connection
+    if len(Connections) == 0:
+        print("Setup incomplete: There are nodes found.")
+        return []
 
-    newNodeList = []
-    newNodeList.append(Node("Node1", "192.168.0.56"))
-    newNodeList.append(Node("Node2", "192.168.0.86"))
-    newNodeList.append(Node("Node3", "192.168.0.46"))
 
-    print ("Done Setting Up.")
+    #checking input & output for all connections
+    #if connection times out, remove it from list
+    for node in Connections:
+        try:
+            node.conn.sendall(b'Input')
+            input = node.conn.recv(2048).decode("utf-8") 
+            if input == "true":
+                node.Input = True
+            elif input == "false":
+                node.Input = False
+            node.conn.sendall(b'Output')
+            output = node.conn.recv(2048).decode("utf-8") 
+            if output == "true":
+                node.Output = True
+            elif output == "false":
+                node.Output = False
+            setupNodes.append(node)
+
+        except socket.error:
+            node.conn.close()
+            Connections.remove(node)
+
+    if len(setupNodes) == 0:
+        print("Setup incomplete: There are nodes found.")
+        return []
+    
+    #finding first and last nodes
+    for node in setupNodes:
+        if not node.Input and node.Output:
+            if nextNode == None:
+                nextNode = node
+            else:
+                print("Setup incomplete: There are 2+ nodes without an input.")
+                return []
+        elif node.Input and not node.Output:
+            if lastNode == None:
+                lastNode = node
+            else:
+                print("Setup incomplete: There are 2+ nodes without an output.")
+                return []
+        elif not node.Input and not node.Output:
+            print("Setup incomplete: There is a node without any connections.")
+            return []
+
+    if(nextNode == None):
+        print("Setup incomplete: There is no node with an output and not an input (1st node).")
+        return []
+    if(lastNode == None):
+        print("Setup incomplete: There is no node with an input and not an output (last node).")
+        return []
+    
+
+    nodesInOrder.append(nextNode)
+    nodesInOrder[0].NodeNumber = nodeCount
+
+    #sets all nodes except first node to listen
+    for node in setupNodes:
+        if not nextNode:
+            node.conn.sendall(b'Listen')
+
+    while nextNode != lastNode:
+        nodeCount += 1
+
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(10.0)
+                s.bind(('', 9000))
+                s.listen(1)
+                conn, addr = s.accept()
+                nextIP = str(addr[0])
+                conn.close()
+                s.close()
+        except socket.error:
+            print("Setup incomplete: Cannot find next node.")
+            print("Check node after node " + str(nodeCount))
+            return []
+        
+        for node in setupNodes:
+            if nextIP == node.addr:
+                node.NodeNumber = nodeCount
+                nodesInOrder.append(node)
+                nextNode = node
+
+    lastNode.NodeNumber = nodeCount
+    nodesInOrder.append(lastNode) 
+
+    print("Nodes are connected in this order:")
+    for node in nodesInOrder:
+        print("Node: " + str(node.NodeNumber) + " IP: " + node.addr)
+
+    print("Done Setting Up.")
     toContinue()
-    return newNodeList
+    clear()
+    return nodesInOrder
 
+#for debugging purposes, will remove in final program
+def PrintConnections():
+    clear()
+    print("Printing Connections")
+    for conn in Connections:
+        print(conn.addr)
+    print("Done Printing Connections")
+    toContinue()
+    clear()
+
+#calls print node function for each node in NodeList
 def PrintRun(NodeList):
     for node in NodeList:
         node.PrintNode()
 
-def UpdatePrintRun(NodeList):
+#prints the last runs for each node
+def PrintLastRun(NodeList):
     clear()
     print("Printing Last Run...")
 
-    #Check for new UDP Results
-    #Print Results
+    if len(NodeList) == 0:
+        print("Print failed: There are no nodes setup.")
+        return []
 
     PrintRun(NodeList)
 
     print ("Done Printing Last Run.")
     toContinue()
+    clear()
     return
 
+def quitApp(NodeList):
+    print("Closing all connections...")
+    for node in NodeList:
+        node.conn.Close()
+
+
+class Node:
+    def __init__(self, conn, addr):
+        self.conn = conn
+        self.addr = str(addr[0])
+        self.NodeNumber = None
+        self.Time = None
+        self.Input = None
+        self.Output = None
+
+    def PrintNode(self):
+        if self.NodeNumber == None:
+            print("Node has not been setup yet")
+        elif self.Time == None:
+            print("Node has not been ran yet")
+        else:
+            print("Node: " + str(self.NodeNumber) + " IP: " + self.addr + " Time: " + self.Time)
+
+#clears terminal screen
 def clear(): 
   
     # import only system from os 
@@ -89,43 +245,35 @@ def clear():
     else: 
         _ = system('clear') 
 
+#press any key to continue
 def toContinue():
 
     input("Press any key to continue...")
 
+#thread that will listen for TCP connections and add the new connections to a list
+def startSocket():
 
-#### Start of MAIN program ####
-Initialize()
+    HOST = ''  # Symbolic name meaning all available interfaces
+    PORT = 8000  # Arbitrary non-privileged port
+    count = 0
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(5.0)
+    s.bind((HOST, PORT))
+    s.listen(10)
+    while 1:
+        if not isRunning:
+            break
+        try:
+            conn, addr = s.accept()
+            recdata = conn.recv(1024)
+            conn.settimeout(5.0)
+            Connections.append(Node(conn, addr))
+        except socket.error:
+            count += 1
+    s.close()
 
-choice = ''
-NodeList = []
-
-while choice != '4':
-
-    clear()
-    print("[1] Set Up")
-    print("[2] Run All") 
-    print("[3] Update & Print")
-    print("[4] Quit")
-    
-    # Ask for the user's choice.
-    choice = input("\nWhat would you like to do? ")
-
-    # Respond to the user's choice.
-    if choice == '1':
-        NodeList = SetUp(NodeList)
-    elif choice == '2':
-        NodeList = RunAll(NodeList)
-    elif choice == '3':
-        UpdatePrintRun(NodeList)
-    elif choice == '4':
-        clear()
-        print("\nQuitting Application.\n")
-    else:
-        print("\nNot a valid option, please try again.")       
-print("Thanks again, bye now.")
-
-
+if __name__ == "__main__":
+    main()
 
 
 
