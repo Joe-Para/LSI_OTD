@@ -38,6 +38,8 @@
 #include <string.h>
 #include <communications_setup.h>
 
+struct tcp_pcb *TCPpcb;
+
 int main(void)
 {
 
@@ -45,12 +47,11 @@ int main(void)
 	start_ethernet();
 	
 	//sets up new TCP
-	struct tcp_pcb *pcb;
 	struct ip_addr dest;
 	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
-	pcb = tcp_new();
-	tcp_arg(pcb, NULL);
-	tcp_connect(pcb, &dest, 8000, client_connected);
+	TCPpcb = tcp_new();
+	tcp_arg(TCPpcb, NULL);
+	tcp_connect(TCPpcb, &dest, 8000, client_connected);
 	
 	while (true) {
 		
@@ -62,25 +63,26 @@ int main(void)
 	}
 }
 
-void runCommand(char *string, struct tcp_pcb *pcb)
+void runCommand(char *string)
 {
 	if(compareString(string, "Input", strlen("Input")) )
 	{
 		//calls function to check input fiber
 		printf("Input = True");
-		tcp_write(pcb, "true", strlen("true"), 0);
+		tcp_write(TCPpcb, "true", strlen("true"), 0);
 	}
 	else if (compareString(string, "Output", strlen("Output")))
 	{
 		//calls function to check output fiber
 		printf("Output = False");
-		tcp_write(pcb, "false", strlen("false"), 0);
+		tcp_write(TCPpcb, "false", strlen("false"), 0);
 	}
 	else if (compareString(string, "Send Ping", strlen("Send Ping")))
 	{
 		//calls function to send ping
 		printf("Ping Sent");
 		gpio_toggle_pin_level(LED0);
+		tcp_write(TCPpcb, "Ping Sent", strlen("Ping Sent"), 0);
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
@@ -108,23 +110,26 @@ void runCommand(char *string, struct tcp_pcb *pcb)
 	{
 		//calls function to do time delay run
 		printf("Running");
-		tcp_write(pcb, "100ns", strlen("100ns"), 0);
+		tcp_write(TCPpcb, "100ns", strlen("100ns"), 0);
 	}
 	else if (compareString(string, "Close Connection", strlen("Close Connection")))
 	{
 		//closes TCP connection
 		printf("Closing connection");
-		client_close(pcb);
+		tcp_write(TCPpcb, "Closing Connection", strlen("Closing Connection"), 0);
+		client_close(TCPpcb);
 	}
 	//on & off are for debugging
 	else if (compareString(string, "On", strlen("On")))
 	{
 		printf("LED On");
+		tcp_write(TCPpcb, "LED On", strlen("LED On"), 0);
 		gpio_set_pin_level(LED0, false);
 	}
 	else if (compareString(string, "Off", strlen("Off")))
 	{
 		printf("LED Off");
+		tcp_write(TCPpcb, "LED Off", strlen("LED Off"), 0);
 		gpio_set_pin_level(LED0, true);
 	}
 	

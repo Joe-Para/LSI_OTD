@@ -86,47 +86,47 @@ void start_ethernet()
 	
 }
 
-void client_close(struct tcp_pcb *pcb)
+void client_close(struct tcp_pcb *TCPpcb)
 {
-	tcp_arg(pcb, NULL);
-	tcp_sent(pcb, NULL);
-	tcp_recv(pcb, NULL);
-	tcp_close(pcb);
+	tcp_arg(TCPpcb, NULL);
+	tcp_sent(TCPpcb, NULL);
+	tcp_recv(TCPpcb, NULL);
+	tcp_close(TCPpcb);
 }
 
-err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
+err_t client_connected(void *arg, struct tcp_pcb *TCPpcb, err_t err)
 {
 	connectionCount += 1;
 	
 	LWIP_UNUSED_ARG(arg);
 	
-	tcp_sent(pcb, client_sent);
-	tcp_recv(pcb, client_recv);
-	tcp_poll(pcb, client_poll, 4);
-	tcp_err(pcb, client_err);
+	tcp_sent(TCPpcb, client_sent);
+	tcp_recv(TCPpcb, client_recv);
+	tcp_poll(TCPpcb, client_poll, 4);
+	tcp_err(TCPpcb, client_err);
 
 	return err;
 }
 
-err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
+err_t client_sent(void *arg, struct tcp_pcb *TCPpcb, u16_t len)
 {
 	LWIP_UNUSED_ARG(arg);
 
 	return ERR_OK;
 }
 
-err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
+err_t client_recv(void *arg, struct tcp_pcb *TCPpcb, struct pbuf *p, err_t err)
 {
 	char *string;
 	LWIP_UNUSED_ARG(arg);
 
 	if (err == ERR_OK && p != NULL)
 	{
-		tcp_recved(pcb, p->tot_len);
+		tcp_recved(TCPpcb, p->tot_len);
 
 		string = p->payload;
 		
-		runCommand(string , pcb);
+		runCommand(string);
 		
 		pbuf_free(p);
 	}
@@ -138,11 +138,11 @@ err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 	return ERR_OK;
 }
 
-err_t client_poll(void *arg, struct tcp_pcb *pcb)
+err_t client_poll(void *arg, struct tcp_pcb *TCPpcb)
 {
 	static int counter = 1;
 	LWIP_UNUSED_ARG(arg);
-	LWIP_UNUSED_ARG(pcb);
+	LWIP_UNUSED_ARG(TCPpcb);
 
 	counter++;
 
