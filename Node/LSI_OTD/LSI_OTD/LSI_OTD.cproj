@@ -29,16 +29,16 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <EraseKey />
     <AsfFrameworkConfig>
-      <framework-data xmlns="">
-        <options />
-        <configurations />
-        <files />
-        <documentation help="" />
-        <offline-documentation help="" />
-        <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.45.0" />
-        </dependencies>
-      </framework-data>
+      <framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
+  </dependencies>
+</framework-data>
     </AsfFrameworkConfig>
     <atStartFilePath>.atmelstart\atmel_start_config.atstart</atStartFilePath>
     <GpdscFilePath>.atmelstart\AtmelStart.gpdsc</GpdscFilePath>
@@ -559,6 +559,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="atmel_start_pins.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="communications_setup.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="communications_setup.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Config\hpl_gmac_config.h">

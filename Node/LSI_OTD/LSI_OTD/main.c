@@ -35,185 +35,8 @@
  */
 
 #include <atmel_start.h>
-#include <peripheral_clk_config.h>
-#include <lwip/netif.h>
-#include <lwip/timers.h>
-#include "lwip_demo_config.h"
 #include <string.h>
-#include <lwip/tcp.h>
-#include <lwip/dhcp.h>
-
-
-int workstationIP[] = {192, 168, 0, 2};
-	
-static void client_close(struct tcp_pcb *pcb);
-static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err);
-static err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
-static err_t client_poll(void *arg, struct tcp_pcb *pcb);
-static err_t client_err(void *arg, err_t err);
-static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len);
-static bool compareString(char *string1, char *string2, int string2Len);
-
-/* Saved total time in mS since timer was enabled */
-volatile static u32_t systick_timems;
-volatile static bool  recv_flag = false;
-static bool           link_up   = false;
-
-u32_t sys_now(void)
-{
-	return systick_timems;
-}
-
-void SysTick_Handler(void)
-{
-	systick_timems++;
-}
-
-void systick_enable(void)
-{
-	systick_timems = 0;
-	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
-}
-
-static void read_macaddress(u8_t *mac)
-{
-	#if CONF_AT24MAC_ADDRESS != 0
-	uint8_t addr = 0x9A;
-
-	i2c_m_sync_enable(&I2C_AT24MAC);
-	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, CONF_AT24MAC_ADDRESS, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), &addr, 1);
-	io_read(&(I2C_AT24MAC.io), mac, 6);
-	#else
-	/* set mac to 0x11 if no EEPROM mounted */
-	memset(mac, 0x11, 6);
-	#endif
-}
-
-static void start_ethernet()
-{
-	int32_t ret;
-	u8_t    mac[6];
-	/* Read MacAddress from EEPROM */
-	read_macaddress(mac);
-
-	systick_enable();
-
-	printf("\r\nHello ATMEL World!\r\n");
-
-	eth_ipstack_init();
-	do {
-		ret = ethernet_phy_get_link_status(&MACIF_PHY_desc, &link_up);
-		if (ret == ERR_NONE && link_up) {
-			break;
-		}
-	} while (true);
-	printf("Ethernet Connection established\n");
-	LWIP_MACIF_init(mac);
-	netif_set_up(&LWIP_MACIF_desc);
-
-	netif_set_default(&LWIP_MACIF_desc);
-	mac_async_enable(&MACIF);
-	dhcp_start(&LWIP_MACIF_desc);
-	
-	while(LWIP_MACIF_desc.ip_addr.addr == 0)
-	{
-		ethernetif_mac_input(&LWIP_MACIF_desc);
-		sys_check_timeouts();
-	}
-	
-	
-}
-
-static void client_close(struct tcp_pcb *pcb)
-{
-	tcp_arg(pcb, NULL);
-	tcp_sent(pcb, NULL);
-	tcp_recv(pcb, NULL);
-	tcp_close(pcb);
-}
-
-static err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
-{
-	LWIP_UNUSED_ARG(arg);
-	
-	tcp_sent(pcb, client_sent);
-	tcp_recv(pcb, client_recv);
-	tcp_poll(pcb, client_poll, 4);
-	tcp_err(pcb, client_err);
-	
-	char *string = "Hello";
-	tcp_write(pcb, string, strlen(string), 0);
-
-	return err;
-}
-
-static err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
-{
-	LWIP_UNUSED_ARG(arg);
-
-	return ERR_OK;
-}
-
-static err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
-{
-	char *string;
-	int length;
-	LWIP_UNUSED_ARG(arg);
-
-	if (err == ERR_OK && p != NULL)
-	{
-		tcp_recved(pcb, p->tot_len);
-
-		string = p->payload;
-		length = strlen(string);
-		
-		if(compareString(string, "On", strlen("On")) || compareString(string, "on", strlen("on")))
-		{
-			gpio_set_pin_level(LED0, false);
-		}
-		else if (compareString(string, "Off", strlen("Off")) || compareString(string, "off", strlen("off")))
-		{
-			gpio_set_pin_level(LED0, true);
-		}
-		
-		pbuf_free(p);
-	}
-	else
-	{
-		pbuf_free(p);
-	}
-
-	return ERR_OK;
-}
-
-static err_t client_poll(void *arg, struct tcp_pcb *pcb)
-{
-	static int counter = 1;
-	LWIP_UNUSED_ARG(arg);
-	LWIP_UNUSED_ARG(pcb);
-
-	counter++;
-
-	return ERR_OK;
-}
-
-static err_t client_err(void *arg, err_t err)
-{
-	LWIP_UNUSED_ARG(arg);
-	LWIP_UNUSED_ARG(err);
-
-	return ERR_OK;
-}
-
-static bool compareString(char *string1, char *string2, int string2Len)
-{
-	for(int i = 0; i < string2Len; i++)
-	if(string1[i] != string2[i])
-	return false;
-	
-	return true;
-}
+#include <communications_setup.h>
 
 int main(void)
 {
@@ -224,7 +47,7 @@ int main(void)
 	//sets up new TCP
 	struct tcp_pcb *pcb;
 	struct ip_addr dest;
-	IP4_ADDR(&dest, workstationIP[0], workstationIP[1], workstationIP[2], workstationIP[3]);
+	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
 	pcb = tcp_new();
 	tcp_arg(pcb, NULL);
 	tcp_connect(pcb, &dest, 8000, client_connected);
@@ -237,4 +60,65 @@ int main(void)
 		sys_check_timeouts();
 		
 	}
+}
+
+void runCommand(char *string, struct tcp_pcb *pcb)
+{
+	if(compareString(string, "Input", strlen("Input")) )
+	{
+		printf("Input = True");
+		tcp_write(pcb, "true", strlen("true"), 0);
+	}
+	else if (compareString(string, "Output", strlen("Output")))
+	{
+		printf("Output = False");
+		tcp_write(pcb, "false", strlen("false"), 0);
+	}
+	else if (compareString(string, "Send Ping", strlen("Send Ping")))
+	{
+		printf("Ping Sent");
+		gpio_toggle_pin_level(LED0);
+	}
+	else if (compareString(string, "Listen", strlen("Listen")))
+	{
+		printf("Listening");
+		
+		struct tcp_pcb *tempPCB;
+		struct ip_addr dest;
+		IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
+		tempPCB = tcp_new();
+		tcp_arg(tempPCB, NULL);
+		tcp_connect(tempPCB, &dest, 9000, client_connected);
+		
+		while (connectionCount != 2) {
+			
+			ethernetif_mac_input(&LWIP_MACIF_desc);
+			
+			/* LWIP timers - ARP, DHCP, TCP, etc. */
+			sys_check_timeouts();
+		}
+		
+		client_close(tempPCB);
+	}
+	else if (compareString(string, "Run", strlen("Run")))
+	{
+		printf("Running");
+		tcp_write(pcb, "100ns", strlen("100ns"), 0);
+	}
+	else if (compareString(string, "Shut Down", strlen("Shut Down")))
+	{
+		printf("Shutting Down");
+		gpio_toggle_pin_level(LED0);
+	}
+	else if (compareString(string, "On", strlen("On")))
+	{
+		printf("LED On");
+		gpio_set_pin_level(LED0, false);
+	}
+	else if (compareString(string, "Off", strlen("Off")))
+	{
+		printf("LED Off");
+		gpio_set_pin_level(LED0, true);
+	}
+	
 }
