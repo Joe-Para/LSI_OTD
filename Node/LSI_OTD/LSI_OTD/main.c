@@ -37,8 +37,10 @@
 #include <atmel_start.h>
 #include <string.h>
 #include <communications_setup.h>
+#include "spi_setup.h"
 
 struct tcp_pcb *TCPpcb;
+struct io_descriptor *io; 
 
 int main(void)
 {
