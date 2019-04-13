@@ -6,6 +6,7 @@
  */ 
 
 #include "tdc7200.h"
+#define TDC_DEBUG_ON 1
 
 void tdc_setup(struct io_descriptor *const io){
 	
@@ -32,7 +33,7 @@ void tdc_setup(struct io_descriptor *const io){
 	tdc_write(io, 0x43, 0x01);
 	delay_us(5);
 	
-	
+	TDC_DEBUG("TDC setup done");
 }
 
 //when inputs are set copy constructor to .h file
@@ -55,14 +56,19 @@ uint32_t get_tof(struct io_descriptor *const io ){
 	
 	//fetch variables for math
 	volatile int time1 = tdc_read_8(io, TDC_TIME1);
+	TDC_DEBUG(time1);
 	delay_us(5);
-	volatile int time2 = tdc_read_8(io, TDC_TIME2);
+	volatile int time2 = tdc_read_8(io, TDC_TIME2);.
+	TDC_DEBUG(time2);
 	delay_us(5);
 	volatile int clock_count1 = tdc_read_8(io, TDC_CLOCK_COUNT1);
+	TDC_DEBUG(clock_count1);
 	delay_us(5);
 	volatile int calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
+	TDC_DEBUG(calibration1);
 	delay_us(5);
 	volatile int calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
+	TDC_DEBUG(calibration2);
 	//this is a very small decimal, do the calcs as doubles?
 	volatile double clock_period = 1.0 / REF_CLOCK_HZ;
 	
@@ -73,6 +79,7 @@ uint32_t get_tof(struct io_descriptor *const io ){
 
 	//return value of tof in picoseconds
 	volatile  tof_ps = tof1 * 1e12;
+	TDC_DEBUG(tof_ps);
 	return tof_ps;
 }
 

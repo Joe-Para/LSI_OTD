@@ -45,7 +45,7 @@ void tdc_write(struct io_descriptor *const io, uint8_t *const commandbuf, uint8_
 uint32_t get_tof(struct io_descriptor *const io);
 void tdc_setup(struct io_descriptor *const io);
 
-
+#define TDC_DEBUG(message) do{ if(TDC_DEBUG_ON) {	printf(message);} } while(0)
 
 
 #endif /* TDC7200_H_ */
