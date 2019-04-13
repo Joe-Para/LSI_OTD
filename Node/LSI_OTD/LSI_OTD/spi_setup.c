@@ -6,9 +6,9 @@
  */
 
 #include "spi_setup.h"
-struct io_descriptor *io;
 
-void start_spi(void){
+
+void start_spi(struct io_descriptor *const io){
 	
 		spi_m_sync_get_io_descriptor(&SPI_0, &io);
 		spi_m_sync_enable(&SPI_0);

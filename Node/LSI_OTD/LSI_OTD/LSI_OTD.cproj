@@ -1377,6 +1377,12 @@
     <Compile Include="stdio_start.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="tdc7200.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="tdc7200.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />

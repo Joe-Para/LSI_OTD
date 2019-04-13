@@ -5,11 +5,13 @@
  *  Author: paran
  */ 
 
+#include "tdc7200.h"
+
 void tdc_setup(struct io_descriptor *const io){
 	
 	//enable tdc chip, needs clean rising edge some time after power up, fully ready 1.5ms after enable.
 	gpio_set_pin_level(TDC_ENABLE, true);
-	delay_ms(10);
+	delay_ms(2);
 	
 	gpio_set_pin_level( TDC_ENABLE,	false);
 	gpio_set_pin_direction(TDC_ENABLE, GPIO_DIRECTION_OUT);

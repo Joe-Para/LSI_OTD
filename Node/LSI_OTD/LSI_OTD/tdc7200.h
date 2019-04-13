@@ -10,7 +10,7 @@
 #define TDC7200_H_
 
 #include <atmel_start.h>
-#include "tdc7200.c"
+
 
 #define REF_CLOCK_HZ 10000000 //10mhz clock
 #define CALIBRATION2_PERIODS 40.0 //write 11 to TDC_CONFIG2[7:6]

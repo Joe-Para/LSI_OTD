@@ -38,16 +38,17 @@
 #include <string.h>
 #include <communications_setup.h>
 #include "spi_setup.h"
+#include "tdc7200.h"
 
 struct tcp_pcb *TCPpcb;
- 
+struct io_descriptor *io;
 
 int main(void)
 {
 
 	atmel_start_init();
 	start_ethernet();
-	start_spi();
+	start_spi(&io);
 	tdc_setup(&io);
 	
 	//sets up new TCP
