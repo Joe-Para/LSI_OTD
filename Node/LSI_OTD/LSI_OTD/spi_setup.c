@@ -6,6 +6,7 @@
  */
 
 #include "spi_setup.h"
+struct io_descriptor *io;
 
 void start_spi(void){
 	

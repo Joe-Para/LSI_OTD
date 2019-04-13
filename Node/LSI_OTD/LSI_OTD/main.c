@@ -40,13 +40,15 @@
 #include "spi_setup.h"
 
 struct tcp_pcb *TCPpcb;
-struct io_descriptor *io; 
+ 
 
 int main(void)
 {
 
 	atmel_start_init();
 	start_ethernet();
+	start_spi();
+	tdc_setup(&io);
 	
 	//sets up new TCP
 	struct ip_addr dest;
