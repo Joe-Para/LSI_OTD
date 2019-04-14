@@ -82,7 +82,7 @@ uint32_t get_tof(struct io_descriptor *const io ){
 	TDC_DEBUG(tof_ps);
 	return tof_ps;
 }
-
+//writes one byte to TDC chip
 void tdc_write(struct io_descriptor *const io, uint8_t *const commandbuf, uint8_t *const databuf){
 	// need to write 2 bytes, one command one data
 
@@ -92,7 +92,7 @@ void tdc_write(struct io_descriptor *const io, uint8_t *const commandbuf, uint8_
 	gpio_set_pin_level(SPI0_SS, true);
 	
 }
-
+//reads one byte from TDC chip
 uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t *const commandbuf){
 	// need to write command byte and read 3 data bytes
 	uint8_t datain = 0;
@@ -103,7 +103,7 @@ uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t *const commandbuf){
 	
 	return (uint8_t) datain;
 }
-
+//reads three byttes from TDC chip
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t *const commandbuf){
 	// need to write command byte and read 3 data bytes
 	uint32_t datain = 0;
