@@ -36,18 +36,19 @@ void tdc_setup(struct io_descriptor *const io){
 	TDC_DEBUG("TDC setup done");
 }
 
-//when inputs are set copy constructor to .h file
+//beware, writing 0x01 to conf1 will erase any measurments
 uint32_t start_tof_meas(struct io_descriptor *const io, const uint8_t trig_pin, const uint8_t outpin){
 	//ref datasheet 7.4.6: Measurement Sequence
-	//Enable lo to high transition	(happens in setup)
+	//Enable: lo to high transition	(happens in setup)
 	//request measurement by writing CONFIG1
-	//tdc_write()
-	//wait for trigger to be enabled
+	uint8_t conf1 = tdc_read_8(io,TDC_CONFIG1)
+	tdc_write(io, TDC_CONFIG1, conf1|0x1);
+	//wait for trigger to be enabled 
+		//see ISR for TDC_TRIG
 	//set output line to fiber channels high
 	//wait for return interrupt
-	//call get_tof on measurement
-	
-	
+		//see ISR for TDC_INT
+
 	return 0;
 }
 //fetches and calculates time of flight from tdc in picoseconds
