@@ -43,6 +43,10 @@
 struct tcp_pcb *TCPpcb;
 struct io_descriptor *io;
 
+//bit 1 - TDCResults Flag
+//bit 2 - incomingSig Flag
+unsigned char flags = 0x0;
+
 int main(void)
 {
 
@@ -67,6 +71,28 @@ int main(void)
 		
 	}
 }
+
+
+void TCD_Trigger_ISR(void)
+{
+	gpio_set_pin_level(TX_PULSE, true);
+	delay_us(1);
+	gpio_set_pin_level(TX_PULSE, false);
+}
+
+void TDC_Interrupt_ISR(void)
+{
+	//sets TDCResults flag
+	flags |= 0x1;
+}
+
+void TDC_LPBK_ISR(void)
+{
+	//sets incomingSig flag
+	flags |= 0x2;
+}
+
+
 
 void runCommand(char *string)
 {
