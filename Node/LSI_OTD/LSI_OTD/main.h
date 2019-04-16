@@ -12,7 +12,7 @@
 //setting up types of flags
 #define flag_EthernetActivity	0x1
 #define flag_TDCResults			0x2
-#define flag_PulseRecved		0x4
+#define flag_PulseRecvd			0x4
 
 
 //setting up states
@@ -26,28 +26,8 @@ void TCD_Trigger_ISR(void);
 void TDC_Interrupt_ISR(void);
 void TDC_LPBK_ISR(void);
 
-
-
-
-
-
-//saved code for later 
-//struct tcp_pcb *tempPCB;
-//struct ip_addr dest;
-//IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
-//tempPCB = tcp_new();
-//tcp_arg(tempPCB, NULL);
-//tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
-//
-//while (connectionCount != 2) {
-	//
-	//ethernetif_mac_input(&LWIP_MACIF_desc);
-	//
-	///* LWIP timers - ARP, DHCP, TCP, etc. */
-	//sys_check_timeouts();
-//}
-//
-//client_close(tempPCB);
+void handleFlags();
 
 
 #endif /* MAIN_H_ */
+
