@@ -53,18 +53,18 @@ def RunAll(NodeList):
 
     if len(NodeList) == 0:
         print("Run failed: There are no nodes setup.")
-        return []
+        return NodeList
 
     for node in NodeList:
         try:
             node.conn.settimeout(RUN_TIMEOUT)
             node.conn.sendall(b"Run")
-            node.Time = str(node.conn.recv(2048))
+            node.Time = node.conn.recv(2048).decode("utf-8") 
             node.conn.settimeout(GEN_TIMEOUT)
         except socket.error as e:
-            print("Running failed: Could not get responce from node " + str(node.NodeNumber))
+            print("Running failed: Could not get response from node " + str(node.NodeNumber))
             errorFile.write(str(datetime.datetime.now()) + " " + e)
-            return[]
+            return NodeList
 
     #print the run data
     PrintRun(NodeList)
@@ -83,7 +83,7 @@ def SetUp():
     nextIP = None
     setupNodes = []
     nodesInOrder = []
-    nodeCount = 1
+    nodeCount = 0
 
     if len(Connections) == 0:
         print("Setup incomplete: There are no nodes found.")
@@ -94,12 +94,14 @@ def SetUp():
     #if connection times out, remove it from list
     for node in Connections:
         try:
+            #check input
             node.conn.sendall(b'Input')
             input = node.conn.recv(2048).decode("utf-8") 
             if input == "true":
                 node.Input = True
             elif input == "false":
                 node.Input = False
+            #check output
             node.conn.sendall(b'Output')
             output = node.conn.recv(2048).decode("utf-8") 
             if output == "true":
@@ -107,11 +109,8 @@ def SetUp():
             elif output == "false":
                 node.Output = False
             setupNodes.append(node)
-
         except socket.error as e:
             errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
-            node.conn.close()
-            Connections.remove(node)
 
     if len(setupNodes) == 0:
         print("Setup incomplete: There are nodes found.")
@@ -143,17 +142,22 @@ def SetUp():
         return []
     
 
+    nodeCount += 1
     nodesInOrder.append(nextNode)
     nodesInOrder[0].NodeNumber = nodeCount
 
     #sets all nodes except first node to listen
     for node in setupNodes:
         if not nextNode:
-            node.conn.sendall(b'Listen')
+            try:
+                node.conn.sendall(b'Listen')
+            except socket.error as e:
+                errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
+                print("Setup incomplete: Count not put all nodes into listen mode.")
+                return []
+
 
     while nextNode != lastNode:
-        nodeCount += 1
-
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(10.0)
@@ -167,16 +171,18 @@ def SetUp():
             errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
             print("Setup incomplete: Cannot find next node.")
             print("Check node after node " + str(nodeCount))
+            for node in setupNodes:
+                try: node.conn.sendall(b'Stop Listening')
+                except socket.error as e: 
+                    errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
             return []
         
         for node in setupNodes:
             if nextIP == node.addr:
+                nodeCount += 1
                 node.NodeNumber = nodeCount
                 nodesInOrder.append(node)
                 nextNode = node
-
-    lastNode.NodeNumber = nodeCount
-    nodesInOrder.append(lastNode) 
 
     print("Nodes are connected in this order:")
     for node in nodesInOrder:
