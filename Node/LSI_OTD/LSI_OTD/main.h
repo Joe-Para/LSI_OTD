@@ -26,7 +26,7 @@ void TCD_Trigger_ISR(void);
 void TDC_Interrupt_ISR(void);
 void TDC_LPBK_ISR(void);
 
-void handleFlags();
+void secondConnect();
 
 
 #endif /* MAIN_H_ */

@@ -65,8 +65,19 @@ int main(void)
 
 	while (true) {
 		
-		if(flags)
-			handleFlags();	
+		if(flags & flag_EthernetActivity)
+		{
+			flags &= ~flag_EthernetActivity;
+			ethernetif_mac_input(&LWIP_MACIF_desc);
+		}
+		if((flags & flag_PulseRecvd) && (state == state_listening))
+		{
+			secondConnect();
+		}
+		if(flags & flag_TDCResults)
+		{
+			//do stuff
+		}	
 		
 		/* LWIP timers - ARP, DHCP, TCP, etc. */
 		sys_check_timeouts();
@@ -97,36 +108,25 @@ void TDC_LPBK_ISR(void)
 	ext_irq_register(PIO_PD25_IDX, NULL);
 }
 
-void handleFlags()
+void secondConnect()
 {
-	if(flags & flag_EthernetActivity)
+	if(connectionCount == 2)
 	{
-		flags &= ~flag_EthernetActivity;
-		ethernetif_mac_input(&LWIP_MACIF_desc);
-	}
-	if((flags & flag_PulseRecvd) && (state == state_listening))
-	{
-		if(connectionCount == 2)
-		{
-			state = state_wait;
-			flags &= ~flag_PulseRecvd;
-			client_close(tempPCB);
-			return;
-		}
-		
-		struct ip_addr dest;
-		IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
-		tempPCB = tcp_new();
-		tcp_arg(tempPCB, NULL);
-		tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
-		ethernetif_mac_input(&LWIP_MACIF_desc);
-		sys_check_timeouts();
+		state = state_wait;
+		flags &= ~flag_PulseRecvd;
+		client_close(tempPCB);
 		return;
 	}
-	if(flags & flag_TDCResults)
-	{
-		//do stuff
-	}
+	
+	struct ip_addr dest;
+	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
+	tempPCB = tcp_new();
+	tcp_arg(tempPCB, NULL);
+	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
+	ethernetif_mac_input(&LWIP_MACIF_desc);
+	sys_check_timeouts();
+	
+	return;
 }
 
 
