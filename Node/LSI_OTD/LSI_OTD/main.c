@@ -124,9 +124,7 @@ void secondConnect()
 	tempPCB = tcp_new();
 	tcp_arg(tempPCB, NULL);
 	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
-	ethernetif_mac_input(&LWIP_MACIF_desc);
-	sys_check_timeouts();
-	
+
 	return;
 }
 
@@ -153,7 +151,6 @@ void runCommand(char *string)
 		gpio_set_pin_level(TX_PULSE, false);
 		
 		printf("Ping Sent");
-		tcp_write(TCPpcb, "Ping Sent", strlen("Ping Sent"), 0);
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{

@@ -466,7 +466,7 @@
 #endif
 
 //enable LWIF debugging
-#define LWIP_DEBUG 1
+#define LWIP_DEBUG 0
 
 // <y> Debug level
 //    <LWIP_DBG_LEVEL_ALL"> All
@@ -485,7 +485,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_etharp_debug
 #ifndef ETHARP_DEBUG
-#define ETHARP_DEBUG LWIP_DBG_ON
+#define ETHARP_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> Netif Debug option
@@ -494,7 +494,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_netif_debug
 #ifndef NETIF_DEBUG
-#define NETIF_DEBUG LWIP_DBG_ON
+#define NETIF_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> Pbuf Debug option
@@ -629,7 +629,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_debug
 #ifndef TCP_DEBUG
-#define TCP_DEBUG LWIP_DBG_ON
+#define TCP_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP input Debug option
@@ -638,7 +638,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_input_debug
 #ifndef TCP_INPUT_DEBUG
-#define TCP_INPUT_DEBUG LWIP_DBG_ON
+#define TCP_INPUT_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP in for fast retransmit Debug option
@@ -656,7 +656,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_rto_debug
 #ifndef TCP_RTO_DEBUG
-#define TCP_RTO_DEBUG LWIP_DBG_ON
+#define TCP_RTO_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP congestion window Debug option
@@ -665,7 +665,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_cwnd_debug
 #ifndef TCP_CWND_DEBUG
-#define TCP_CWND_DEBUG LWIP_DBG_ON
+#define TCP_CWND_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP window updating Debug option
@@ -674,7 +674,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_wnd_debug
 #ifndef TCP_WND_DEBUG
-#define TCP_WND_DEBUG LWIP_DBG_ON
+#define TCP_WND_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP out Debug option
@@ -683,7 +683,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcp_output_debug
 #ifndef TCP_OUTPUT_DEBUG
-#define TCP_OUTPUT_DEBUG LWIP_DBG_ON
+#define TCP_OUTPUT_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> TCP RST Debug option
@@ -719,7 +719,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_tcpip_debug
 #ifndef TCPIP_DEBUG
-#define TCPIP_DEBUG LWIP_DBG_ON
+#define TCPIP_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> PPP Debug option
@@ -746,7 +746,7 @@
 // <i> Default LWIP_DBG_OFF
 // <id> lwip_dhcp_debug
 #ifndef DHCP_DEBUG
-#define DHCP_DEBUG LWIP_DBG_ON
+#define DHCP_DEBUG LWIP_DBG_OFF
 #endif
 
 // <y> AUTOIP Debug option
