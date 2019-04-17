@@ -39,11 +39,8 @@
 #include "communications_setup.h"
 #include "spi_setup.h"
 #include "tdc7200.h"
-<<<<<<< HEAD
 #include "i2c_setup.h"
-=======
 #include "main.h"
->>>>>>> 98bb6b07eb38490a63329096151e9e06ce1d1a81
 
 struct tcp_pcb *TCPpcb;
 struct tcp_pcb *tempPCB;
