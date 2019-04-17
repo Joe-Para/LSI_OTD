@@ -63,7 +63,7 @@ def RunAll(NodeList):
             node.conn.settimeout(GEN_TIMEOUT)
         except socket.error as e:
             print("Running failed: Could not get response from node " + str(node.NodeNumber))
-            errorFile.write(str(datetime.datetime.now()) + " " + e)
+            errorFile.write(str(datetime.datetime.now()) + " " + str(e))
             return NodeList
 
     #print the run data
@@ -89,6 +89,10 @@ def SetUp():
         print("Setup incomplete: There are no nodes found.")
         return []
 
+
+    for node in Connections:
+        node.Input = None
+        node.Output = None
 
     #checking input & output for all connections
     #if connection times out, remove it from list
@@ -148,7 +152,7 @@ def SetUp():
 
     #sets all nodes except first node to listen
     for node in setupNodes:
-        if not nextNode:
+        if node != nextNode:
             try:
                 node.conn.sendall(b'Listen')
             except socket.error as e:
@@ -159,6 +163,7 @@ def SetUp():
 
     while nextNode != lastNode:
         try:
+            nextNode.conn.sendall(b'Send Ping')
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(10.0)
                 s.bind(('', SC_PORT))
