@@ -39,6 +39,7 @@
 #include <communications_setup.h>
 #include "spi_setup.h"
 #include "tdc7200.h"
+#include "i2c_setup.h"
 
 struct tcp_pcb *TCPpcb;
 struct io_descriptor *io;
