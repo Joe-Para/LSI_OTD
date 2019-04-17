@@ -41,7 +41,7 @@ uint32_t start_tof_meas(struct io_descriptor *const io, const uint8_t trig_pin, 
 	//ref datasheet 7.4.6: Measurement Sequence
 	//Enable: lo to high transition	(happens in setup)
 	//request measurement by writing CONFIG1
-	uint8_t conf1 = tdc_read_8(io,TDC_CONFIG1)
+	uint8_t conf1 = tdc_read_8(io,TDC_CONFIG1);
 	tdc_write(io, TDC_CONFIG1, conf1|0x1);
 	//wait for trigger to be enabled 
 		//see ISR for TDC_TRIG
@@ -59,7 +59,7 @@ uint32_t get_tof(struct io_descriptor *const io ){
 	volatile int time1 = tdc_read_8(io, TDC_TIME1);
 	TDC_DEBUG(time1);
 	delay_us(5);
-	volatile int time2 = tdc_read_8(io, TDC_TIME2);.
+	volatile int time2 = tdc_read_8(io, TDC_TIME2);
 	TDC_DEBUG(time2);
 	delay_us(5);
 	volatile int clock_count1 = tdc_read_8(io, TDC_CLOCK_COUNT1);

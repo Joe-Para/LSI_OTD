@@ -12,7 +12,7 @@
 #define workstationIP_0		192
 #define workstationIP_1		168
 #define workstationIP_2		0
-#define workstationIP_3		18
+#define workstationIP_3		8
 
 //main and secondary connection ports
 #define MC_PORT				8000
@@ -26,6 +26,7 @@
 #include <string.h>
 #include <lwip/tcp.h>
 #include <lwip/dhcp.h>
+#include <main.h>
 
 void client_close(struct tcp_pcb *TCPpcb);
 err_t client_connected(void *arg, struct tcp_pcb *TCPpcb, err_t err);
@@ -38,6 +39,8 @@ void start_ethernet();
 
 void runCommand(char *string);
 extern int connectionCount;
+extern unsigned char state;
+extern unsigned char flags;
 
 #endif /* COMMUNICATIONS_SETUP_H_ */
 

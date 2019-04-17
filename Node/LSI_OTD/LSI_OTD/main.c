@@ -36,21 +36,29 @@
 
 #include <atmel_start.h>
 #include <string.h>
-#include <communications_setup.h>
+#include "communications_setup.h"
 #include "spi_setup.h"
 #include "tdc7200.h"
+<<<<<<< HEAD
 #include "i2c_setup.h"
+=======
+#include "main.h"
+>>>>>>> 98bb6b07eb38490a63329096151e9e06ce1d1a81
 
 struct tcp_pcb *TCPpcb;
+struct tcp_pcb *tempPCB;
 struct io_descriptor *io;
+
+unsigned char flags = 0x0;
+unsigned char state = 0x0;
 
 int main(void)
 {
-
+	state = state_init;
 	atmel_start_init();
 	start_ethernet();
-	start_spi(&io);
-	tdc_setup(&io);
+	//start_spi(&io);
+	//tdc_setup(&io);
 	
 	//sets up new TCP
 	struct ip_addr dest;
@@ -58,16 +66,74 @@ int main(void)
 	TCPpcb = tcp_new();
 	tcp_arg(TCPpcb, NULL);
 	tcp_connect(TCPpcb, &dest, MC_PORT, client_connected);
-	
+
 	while (true) {
 		
-		ethernetif_mac_input(&LWIP_MACIF_desc);	
+		if(flags & flag_EthernetActivity)
+		{
+			flags &= ~flag_EthernetActivity;
+			ethernetif_mac_input(&LWIP_MACIF_desc);
+		}
+		if((flags & flag_PulseRecvd) && (state == state_listening))
+		{
+			secondConnect();
+		}
+		if(flags & flag_TDCResults)
+		{
+			//do stuff
+		}	
 		
 		/* LWIP timers - ARP, DHCP, TCP, etc. */
 		sys_check_timeouts();
 		
 	}
 }
+
+
+void TCD_Trigger_ISR(void)
+{
+	gpio_set_pin_level(TX_PULSE, true);
+	delay_us(1);
+	gpio_set_pin_level(TX_PULSE, false);
+}
+
+void TDC_Interrupt_ISR(void)
+{
+	//sets TDCResults flag
+	flags |= flag_TDCResults;
+}
+
+void TDC_LPBK_ISR(void)
+{
+	//sets flag
+	flags |= flag_PulseRecvd;
+	
+	//disables the interrupt
+	ext_irq_register(PIO_PD25_IDX, NULL);
+}
+
+void secondConnect()
+{
+	if(connectionCount == 2)
+	{
+		state = state_wait;
+		flags &= ~flag_PulseRecvd;
+		client_close(tempPCB);
+		return;
+	}
+	
+	struct ip_addr dest;
+	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
+	tempPCB = tcp_new();
+	tcp_arg(tempPCB, NULL);
+	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
+	ethernetif_mac_input(&LWIP_MACIF_desc);
+	sys_check_timeouts();
+	
+	return;
+}
+
+
 
 void runCommand(char *string)
 {
@@ -85,32 +151,28 @@ void runCommand(char *string)
 	}
 	else if (compareString(string, "Send Ping", strlen("Send Ping")))
 	{
-		//calls function to send ping
+		gpio_set_pin_level(TX_PULSE, true);
+		delay_us(1);
+		gpio_set_pin_level(TX_PULSE, false);
+		
 		printf("Ping Sent");
-		gpio_toggle_pin_level(LED0);
 		tcp_write(TCPpcb, "Ping Sent", strlen("Ping Sent"), 0);
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
-		//calls function to listen for ping (use code below for function)
+		state = state_listening;
+		ext_irq_register(PIO_PD25_IDX, TDC_LPBK_ISR);
+		
 		printf("Listening");
+	}
+	else if (compareString(string, "Stop Listening", strlen("Stop Listening")))
+	{
+		state = state_wait;
+		ext_irq_register(PIO_PD25_IDX, NULL);
 		
-		struct tcp_pcb *tempPCB;
-		struct ip_addr dest;
-		IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
-		tempPCB = tcp_new();
-		tcp_arg(tempPCB, NULL);
-		tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
+		printf("Stopped Listening");
+		tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);
 		
-		while (connectionCount != 2) {
-			
-			ethernetif_mac_input(&LWIP_MACIF_desc);
-			
-			/* LWIP timers - ARP, DHCP, TCP, etc. */
-			sys_check_timeouts();
-		}
-		
-		client_close(tempPCB);
 	}
 	else if (compareString(string, "Run", strlen("Run")))
 	{
@@ -138,5 +200,12 @@ void runCommand(char *string)
 		tcp_write(TCPpcb, "LED Off", strlen("LED Off"), 0);
 		gpio_set_pin_level(LED0, true);
 	}
+	else
+	{
+		printf("Command Not Found");
+		tcp_write(TCPpcb, "Command Not Found", strlen("Command Not Found"), 0);
+	}
 	
 }
+
+
