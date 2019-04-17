@@ -44,6 +44,7 @@ uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t *const commandbuf);
 void tdc_write(struct io_descriptor *const io, uint8_t *const commandbuf, uint8_t *const databuf);
 uint32_t get_tof(struct io_descriptor *const io);
 void tdc_setup(struct io_descriptor *const io);
+uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples);
 
 #define TDC_DEBUG(message) do{ if(TDC_DEBUG_ON) {	printf(message);} } while(0)
 

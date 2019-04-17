@@ -83,6 +83,42 @@ uint32_t get_tof(struct io_descriptor *const io ){
 	TDC_DEBUG(tof_ps);
 	return tof_ps;
 }
+//input takes a multiple of 2 (1,2,4...128)
+uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples){
+	uint32_t err = 0;
+	uint8_t conf2 = 0;
+	switch (samples)
+	{ //this is a replacement for log2(samples), good up to 128
+		case 1:
+			conf2 = 0; break;
+		case 2:
+			conf2 = 1; break;
+		case 4:
+			conf2 = 2; break;
+		case 8:
+			conf2 = 3; break;
+		case 16:
+			conf2 = 4; break;
+		case 32:
+			conf2 = 5; break;
+		case 64:
+			conf2 = 6; break;
+		case 128:
+			conf2 = 7; break;
+		default:
+			return -1;
+	}
+	TDC_DEBUG("enabling multicycle averaging #:");
+	TDC_DEBUG(samples);
+	uint8_t confold = tdc_read_8(io, TDC_CONFIG2);
+	//clear averaging bits [5:3]
+	confold &= 0xC7;
+	confold |= (conf2<<3);
+	tdc_write(io, TDC_CONFIG2, &confold);
+	return err;
+}
+
+
 //writes one byte to TDC chip
 void tdc_write(struct io_descriptor *const io, uint8_t *const commandbuf, uint8_t *const databuf){
 	// need to write 2 bytes, one command one data
