@@ -21,3 +21,9 @@ GEN_TIMEOUT = 5.0
 #This timeout is how long the workstation will wait 
 #for a reply from a node after sending the "Run" command
 RUN_TIMEOUT = 30.0
+
+#SC_TIMEOUT
+#This timeout is how long the workstation will wait 
+#for the second connection from a node during setup
+SC_TIMEOUT = 10.0
+

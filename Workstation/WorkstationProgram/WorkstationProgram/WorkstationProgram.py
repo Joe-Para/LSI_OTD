@@ -1,6 +1,7 @@
 import socket
 import threading
 import datetime
+import time
 from config import *
 
 Connections = []
@@ -115,6 +116,7 @@ def SetUp():
             setupNodes.append(node)
         except socket.error as e:
             errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
+           
 
     if len(setupNodes) == 0:
         print("Setup incomplete: There are nodes found.")
@@ -165,12 +167,12 @@ def SetUp():
         try:
             nextNode.conn.sendall(b'Send Ping')
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(10.0)
+                s.settimeout(SC_TIMEOUT)
                 s.bind(('', SC_PORT))
                 s.listen(1)
-                conn, addr = s.accept()
+                newConn, addr = s.accept()
                 nextIP = str(addr[0])
-                conn.close()
+                newConn.close()
                 s.close()
         except socket.error as e:
             errorFile.write(str(datetime.datetime.now()) + " Socket error: " + str(e))
