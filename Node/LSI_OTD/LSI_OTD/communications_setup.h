@@ -28,12 +28,12 @@
 #include <lwip/dhcp.h>
 #include <main.h>
 
-void client_close(struct tcp_pcb *TCPpcb);
-err_t client_connected(void *arg, struct tcp_pcb *TCPpcb, err_t err);
-err_t client_recv(void *arg, struct tcp_pcb *TCPpcb, struct pbuf *p, err_t err);
-err_t client_poll(void *arg, struct tcp_pcb *TCPpcb);
+void client_close(struct tcp_pcb *pcb);
+err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err);
+err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err);
+err_t client_poll(void *arg, struct tcp_pcb *pcb);
 err_t client_err(void *arg, err_t err);
-err_t client_sent(void *arg, struct tcp_pcb *TCPpcb, u16_t len);
+err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len);
 bool compareString(char *string1, char *string2, int string2Len);
 void start_ethernet();
 
