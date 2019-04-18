@@ -78,6 +78,11 @@ int main(void)
 		if(flags & flag_TDCResults)
 		{
 			//do stuff
+		}
+		if(flags & flag_secConnection)
+		{
+			flags &= ~flag_secConnection;
+			client_close(tempPCB);
 		}	
 		
 		/* LWIP timers - ARP, DHCP, TCP, etc. */
@@ -111,21 +116,13 @@ void TDC_LPBK_ISR(void)
 
 void secondConnect()
 {
-	if(connectionCount == 2)
-	{
-		state = state_wait;
-		flags &= ~flag_PulseRecvd;
-		client_close(tempPCB);
-		return;
-	}
-	
+	flags &= ~flag_PulseRecvd;
+	state = state_wait;
 	struct ip_addr dest;
 	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
 	tempPCB = tcp_new();
 	tcp_arg(tempPCB, NULL);
 	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
-
-	return;
 }
 
 

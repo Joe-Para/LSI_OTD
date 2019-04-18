@@ -11,8 +11,9 @@
 
 //setting up types of flags
 #define flag_EthernetActivity	0x1
-#define flag_TDCResults			0x2
-#define flag_PulseRecvd			0x4
+#define flag_secConnection		0x2
+#define flag_TDCResults			0x4
+#define flag_PulseRecvd			0x8
 
 
 //setting up states
