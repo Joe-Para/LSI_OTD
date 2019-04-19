@@ -1024,6 +1024,12 @@
     <Compile Include="hri\hri_xdmac_e70b.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="i2c_setup.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="i2c_setup.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="lwip\lwip-1.4.0\port\ethif_mac.c">
       <SubType>compile</SubType>
     </Compile>
