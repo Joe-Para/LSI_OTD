@@ -52,10 +52,13 @@ unsigned char state = 0x0;
 int main(void)
 {
 	state = state_init;
+	uint8_t buttons;
 	atmel_start_init();
-	start_ethernet();
+	//start_ethernet();
 	//start_spi(&io);
 	//tdc_setup(&io);
+	LCD_begin();
+	LCD_print("Welcome!");
 	
 	//sets up new TCP
 	struct ip_addr dest;
@@ -66,6 +69,9 @@ int main(void)
 
 	while (true) {
 		
+		buttons = LCD_readButtons();
+		
+
 		if(flags & flag_EthernetActivity)
 		{
 			flags &= ~flag_EthernetActivity;
@@ -84,6 +90,10 @@ int main(void)
 			flags &= ~flag_secConnection;
 			client_close(tempPCB);
 		}	
+		if(buttons)
+		{
+			buttonClicked(buttons);
+		}
 		
 		/* LWIP timers - ARP, DHCP, TCP, etc. */
 		sys_check_timeouts();
@@ -123,6 +133,30 @@ void secondConnect()
 	tempPCB = tcp_new();
 	tcp_arg(tempPCB, NULL);
 	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
+}
+
+void buttonClicked(uint8_t buttons)
+{
+	if(buttons & BUTTON_UP)
+	{
+		LCD_print("UP");
+	}
+	if(buttons & BUTTON_DOWN)
+	{
+		LCD_print("DOWN");
+	}
+	if(buttons & BUTTON_RIGHT)
+	{
+		LCD_print("RIGHT");
+	}
+	if(buttons & BUTTON_LEFT)
+	{
+		LCD_print("LEFT");
+	}
+	if(buttons & BUTTON_SELECT)
+	{
+		LCD_print("SELECT");
+	}
 }
 
 

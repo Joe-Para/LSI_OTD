@@ -28,6 +28,7 @@ void TDC_Interrupt_ISR(void);
 void TDC_LPBK_ISR(void);
 
 void secondConnect();
+void buttonClicked(uint8_t buttons);
 
 
 #endif /* MAIN_H_ */

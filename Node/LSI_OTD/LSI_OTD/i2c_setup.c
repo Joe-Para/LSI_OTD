@@ -13,8 +13,7 @@
 // otherwise you would need to create a separate I2C struct 
 // struct i2c_m_sync_desc I2C_AT24MAC;
 
-uint8_t _displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS \
-| LCD_2LINE;
+uint8_t _displayfunction = LCD_4BITMODE | LCD_5x8DOTS | LCD_2LINE;
 uint8_t _displaycontrol, _displaymode;
 uint8_t _numlines = 2;
 uint8_t _currline = 0;
@@ -24,7 +23,7 @@ uint8_t _enable_pin = 13;
 uint8_t _data_pins[8];
 uint8_t _button_pins[5];
 
-
+uint16_t i2cData = 0;
 
 void LCD_begin(void){
 	_data_pins[0] = 12;  // really d4
@@ -42,11 +41,11 @@ void LCD_begin(void){
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
 	
 	//Set Defaults to all inputs (_i2c.begin from adafruit)
-	io_write(&(I2C_AT24MAC.io), MCP23017_IODIRA, 1);
-	io_write(&(I2C_AT24MAC.io), 0xFF, 1);
+	i2cData = 0xFF00| MCP23017_IODIRA;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 	
-	io_write(&(I2C_AT24MAC.io), MCP23017_IODIRB, 1);
-	io_write(&(I2C_AT24MAC.io), 0xFF, 1);
+	i2cData = 0xFF00| MCP23017_IODIRB;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 	
 	LCD_pinMode(8, OUTPUT);
 	LCD_pinMode(6, OUTPUT);
@@ -54,9 +53,9 @@ void LCD_begin(void){
 	LCD_setBacklight(0x7);
 	
 	LCD_pinMode(_rw_pin, OUTPUT);
-
 	LCD_pinMode(_rs_pin, OUTPUT);
 	LCD_pinMode(_enable_pin, OUTPUT);
+	
 	for (uint8_t i=0; i<4; i++){
 		LCD_pinMode(_data_pins[i], OUTPUT);
 	}
@@ -75,40 +74,43 @@ void LCD_begin(void){
     LCD_digitalWrite(_enable_pin, LOW);
     LCD_digitalWrite(_rw_pin, LOW);
    
-    //put the LCD into 4 bit or 8 bit mode
-    if (! (_displayfunction & LCD_8BITMODE)) {
-	    // this is according to the hitachi HD44780 datasheet
-	    // figure 24, pg 46
+	//put the LCD into 4 bit or 8 bit mode
+	if (! (_displayfunction & LCD_8BITMODE)) 
+	{
+		// this is according to the hitachi HD44780 datasheet
+		// figure 24, pg 46
 
-	    // we start in 8bit mode, try to set 4 bit mode
-	    LCD_write4bits(0x03);
-	    delay_us(4500); // wait min 4.1ms
+		// we start in 8bit mode, try to set 4 bit mode
+		LCD_write4bits(0x03);
+		delay_us(4500); // wait min 4.1ms
 
-	    // second try
-	    LCD_write4bits(0x03);
-	    delay_us(4500); // wait min 4.1ms
+		// second try
+		LCD_write4bits(0x03);
+		delay_us(4500); // wait min 4.1ms
 	    
-	    // third go!
-	    LCD_write4bits(0x03);
-	    delay_us(150);
+		// third go!
+		LCD_write4bits(0x03);
+		delay_us(150);
 
-	    // finally, set to 8-bit interface
-	    LCD_write4bits(0x02);
-	    } else {
-	    // this is according to the hitachi HD44780 datasheet
-	    // page 45 figure 23
+		// finally, set to 8-bit interface
+		LCD_write4bits(0x02);
+	} 
+	else 
+	{
+		// this is according to the hitachi HD44780 datasheet
+		// page 45 figure 23
 
-	    // Send function set command sequence
-	    LCD_command(LCD_FUNCTIONSET | _displayfunction);
-	    delay_us(4500);  // wait more than 4.1ms
+		// Send function set command sequence
+		LCD_command(LCD_FUNCTIONSET | _displayfunction);
+		delay_us(4500);  // wait more than 4.1ms
 
-	    // second try
-	    LCD_command(LCD_FUNCTIONSET | _displayfunction);
-	    delay_us(150);
+		// second try
+		LCD_command(LCD_FUNCTIONSET | _displayfunction);
+		delay_us(150);
 
-	    // third go
-	    LCD_command(LCD_FUNCTIONSET | _displayfunction);
-    }
+		// third go
+		LCD_command(LCD_FUNCTIONSET | _displayfunction);
+	}
 
     // finally, set # lines, font size, etc.
     LCD_command(LCD_FUNCTIONSET | _displayfunction);
@@ -120,36 +122,45 @@ void LCD_begin(void){
     // clear it off
     LCD_clear();
 
-    // Initialize to default text direction (for romance languages)
+    // Initialize to default text direction
     _displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
     // set the entry mode
     LCD_command(LCD_ENTRYMODESET | _displaymode);
-	
 }
 
 void LCD_pinMode(uint8_t p, uint8_t d){
-	uint8_t iodir;
+	uint8_t iodir = 0;
 	uint8_t iodiraddr;
 	
-	if (p < 8)
-	iodiraddr = MCP23017_IODIRA;
-	else {
+	if(p > 15)
+		return;
+	
+	if (p < 8) 
+	{
+		iodiraddr = MCP23017_IODIRA;
+	}
+	else 
+	{
 		iodiraddr = MCP23017_IODIRB;
 		p -= 8;
 	}
+	
 	//don't forget to set slave back just in case its changed!
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), iodiraddr, 1);
+	io_write(&(I2C_AT24MAC.io), &iodiraddr, 1);
 	io_read(&(I2C_AT24MAC.io), &iodir, 1);
 	
-	if (d == INPUT) {
+	if (d == INPUT) 
+	{
 		iodir |= 1 << p;
-		} else {
+	} 
+	else 
+	{
 		iodir &= ~(1 << p);
 	}
 	
-	io_write(&(I2C_AT24MAC.io), iodiraddr, 1);
-	io_write(&(I2C_AT24MAC.io), iodir, 1);
+	i2cData = (iodir << 8) | iodiraddr;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
 void LCD_digitalWrite(uint8_t p, uint8_t d) {
@@ -158,46 +169,59 @@ void LCD_digitalWrite(uint8_t p, uint8_t d) {
 
 	// only 16 bits!
 	if (p > 15)
-	return;
+		return;
 
-	if (p < 8) {
+	if (p < 8) 
+	{
 		olataddr = MCP23017_OLATA;
 		gpioaddr = MCP23017_GPIOA;
-		} else {
+	} 
+	else 
+	{
 		olataddr = MCP23017_OLATB;
 		gpioaddr = MCP23017_GPIOB;
 		p -= 8;
 	}
+	
 	// read the current GPIO output latches
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), olataddr, 1);
+	io_write(&(I2C_AT24MAC.io), &olataddr, 1);
 	io_read(&(I2C_AT24MAC.io), &gpio, 1);
 
 	// set the pin and direction
-	if (d == HIGH) {
+	if (d == HIGH) 
+	{
 		gpio |= 1 << p;
-		} else {
+	} 
+	else 
+	{
 		gpio &= ~(1 << p);
 	}
 
 	// write the new GPIO
-	io_write(&(I2C_AT24MAC.io), gpioaddr, 1);
-	io_write(&(I2C_AT24MAC.io), gpio, 1);
+	i2cData = (gpio << 8) | gpioaddr;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
 uint8_t LCD_digitalRead(uint8_t p) {
 	uint8_t gpioaddr;
-	uint8_t gpioin;
+	uint8_t gpioin = 0;
+	
+	if (p > 15)
+		return;
 
 	if (p < 8)
-	gpioaddr = MCP23017_GPIOA;
-	else {
+	{
+		gpioaddr = MCP23017_GPIOA;
+	}
+	else 
+	{
 		gpioaddr = MCP23017_GPIOB;
 		p -= 8;
 	}
 	
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), gpioaddr, 1);
+	io_write(&(I2C_AT24MAC.io), &gpioaddr, 1);
 	io_read(&(I2C_AT24MAC.io), &gpioin, 1);
 	return (gpioin >> p) & 0x1;
 }
@@ -211,15 +235,17 @@ void LCD_setBacklight(uint8_t status) {
 }
 
 void LCD_pullUp(uint8_t p, uint8_t d) {
-	uint8_t gppu;
+	uint8_t gppu = 0;
 	uint8_t gppuaddr;
 
 	// only 16 bits!
 	if (p > 15)
-	return;
+		return;
 
 	if (p < 8)
-	gppuaddr = MCP23017_GPPUA;
+	{
+		gppuaddr = MCP23017_GPPUA;
+	}
 	else {
 		gppuaddr = MCP23017_GPPUB;
 		p -= 8;
@@ -227,19 +253,22 @@ void LCD_pullUp(uint8_t p, uint8_t d) {
 
 	// read the current pullup resistor set
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), gppuaddr, 1);
+	io_write(&(I2C_AT24MAC.io), &gppuaddr, 1);
 	io_read(&(I2C_AT24MAC.io), &gppu, 1);
 
 	// set the pin and direction
-	if (d == HIGH) {
+	if (d == HIGH) 
+	{
 		gppu |= 1 << p;
-		} else {
+	}
+	else 
+	{
 		gppu &= ~(1 << p);
 	}
 	
 	// write the new GPIO
-	io_write(&(I2C_AT24MAC.io), gppuaddr, 1);
-	io_write(&(I2C_AT24MAC.io), gppu, 1);
+	i2cData = (gppu << 8) | gppuaddr;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
 void LCD_write4bits(uint8_t value) {
@@ -249,9 +278,11 @@ void LCD_write4bits(uint8_t value) {
 		out = LCD_readGPIOAB();
 
 		// speed up for i2c since its sluggish
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) 
+		{
 			out &= ~(1 << _data_pins[i]);
 			out |= ((value >> i) & 0x1) << _data_pins[i];
+		}
 		
 		// make sure enable is low
 		out &= ~(1 << _enable_pin);
@@ -266,25 +297,28 @@ void LCD_write4bits(uint8_t value) {
 		out &= ~(1 << _enable_pin);
 		LCD_writeGPIOAB(out);
 		delay_us(100);
-
-		LCD_pulseEnable();
-	}
 }
 
 void LCD_writeGPIOAB(uint16_t ba) {
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
-	io_write(&(I2C_AT24MAC.io), MCP23017_GPIOA, 1);
-	io_write(&(I2C_AT24MAC.io), (ba & 0xFF), 1);
-	io_write(&(I2C_AT24MAC.io), (ba >> 8), 1);
+	
+	uint32_t dataOut = 0;
+	uint8_t a = ba & 0xFF;
+	uint8_t b = ba >> 8;
+	
+	dataOut = (b << 16) | (a << 8) | MCP23017_GPIOA;
+
+	io_write(&(I2C_AT24MAC.io), &dataOut, 3);
 }
 
 void LCD_write8bits(uint8_t value) {
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 8; i++) 
+	{
 		LCD_pinMode(_data_pins[i], OUTPUT);
 		LCD_digitalWrite(_data_pins[i], (value >> i) & 0x01);
 	}
 	
-	pulseEnable();
+	LCD_pulseEnable();
 }
 
 void LCD_pulseEnable(void) {
@@ -308,33 +342,48 @@ uint8_t LCD_readButtons(void) {
 uint16_t LCD_readGPIOAB(void) {
 	uint16_t ba = 0;
 	uint8_t a;
+	uint8_t b;
 
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
 	// read the current GPIO output latches	
-	io_write(&(I2C_AT24MAC.io), MCP23017_GPIOA, 1);
+	i2cData = MCP23017_GPIOA;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 1);
 	io_read(&(I2C_AT24MAC.io), &a, 1);
-	io_read(&(I2C_AT24MAC.io), &ba, 1);
-
-	ba <<= 8;
-	ba |= a;
+	
+	i2cData = MCP23017_GPIOB;
+	io_write(&(I2C_AT24MAC.io), &i2cData, 1);
+	io_read(&(I2C_AT24MAC.io), &b, 1);
+	
+	ba = (b << 8) | a;
+	
 	return ba;
 }
 
-inline void LCD_command(uint8_t value) {
+ void LCD_command(uint8_t value) 
+ {
 	LCD_send(value, LOW);
 }
+
+void LCD_write(uint8_t value)
+{
+	LCD_send(value, HIGH);
+}
+
 // write either command or data, with automatic 4/8-bit selection
 void LCD_send(uint8_t value, uint8_t mode) {
 	LCD_digitalWrite(_rs_pin, mode);
 
 	// if there is a RW pin indicated, set it low to Write
 	if (_rw_pin != 255) {
-		_digitalWrite(_rw_pin, LOW);
+		LCD_digitalWrite(_rw_pin, LOW);
 	}
 	
-	if (_displayfunction & LCD_8BITMODE) {
+	if (_displayfunction & LCD_8BITMODE) 
+	{
 		LCD_write8bits(value);
-		} else {
+	} 
+	else
+	{
 		LCD_write4bits(value>>4);
 		LCD_write4bits(value);
 	}
@@ -438,3 +487,22 @@ void LCD_createChar(uint8_t location, uint8_t charmap[]) {
 	}
 	LCD_command(LCD_SETDDRAMADDR);  // unfortunately resets the location to 0,0
 }
+
+void LCD_print(char message[])
+{
+	int i = 0;
+	LCD_clear();
+	LCD_home();
+	
+	int length = strlen(message);
+	
+	for(int i = 0; i < length; i++)
+	{
+		if(message[i] == '\n'){
+			LCD_setCursor(0,1);
+			continue;
+		}
+		LCD_write(message[i]);
+	}
+}
+

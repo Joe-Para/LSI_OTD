@@ -111,9 +111,8 @@ void LCD_write8bits(uint8_t value);
 void LCD_pulseEnable(void);
 uint8_t LCD_readButtons(void);
 uint16_t LCD_readGPIOAB(void);
-inline void LCD_command(uint8_t value);
+void LCD_command(uint8_t value);
 void LCD_send(uint8_t value, uint8_t mode);
-void LCD_clear();
 void LCD_clear();
 void LCD_home();
 void LCD_setCursor(uint8_t col, uint8_t row);
@@ -130,5 +129,8 @@ void LCD_rightToLeft(void);
 void LCD_autoscroll(void);
 void LCD_noAutoscroll(void);
 void LCD_createChar(uint8_t location, uint8_t charmap[]);
+void LCD_write(uint8_t value);
+
+void LCD_print(char message[]);
 
 #endif /* I2C_SETUP_H_ */
