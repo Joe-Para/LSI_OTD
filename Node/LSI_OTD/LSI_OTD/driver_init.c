@@ -188,24 +188,24 @@ void system_init(void)
 	/* GPIO on PA0 */
 
 	// Set pin direction to input
-	gpio_set_pin_direction(GPIO_SPARE3, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(TX_FAULT_DOWN, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(GPIO_SPARE3,
+	gpio_set_pin_pull_mode(TX_FAULT_DOWN,dd
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_UP);
 
-	gpio_set_pin_function(GPIO_SPARE3, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_function(TX_FAULT_DOWN, GPIO_PIN_FUNCTION_OFF);
 
 	/* GPIO on PA19 */
 
 	// Set pin direction to input
-	gpio_set_pin_direction(GPIO_SPARE2, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(RX_LOSS_UP, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(GPIO_SPARE2,
+	gpio_set_pin_pull_mode(RX_LOSS_UP,
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
@@ -213,7 +213,7 @@ void system_init(void)
 	                       // <GPIO_PULL_DOWN"> Pull-down
 	                       GPIO_PULL_OFF);
 
-	gpio_set_pin_function(GPIO_SPARE2, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_function(RX_LOSS_UP, GPIO_PIN_FUNCTION_OFF);
 
 	/* GPIO on PB0 */
 
@@ -289,9 +289,9 @@ void system_init(void)
 	/* GPIO on PC30 */
 
 	// Set pin direction to input
-	gpio_set_pin_direction(GPIO_SPARE4, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(RX_LOSS_DOWN, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(GPIO_SPARE4,
+	gpio_set_pin_pull_mode(RX_LOSS_DOWN,
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
@@ -299,22 +299,22 @@ void system_init(void)
 	                       // <GPIO_PULL_DOWN"> Pull-down
 	                       GPIO_PULL_OFF);
 
-	gpio_set_pin_function(GPIO_SPARE4, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_function(RX_LOSS_DOWN, GPIO_PIN_FUNCTION_OFF);
 
 	/* GPIO on PC31 */
 
 	// Set pin direction to input
-	gpio_set_pin_direction(GPIO_SPARE1, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(TX_FAULT_UP, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(GPIO_SPARE1,
+	gpio_set_pin_pull_mode(TX_FAULT_UP,
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_UP);
 
-	gpio_set_pin_function(GPIO_SPARE1, GPIO_PIN_FUNCTION_OFF);
+	gpio_set_pin_function(TX_FAULT_UP, GPIO_PIN_FUNCTION_OFF);
 
 	// Set pin direction to output
 	gpio_set_pin_direction(LED0, GPIO_DIRECTION_OUT);
