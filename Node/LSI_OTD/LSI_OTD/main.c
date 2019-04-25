@@ -79,6 +79,8 @@ int main(void)
 		}
 		if((flags & flag_PulseRecvd) && (state == state_listening))
 		{
+			flags &= ~flag_PulseRecvd;
+			state = state_wait;
 			secondConnect();
 		}
 		if(flags & flag_TDCResults)
@@ -126,8 +128,6 @@ void TDC_LPBK_ISR(void)
 
 void secondConnect()
 {
-	flags &= ~flag_PulseRecvd;
-	state = state_wait;
 	struct ip_addr dest;
 	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
 	tempPCB = tcp_new();
@@ -196,7 +196,7 @@ void runCommand(char *string)
 		ext_irq_register(PIO_PD25_IDX, NULL);
 		
 		printf("Stopped Listening");
-		tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);
+		//tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);
 		
 	}
 	else if (compareString(string, "Run", strlen("Run")))

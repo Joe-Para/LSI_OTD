@@ -101,16 +101,19 @@ err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 	
 	LWIP_UNUSED_ARG(arg);
 	
+	if (connectionCount == 1)
+		state = state_wait;
+	else if (connectionCount == 2)
+	{
+		flags |= flag_secConnection;
+		return;
+	}
+	
 	tcp_sent(pcb, client_sent);
 	tcp_recv(pcb, client_recv);
 	tcp_poll(pcb, client_poll, 4);
 	tcp_err(pcb, client_err);
 	
-	if (connectionCount == 1)
-		state = state_wait;
-	else if (connectionCount == 2)
-		flags |= flag_secConnection;
-
 	return err;
 }
 
