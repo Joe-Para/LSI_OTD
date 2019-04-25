@@ -190,7 +190,7 @@ void system_init(void)
 	// Set pin direction to input
 	gpio_set_pin_direction(TX_FAULT_DOWN, GPIO_DIRECTION_IN);
 
-	gpio_set_pin_pull_mode(TX_FAULT_DOWN,dd
+	gpio_set_pin_pull_mode(TX_FAULT_DOWN,
 	                       // <y> Pull configuration
 	                       // <id> pad_pull_config
 	                       // <GPIO_PULL_OFF"> Off
