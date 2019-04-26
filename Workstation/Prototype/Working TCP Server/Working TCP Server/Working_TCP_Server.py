@@ -12,7 +12,7 @@ while 1:
         print("Waiting for a connection on port: " + str(PORT))
         conn, addr = s.accept()
         print('Connected by', addr)
-        conn.settimeout(10.0)
+        conn.settimeout(100.0)
         while 1:
             message = input('Type in a command: ')
             conn.send(str.encode(message))
