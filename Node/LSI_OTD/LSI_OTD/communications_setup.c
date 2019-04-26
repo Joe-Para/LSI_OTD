@@ -106,7 +106,7 @@ err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 	else if (connectionCount == 2)
 	{
 		flags |= flag_secConnection;
-		return;
+		return err;
 	}
 	
 	tcp_sent(pcb, client_sent);
