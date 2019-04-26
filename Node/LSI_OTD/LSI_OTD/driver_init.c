@@ -34,7 +34,7 @@ void EXTERNAL_IRQ_0_PC_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_DOWN);
 
 	gpio_set_pin_function(TDC_TRIG, GPIO_PIN_FUNCTION_OFF);
 }
@@ -51,7 +51,7 @@ void EXTERNAL_IRQ_1_PD_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_DOWN);
 
 	gpio_set_pin_function(TDC_LPBK, GPIO_PIN_FUNCTION_OFF);
 
@@ -64,7 +64,7 @@ void EXTERNAL_IRQ_1_PD_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_DOWN);
 
 	gpio_set_pin_function(TDC_INT, GPIO_PIN_FUNCTION_OFF);
 }
