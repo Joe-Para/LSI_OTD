@@ -47,18 +47,19 @@ struct tcp_pcb *tempPCB;
 struct io_descriptor *io;
 
 unsigned char flags = 0x0;
+unsigned char isrEnable = 0x0;
 unsigned char state = 0x0;
 
 int main(void)
 {
 	state = state_init;
-	uint8_t buttons;
+	uint8_t buttons = 0;
 	atmel_start_init();
-	//start_ethernet();
+	start_ethernet();
 	//start_spi(&io);
 	//tdc_setup(&io);
-	LCD_begin();
-	LCD_print("Welcome!");
+	//LCD_begin();
+	//LCD_print("Welcome!");
 	
 	//sets up new TCP
 	struct ip_addr dest;
@@ -69,8 +70,7 @@ int main(void)
 
 	while (true) {
 		
-		buttons = LCD_readButtons();
-		
+		//buttons = LCD_readButtons();	
 
 		if(flags & flag_EthernetActivity)
 		{
@@ -119,11 +119,19 @@ void TDC_Interrupt_ISR(void)
 
 void TDC_LPBK_ISR(void)
 {
-	//sets flag
-	flags |= flag_PulseRecvd;
+	if(isrEnable & isrEnable_TDC_LPBK) 
+	{
+		flags |= flag_PulseRecvd;
+		gpio_toggle_pin_level(LED0);
+	}
+	else 
+	{
+		return;
+	}
 	
 	//disables the interrupt
 	ext_irq_register(PIO_PD25_IDX, NULL);
+	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
 void secondConnect()
@@ -176,24 +184,28 @@ void runCommand(char *string)
 		tcp_write(TCPpcb, "false", strlen("false"), 0);
 	}
 	else if (compareString(string, "Send Ping", strlen("Send Ping")))
-	{
+	{	
+		
 		gpio_set_pin_level(TX_PULSE, true);
 		delay_us(1);
 		gpio_set_pin_level(TX_PULSE, false);
-		
+
 		printf("Ping Sent");
+		
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
 		state = state_listening;
-		ext_irq_register(PIO_PD25_IDX, TDC_LPBK_ISR);
-		
+		ext_irq_register(PIO_PD25_IDX,  TDC_LPBK_ISR);
+		delay_us(10);
+		isrEnable |= isrEnable_TDC_LPBK;
 		printf("Listening");
 	}
 	else if (compareString(string, "Stop Listening", strlen("Stop Listening")))
 	{
 		state = state_wait;
 		ext_irq_register(PIO_PD25_IDX, NULL);
+		isrEnable &= ~isrEnable_TDC_LPBK;
 		
 		printf("Stopped Listening");
 		//tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);
@@ -204,6 +216,15 @@ void runCommand(char *string)
 		//calls function to do time delay run
 		printf("Running");
 		tcp_write(TCPpcb, "100ns", strlen("100ns"), 0);
+	}
+	else if (compareString(string, "State", strlen("State")))
+	{
+		if(state == state_init)
+			tcp_write(TCPpcb, "Init", strlen("Init"), 0);
+		else if (state == state_listening)
+			tcp_write(TCPpcb, "Listening", strlen("Listening"), 0);
+		else if (state == state_wait)
+			tcp_write(TCPpcb, "Wait", strlen("Wait"), 0);
 	}
 	else if (compareString(string, "Close Connection", strlen("Close Connection")))
 	{

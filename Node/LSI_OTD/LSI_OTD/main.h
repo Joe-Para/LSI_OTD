@@ -15,6 +15,10 @@
 #define flag_TDCResults			0x4
 #define flag_PulseRecvd			0x8
 
+#define isrEnable_TDC_LPBK		0x1
+#define isrEnable_TDC_INT		0x2
+#define isrEnable_TDC_Trigger	0x4
+
 
 //setting up states
 #define state_init				0x1
