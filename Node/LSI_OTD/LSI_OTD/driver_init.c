@@ -64,7 +64,7 @@ void EXTERNAL_IRQ_1_PD_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_DOWN);
+	                       GPIO_PULL_UP);
 
 	gpio_set_pin_function(TDC_INT, GPIO_PIN_FUNCTION_OFF);
 }

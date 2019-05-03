@@ -41,6 +41,10 @@
 #define TDC_CALIBRATION1 0x1B //Calibration 1, 1 CLOCK PeriodBytes: 24 Reset Val: 00_0000h
 #define TDC_CALIBRATION2 0x1C //Calibration 2, 2/10/20/40 CLOCK PeriodsBytes: 24 Reset Val: 00_0000h
 
+#define TDC_NEW_MEAS_INT 0x1
+#define TDC_COARSE_CNTR_OVF_INT 0x2
+#define TDC_CLOCK_CNTR_OVF_INT 0x4
+
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t const commandbuf);
 uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t const commandbuf);
 void tdc_write(struct io_descriptor *const io, uint8_t const commandbuf, uint8_t const databuf);

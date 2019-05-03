@@ -13,7 +13,9 @@
 
 #include "atmel_start.h"
 
-void start_spi(struct io_descriptor *const io);
-static int32_t spi_custom_io_rw(struct io_descriptor *const io, uint8_t *inbuf, const uint8_t *const outbuf, const uint16_t length);
+extern struct io_descriptor *io; //this is for spi
+
+void start_spi();
+int32_t spi_custom_io_rw(struct io_descriptor *const io, uint8_t *inbuf, const uint8_t *const outbuf, const uint16_t length);
 
 #endif /* SPI_H_ */
