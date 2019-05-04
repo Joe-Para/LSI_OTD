@@ -65,6 +65,14 @@ int main(void)
 	tdc_setup(io);
 	//LCD_begin();
 	//LCD_print("Welcome!");
+	
+	while(1)
+	{
+		
+	}
+	
+	
+	
 
 	while(1){
 		

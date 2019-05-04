@@ -211,7 +211,7 @@ void system_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_UP);
 
 	gpio_set_pin_function(RX_LOSS_UP, GPIO_PIN_FUNCTION_OFF);
 
@@ -229,6 +229,40 @@ void system_init(void)
 	                       GPIO_PULL_OFF);
 
 	gpio_set_pin_function(RX_PULSE, GPIO_PIN_FUNCTION_OFF);
+	
+	/* GPIO on PD30 */
+
+	// Set pin direction to input
+	gpio_set_pin_direction(TX_DISABLE_UP, GPIO_DIRECTION_OUT);
+	
+	gpio_set_pin_level(TX_DISABLE_UP, false);
+
+	gpio_set_pin_pull_mode(TX_DISABLE_UP,
+							// <y> Pull configuration
+							// <id> pad_pull_config
+							// <GPIO_PULL_OFF"> Off
+							// <GPIO_PULL_UP"> Pull-up
+							// <GPIO_PULL_DOWN"> Pull-down
+							GPIO_PULL_DOWN);
+
+	gpio_set_pin_function(TX_DISABLE_UP, GPIO_PIN_FUNCTION_OFF);
+		
+	/* GPIO on PC13 */
+
+	// Set pin direction to input
+	gpio_set_pin_direction(TX_DISABLE_DOWN, GPIO_DIRECTION_OUT);
+	
+	gpio_set_pin_level(TX_DISABLE_DOWN, false);
+
+	gpio_set_pin_pull_mode(TX_DISABLE_DOWN,
+							// <y> Pull configuration
+							// <id> pad_pull_config
+							// <GPIO_PULL_OFF"> Off
+							// <GPIO_PULL_UP"> Pull-up
+							// <GPIO_PULL_DOWN"> Pull-down
+							GPIO_PULL_DOWN);
+
+	gpio_set_pin_function(TX_DISABLE_DOWN, GPIO_PIN_FUNCTION_OFF);
 
 	/* GPIO on PB1 */
 
@@ -297,7 +331,7 @@ void system_init(void)
 	                       // <GPIO_PULL_OFF"> Off
 	                       // <GPIO_PULL_UP"> Pull-up
 	                       // <GPIO_PULL_DOWN"> Pull-down
-	                       GPIO_PULL_OFF);
+	                       GPIO_PULL_UP);
 
 	gpio_set_pin_function(RX_LOSS_DOWN, GPIO_PIN_FUNCTION_OFF);
 
