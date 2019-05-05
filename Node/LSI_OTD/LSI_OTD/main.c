@@ -66,14 +66,18 @@ int main(void)
 	//LCD_begin();
 	//LCD_print("Welcome!");
 	
-	while(1)
-	{
-		
-	}
+	//void *const hw = 0x400e1000;
+	//const uint32_t mask = 0x2;
+	//int i = 0;
+	//while(1)
+	//
+	//{	delay_us(0.000001);
+		//((Pio *)hw)->PIO_SODR = mask;
+		//delay_us(0.000001);
+		//((Pio *)hw)->PIO_CODR = mask;
+		//
+	//}
 	
-	
-	
-
 	while(1){
 		
 		delay_us(20);
@@ -167,7 +171,7 @@ void TDC_LPBK_ISR(void)
 	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
-uint32_t singleRun()
+double singleRun()
 {
 	//start ISR
 	ext_irq_register(TDC_TRIG, TDC_Trigger_ISR);
@@ -176,15 +180,23 @@ uint32_t singleRun()
 	
 	//start measure
 	start_tof_meas(io);
-	
+
 	//wait for trigger
 	while(!(flags & flag_TDCTrigger)) {}
 	flags &= ~flag_TDCTrigger;
 		
 	//send start trigger
-	gpio_set_pin_level(TX_PULSE, true);
+	gpio_set_pin_level(TX_PULSE, true);	
 	delay_us(1);
 	gpio_set_pin_level(TX_PULSE, false);
+	
+	delay_us(100);
+	
+	gpio_set_pin_level(RX_PULSE, true);
+	delay_us(1);
+	gpio_set_pin_level(RX_PULSE, false);
+	
+	
 	
 	//wait for results
 	while(!(flags & flag_TDCResults)) {}

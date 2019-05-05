@@ -35,7 +35,7 @@ void TDC_LPBK_ISR(void);
 void secondConnect();
 void buttonClicked(uint8_t buttons);
 
-uint32_t singleRun();
+double singleRun();
 
 
 #endif /* MAIN_H_ */

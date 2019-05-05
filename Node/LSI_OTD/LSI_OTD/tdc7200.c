@@ -20,8 +20,8 @@ void tdc_setup(struct io_descriptor *const io){
 	//TDC CONFIG1; MEASE MODE 2
 	tdc_write(io, TDC_CONFIG1, 0x02);
 	delay_us(5);
-	//TDC CONFIG2; CAL PERIODS 40
-	tdc_write(io, TDC_CONFIG2, 0xC0);
+	//TDC CONFIG2; CAL PERIODS 2
+	tdc_write(io, TDC_CONFIG2, 0x00);
 	delay_us(5);
 	//TDC INT MASK; enable new meas interrupt
 	tdc_write(io, TDC_INT_MASK, 0x07);
@@ -50,35 +50,35 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 	return 0;
 }
 //fetches and calculates time of flight from tdc in picoseconds
-uint32_t get_tof(struct io_descriptor *const io ){
+long double get_tof(struct io_descriptor *const io ){
 	//ref section 7.4.2.2.1 of datasheet
 	
 	//fetch variables for math
-	volatile int time1 = tdc_read_8(io, TDC_TIME1);
-	TDC_DEBUG(time1);
+	volatile uint32_t time1 = tdc_read_24(io, TDC_TIME1);
+	//TDC_DEBUG(time1);
 	delay_us(5);
-	volatile int time2 = tdc_read_8(io, TDC_TIME2);
-	TDC_DEBUG(time2);
+	volatile uint32_t time2 = tdc_read_24(io, TDC_TIME2);
+	//TDC_DEBUG(time2);
 	delay_us(5);
-	volatile int clock_count1 = tdc_read_8(io, TDC_CLOCK_COUNT1);
-	TDC_DEBUG(clock_count1);
+	volatile uint32_t clock_count1 = tdc_read_24(io, TDC_CLOCK_COUNT1);
+	//TDC_DEBUG(clock_count1);
 	delay_us(5);
-	volatile int calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
-	TDC_DEBUG(calibration1);
+	volatile uint32_t calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
+	//TDC_DEBUG(calibration1);
 	delay_us(5);
-	volatile int calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
-	TDC_DEBUG(calibration2);
+	volatile uint32_t calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
+	//TDC_DEBUG(calibration2);
 	//this is a very small decimal, do the calcs as doubles?
 	volatile double clock_period = 1.0 / REF_CLOCK_HZ;
 	
 	//math, see datasheet
-	volatile double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
-	volatile double normLSB = clock_period / cal_count;
-	volatile double tof1 = normLSB*((time1 - time2)) + (clock_count1*clock_period);
+	volatile long double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
+	volatile long double normLSB = clock_period / cal_count;
+	volatile long double tof1 = normLSB*((time1 - time2)) + (clock_count1*clock_period);
 
 	//return value of tof in picoseconds
-	volatile  uint32_t tof_ps = tof1 * 1e12 - CORRECTION_FACTOR;
-	TDC_DEBUG(tof_ps);
+	volatile  long double tof_ps = tof1 * 100; //1e12 - CORRECTION_FACTOR;
+	//TDC_DEBUG(tof_ps);
 	return tof_ps;
 }
 //input takes a multiple of 2 (1,2,4...128)

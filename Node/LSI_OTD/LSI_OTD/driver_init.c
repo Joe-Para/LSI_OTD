@@ -218,7 +218,8 @@ void system_init(void)
 	/* GPIO on PB0 */
 
 	// Set pin direction to input
-	gpio_set_pin_direction(RX_PULSE, GPIO_DIRECTION_IN);
+	gpio_set_pin_direction(RX_PULSE, GPIO_DIRECTION_OUT);
+	gpio_set_pin_level(RX_PULSE, false);
 
 	gpio_set_pin_pull_mode(RX_PULSE,
 	                       // <y> Pull configuration
