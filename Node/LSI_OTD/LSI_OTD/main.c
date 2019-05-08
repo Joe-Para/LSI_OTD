@@ -43,7 +43,7 @@
 #include "main.h"
 #include <hal_atomic.h>
 #define TDC_DEBUG_ON 1
-#define TDC_DEBUG(message) do{ if(TDC_DEBUG_ON) {	printf(message);} } while(0)
+#define TDC_DEBUG(message) do{ if(TDC_DEBUG_ON) {	printf("%d\n", message);} } while(0)
 
 struct tcp_pcb *TCPpcb;
 struct tcp_pcb *tempPCB;
@@ -78,11 +78,65 @@ int main(void)
 		//
 	//}
 	
-	while(1){
+	//while(1){
+		//
+		//delay_us(20);
+//
+		//tof = singleRun();
+	//}
+	
+	uint8_t activeInterrupts;
+	//ext_irq_register(TDC_TRIG, TDC_Trigger_ISR);
+	ext_irq_register(TDC_INT, TDC_Interrupt_ISR);
+	isrEnable |= isrEnable_TDC_INT;
+	
+	//start measure
+	start_tof_meas(io);
+	
+	int count = 0;
+	double average [100] = {0};
+	int numberAverage = 100;
+	
+	while(1) 
+	{
+		//if(flags & flag_TDCTrigger) 
+		//{
+			//flags &= ~flag_TDCTrigger;
 		
-		delay_us(20);
-
-		tof = singleRun();
+			//send start trigger
+			//gpio_set_pin_level(TX_PULSE, true);	
+			//delay_us(1);
+			//
+			//gpio_set_pin_level(RX_PULSE, true);
+			//delay_us(1);
+			//gpio_set_pin_level(TX_PULSE, false);
+			//gpio_set_pin_level(RX_PULSE, false);
+			//i++;
+		//}
+		
+		
+		if(flags & flag_TDCResults)
+		{
+			activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);	
+		
+			if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT)) 
+			{
+				tof = 1;
+			}
+			else 
+			{
+				tof = get_tof(io);
+				tof /= 1.0;
+			}
+			flags &= ~flag_TDCResults;
+			TDC_DEBUG((int)(tof*10000000));
+			//average[count++] = tof;
+			start_tof_meas(io);
+		}
+		
+		if(count == numberAverage)
+			count = 0;
+			
 	}
 	
 	
@@ -136,11 +190,11 @@ void TDC_Trigger_ISR(void)
 	
 	flags |= flag_TDCTrigger;
 	
-	TDC_DEBUG("Hit Trig ISR\n");
+	//TDC_DEBUG("Hit Trig ISR\n");
 	
 	//disables the interrupt
-	ext_irq_register(TDC_TRIG, NULL);
-	isrEnable &= ~isrEnable_TDC_Trigger;
+	//ext_irq_register(TDC_TRIG, NULL);
+	//isrEnable &= ~isrEnable_TDC_Trigger;
 }
 
 void TDC_Interrupt_ISR(void)
@@ -151,11 +205,11 @@ void TDC_Interrupt_ISR(void)
 	//sets TDCResults flag
 	flags |= flag_TDCResults;
 	
-	TDC_DEBUG("Hit Interrupt ISR\n");
+	//TDC_DEBUG("Hit Interrupt ISR\n");
 	
 	//disables the interrupt
-	ext_irq_register(TDC_INT, NULL);
-	isrEnable &= ~isrEnable_TDC_INT;
+	//ext_irq_register(TDC_INT, NULL);
+	//isrEnable &= ~isrEnable_TDC_INT;
 }
 
 void TDC_LPBK_ISR(void)
@@ -190,7 +244,7 @@ double singleRun()
 	delay_us(1);
 	gpio_set_pin_level(TX_PULSE, false);
 	
-	delay_us(100);
+	delay_us(1);
 	
 	gpio_set_pin_level(RX_PULSE, true);
 	delay_us(1);
@@ -205,6 +259,8 @@ double singleRun()
 		
 	if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
 		return 0;
+		
+	delay_ms(10);
 	
 	return get_tof(io);	
 
