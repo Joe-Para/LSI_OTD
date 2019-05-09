@@ -15,7 +15,7 @@
 #define CORRECTION_FACTOR 0
 
 #define REF_CLOCK_HZ 10000000 //10mhz clock
-#define CALIBRATION2_PERIODS 40.0 //write 11 to TDC_CONFIG2[7:6]
+#define CALIBRATION2_PERIODS 2.0 //write 11 to TDC_CONFIG2[7:6]
 
 #define TDC_CONFIG1 0x00 //Configuration Register 1  Bytes: 8 Reset Val: 00h
 #define TDC_CONFIG2 0x01 //Configuration Register 2  Bytes: 8 Reset Val: 40h
@@ -41,10 +41,14 @@
 #define TDC_CALIBRATION1 0x1B //Calibration 1, 1 CLOCK PeriodBytes: 24 Reset Val: 00_0000h
 #define TDC_CALIBRATION2 0x1C //Calibration 2, 2/10/20/40 CLOCK PeriodsBytes: 24 Reset Val: 00_0000h
 
+#define TDC_NEW_MEAS_INT 0x1
+#define TDC_COARSE_CNTR_OVF_INT 0x2
+#define TDC_CLOCK_CNTR_OVF_INT 0x4
+
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t const commandbuf);
 uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t const commandbuf);
 void tdc_write(struct io_descriptor *const io, uint8_t const commandbuf, uint8_t const databuf);
-uint32_t get_tof(struct io_descriptor *const io);
+long double get_tof(struct io_descriptor *const io);
 void tdc_setup(struct io_descriptor *const io);
 uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples);
 uint32_t start_tof_meas(struct io_descriptor *const io);

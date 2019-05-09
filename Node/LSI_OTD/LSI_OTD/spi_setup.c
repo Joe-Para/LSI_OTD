@@ -8,19 +8,18 @@
 #include "spi_setup.h"
 
 
-void start_spi(struct io_descriptor *const io){
-	
+void start_spi()
+{
 		spi_m_sync_get_io_descriptor(&SPI_0, &io);
 		spi_m_sync_enable(&SPI_0);
 		//this doesnt seem to change much
 		spi_m_sync_set_baudrate(&SPI_0,1000);
 		//Mode 3 is leading edge is falling, sample on trailing (rising) edge.
-		spi_m_sync_set_mode(&SPI_0,SPI_MODE_0);
+		spi_m_sync_set_mode(&SPI_0,SPI_MODE_3);
 		spi_m_sync_set_char_size(&SPI_0,SPI_CHAR_SIZE_8);
-	
 } 
 
-static int32_t spi_custom_io_rw(struct io_descriptor *const io, uint8_t *inbuf, const uint8_t *const outbuf, const uint16_t length)
+int32_t spi_custom_io_rw(struct io_descriptor *const io, uint8_t *inbuf, const uint8_t *const outbuf, const uint16_t length)
 {
 	ASSERT(io);
 

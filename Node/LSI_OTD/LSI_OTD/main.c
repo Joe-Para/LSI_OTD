@@ -104,34 +104,87 @@ int main(void)
 }
 
 
-void TCD_Trigger_ISR(void)
+void TDC_Trigger_ISR(void)
 {
-	gpio_set_pin_level(TX_PULSE, true);
-	delay_us(1);
-	gpio_set_pin_level(TX_PULSE, false);
+	if(!(isrEnable & isrEnable_TDC_Trigger))
+		return;
+	
+	flags |= flag_TDCTrigger;
+	
+	//TDC_DEBUG("Hit Trig ISR\n");
+	
+	//disables the interrupt
+	//ext_irq_register(TDC_TRIG, NULL);
+	//isrEnable &= ~isrEnable_TDC_Trigger;
 }
 
 void TDC_Interrupt_ISR(void)
 {
+	if(!(isrEnable & isrEnable_TDC_INT))
+		return;
+	
 	//sets TDCResults flag
 	flags |= flag_TDCResults;
+	
+	//TDC_DEBUG("Hit Interrupt ISR\n");
+	
+	//disables the interrupt
+	//ext_irq_register(TDC_INT, NULL);
+	//isrEnable &= ~isrEnable_TDC_INT;
 }
 
 void TDC_LPBK_ISR(void)
 {
-	if(isrEnable & isrEnable_TDC_LPBK) 
-	{
-		flags |= flag_PulseRecvd;
-		gpio_toggle_pin_level(LED0);
-	}
-	else 
-	{
+	if(!(isrEnable & isrEnable_TDC_LPBK)) 
 		return;
-	}
+	
+	flags |= flag_PulseRecvd;
+	gpio_toggle_pin_level(LED0);
 	
 	//disables the interrupt
 	ext_irq_register(PIO_PD25_IDX, NULL);
 	isrEnable &= ~isrEnable_TDC_LPBK;
+}
+
+double singleRun()
+{
+	//start ISR
+	ext_irq_register(TDC_TRIG, TDC_Trigger_ISR);
+	ext_irq_register(TDC_INT, TDC_Interrupt_ISR);
+	isrEnable |= isrEnable_TDC_Trigger | isrEnable_TDC_INT;
+	
+	//start measure
+	start_tof_meas(io);
+
+	//wait for trigger
+	while(!(flags & flag_TDCTrigger)) {}
+	flags &= ~flag_TDCTrigger;
+		
+	//send start trigger
+	gpio_set_pin_level(TX_PULSE, true);	
+	delay_us(1);
+	gpio_set_pin_level(TX_PULSE, false);
+	
+	delay_us(1);
+	
+	gpio_set_pin_level(RX_PULSE, true);
+	delay_us(1);
+	gpio_set_pin_level(RX_PULSE, false);
+	
+	
+	
+	//wait for results
+	while(!(flags & flag_TDCResults)) {}
+		
+	uint8_t activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);	
+		
+	if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
+		return 0;
+		
+	delay_ms(10);
+	
+	return get_tof(io);	
+
 }
 
 void secondConnect()

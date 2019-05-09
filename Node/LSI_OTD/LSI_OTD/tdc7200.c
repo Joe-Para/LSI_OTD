@@ -1,4 +1,4 @@
-﻿/*
+/*
  * tdc7200.c
  *
  * Created: 4/12/2019 7:08:00 PM
@@ -7,29 +7,24 @@
 
 #include "tdc7200.h"
 #include "spi_setup.h"
-#define TDC_DEBUG_ON 1
+#define TDC_DEBUG_ON 0
 
 void tdc_setup(struct io_descriptor *const io){
 	
-	gpio_set_pin_level( TDC_ENABLE,	false);
-	gpio_set_pin_direction(TDC_ENABLE, GPIO_DIRECTION_OUT);
-	gpio_set_pin_function(TDC_ENABLE, GPIO_PIN_FUNCTION_OFF);  //(func off means gpio)
-	gpio_set_pin_level(TDC_ENABLE, false);
-	
 	//enable tdc chip, needs clean rising edge some time after power up, fully ready 1.5ms after enable.
+	gpio_set_pin_level(TDC_ENABLE, false);
+	delay_us(10);
 	gpio_set_pin_level(TDC_ENABLE, true);
 	delay_ms(2);
-	
-
 	
 	//TDC CONFIG1; MEASE MODE 2
 	tdc_write(io, TDC_CONFIG1, 0x02);
 	delay_us(5);
-	//TDC CONFIG2; CAL PERIODS 40
-	tdc_write(io, TDC_CONFIG2, 0xC0);
+	//TDC CONFIG2; CAL PERIODS 2
+	tdc_write(io, TDC_CONFIG2, 0x00);
 	delay_us(5);
 	//TDC INT MASK; enable new meas interrupt
-	tdc_write(io, TDC_INT_MASK, 0x01);
+	tdc_write(io, TDC_INT_MASK, 0x07);
 	delay_us(5);
 	
 	TDC_DEBUG("TDC setup done\n");
@@ -43,8 +38,9 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 
 	uint8_t conf1 = tdc_read_8(io, TDC_CONFIG1);
 	conf1 |= 0x1;
-	tdc_write(io, TDC_CONFIG1, &conf1);
+	tdc_write(io, TDC_CONFIG1, conf1);
 	TDC_DEBUG("Starting TOF Meas\n");
+
 	//wait for trigger to be enabled 
 		//see ISR for TDC_TRIG
 	//set output line to fiber channels high
@@ -54,35 +50,35 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 	return 0;
 }
 //fetches and calculates time of flight from tdc in picoseconds
-uint32_t get_tof(struct io_descriptor *const io ){
+long double get_tof(struct io_descriptor *const io ){
 	//ref section 7.4.2.2.1 of datasheet
 	
 	//fetch variables for math
-	volatile int time1 = tdc_read_8(io, TDC_TIME1);
-	TDC_DEBUG(time1);
+	volatile uint32_t time1 = tdc_read_24(io, TDC_TIME1);
+	//TDC_DEBUG(time1);
 	delay_us(5);
-	volatile int time2 = tdc_read_8(io, TDC_TIME2);
-	TDC_DEBUG(time2);
+	volatile uint32_t time2 = tdc_read_24(io, TDC_TIME2);
+	//TDC_DEBUG(time2);
 	delay_us(5);
-	volatile int clock_count1 = tdc_read_8(io, TDC_CLOCK_COUNT1);
-	TDC_DEBUG(clock_count1);
+	volatile uint32_t clock_count1 = tdc_read_24(io, TDC_CLOCK_COUNT1);
+	//TDC_DEBUG(clock_count1);
 	delay_us(5);
-	volatile int calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
-	TDC_DEBUG(calibration1);
+	volatile uint32_t calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
+	//TDC_DEBUG(calibration1);
 	delay_us(5);
-	volatile int calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
-	TDC_DEBUG(calibration2);
+	volatile uint32_t calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
+	//TDC_DEBUG(calibration2);
 	//this is a very small decimal, do the calcs as doubles?
 	volatile double clock_period = 1.0 / REF_CLOCK_HZ;
 	
 	//math, see datasheet
-	volatile double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
-	volatile double normLSB = clock_period / cal_count;
-	volatile double tof1 = normLSB*((time1 - time2)) + (clock_count1*clock_period);
+	volatile long double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
+	volatile long double normLSB = clock_period / cal_count;
+	volatile long double tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
 
 	//return value of tof in picoseconds
-	volatile  uint32_t tof_ps = tof1 * 1e12 - CORRECTION_FACTOR;
-	TDC_DEBUG(tof_ps);
+	volatile  long double tof_ps = tof1 * 1e6; //1e12 - CORRECTION_FACTOR;
+	//TDC_DEBUG(tof_ps);
 	return tof_ps;
 }
 //input takes a multiple of 2 (1,2,4...128)
@@ -141,19 +137,21 @@ uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t const commandbuf){
 	//spi_custom_io_rw(io, &datain, &commandbuf, 2);
 	//datain = datain >> 9; //issue with MISO being 1 clock ahead
 	gpio_set_pin_level(SPI0_SS, true);
-	TDC_DEBUG((uint8_t)datain);
 	return datain;
 }
 //reads three bytes from TDC chip
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t const commandbuf){
 	// need to write command byte and read 3 data bytes
-	uint32_t datain = 0;
+	uint8_t datain1 = 0;
+	uint8_t datain2 = 0;
+	uint8_t datain3 = 0;
 	gpio_set_pin_level(SPI0_SS, false);
 	io_write(io, &commandbuf, 1);
-	io_read(io, &datain, 1);
-	//spi_custom_io_rw(io, &datain, &commandbuf, 4);
+	io_read(io, &datain1, 1);
+	io_read(io, &datain2, 1);
+	io_read(io, &datain3, 1);
+	//spi_custom_io_rw(io, &datain, &commandbuf, 3);
 	//datain = datain >> 1; //issue with MISO being 1 clock ahead
 	gpio_set_pin_level(SPI0_SS, true);
-
-	return datain;
+	return (datain1 << 16) | (datain2 << 8) | datain3;
 }

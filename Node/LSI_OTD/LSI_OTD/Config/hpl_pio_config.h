@@ -1281,7 +1281,7 @@
 // <i> This defines input sense trigger
 // <id> gpio_ext_irq_sense28
 #ifndef CONF_EXTIRQ_3_SENSE28
-#define CONF_EXTIRQ_3_SENSE28 26
+#define CONF_EXTIRQ_3_SENSE28 25
 #endif
 // </e>
 
