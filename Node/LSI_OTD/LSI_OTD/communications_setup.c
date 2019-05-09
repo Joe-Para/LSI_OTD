@@ -103,7 +103,7 @@ err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 	
 	if (connectionCount == 1)
 		state = state_wait;
-	else if (connectionCount == 2)
+	else if (connectionCount > 2)
 	{
 		flags |= flag_secConnection;
 		return err;
@@ -143,7 +143,6 @@ err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 	{
 		pbuf_free(p);
 	}
-
 	return ERR_OK;
 }
 

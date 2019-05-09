@@ -36,7 +36,7 @@ void secondConnect();
 void buttonClicked(uint8_t buttons);
 
 void startRun();
-void printTOF(float TOF);
+void printTOF(double TOF);
 
 
 #endif /* MAIN_H_ */

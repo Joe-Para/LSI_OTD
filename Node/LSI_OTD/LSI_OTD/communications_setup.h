@@ -9,10 +9,10 @@
 #ifndef COMMUNICATIONS_SETUP_H_
 #define COMMUNICATIONS_SETUP_H_
 
-#define workstationIP_0		192
-#define workstationIP_1		168
-#define workstationIP_2		0
-#define workstationIP_3		18
+#define workstationIP_0		10
+#define workstationIP_1		0
+#define workstationIP_2		2
+#define workstationIP_3		247
 
 //main and secondary connection ports
 #define MC_PORT				8000

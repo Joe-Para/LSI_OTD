@@ -9,6 +9,9 @@
 #include "spi_setup.h"
 #define TDC_DEBUG_ON 0
 
+uint32_t time1, time2, clock_count1, calibration1, calibration2 = 0;
+double clock_period, cal_count, normLSB, tof1, tof_us;
+
 void tdc_setup(struct io_descriptor *const io){
 	
 	//enable tdc chip, needs clean rising edge some time after power up, fully ready 1.5ms after enable.
@@ -50,36 +53,36 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 	return 0;
 }
 //fetches and calculates time of flight from tdc in picoseconds
-long double get_tof(struct io_descriptor *const io ){
+double get_tof(struct io_descriptor *const io ){
 	//ref section 7.4.2.2.1 of datasheet
 	
 	//fetch variables for math
-	volatile uint32_t time1 = tdc_read_24(io, TDC_TIME1);
+	time1 = tdc_read_24(io, TDC_TIME1);
 	//TDC_DEBUG(time1);
 	delay_us(5);
-	volatile uint32_t time2 = tdc_read_24(io, TDC_TIME2);
+	time2 = tdc_read_24(io, TDC_TIME2);
 	//TDC_DEBUG(time2);
 	delay_us(5);
-	volatile uint32_t clock_count1 = tdc_read_24(io, TDC_CLOCK_COUNT1);
+	clock_count1 = tdc_read_24(io, TDC_CLOCK_COUNT1);
 	//TDC_DEBUG(clock_count1);
 	delay_us(5);
-	volatile uint32_t calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
+	calibration1 = tdc_read_24(io, TDC_CALIBRATION1);
 	//TDC_DEBUG(calibration1);
 	delay_us(5);
-	volatile uint32_t calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
+	calibration2 = tdc_read_24(io, TDC_CALIBRATION2);
 	//TDC_DEBUG(calibration2);
 	//this is a very small decimal, do the calcs as doubles?
-	volatile double clock_period = 1.0 / REF_CLOCK_HZ;
+	clock_period = 1.0 / REF_CLOCK_HZ;
 	
 	//math, see datasheet
-	volatile long double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
-	volatile long double normLSB = clock_period / cal_count;
-	volatile long double tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
+	cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
+	normLSB = clock_period / cal_count;
+	tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
 
-	//return value of tof in picoseconds
-	volatile  long double tof_ps = tof1 * 1e6; //1e12 - CORRECTION_FACTOR;
+	//return value of tof in microseconds
+	tof_us = tof1 * 1e6; //- CORRECTION_FACTOR;
 	//TDC_DEBUG(tof_ps);
-	return tof_ps;
+	return tof_us;
 }
 //input takes a multiple of 2 (1,2,4...128)
 uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples){

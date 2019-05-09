@@ -42,7 +42,8 @@
 #include "i2c_setup.h"
 #include "main.h"
 
-struct tcp_pcb *TCPpcb;
+volatile struct tcp_pcb *TCPpcb;
+uint32_t address = &TCPpcb;
 struct tcp_pcb *tempPCB;
 struct io_descriptor *io;
 
@@ -50,43 +51,87 @@ unsigned char flags = 0x0;
 unsigned char isrEnable = 0x0;
 unsigned char state = 0x0;
 
+double tof = -1;
+int delayTime = 10;
+char *topLine;
+char bottomLine[20];
+char LCD_Message[33];
+char *TCP_Message;
+
 int main(void)
 {
 	state = state_init;
 	uint8_t buttons = 0;
+	uint8_t activeInterrupts;
 	atmel_start_init();
+	LCD_begin();
+	LCD_print("Initializing...\nConnect Ethernet");
 	start_ethernet();
-	//start_spi(&io);
-	//tdc_setup(&io);
-	//LCD_begin();
-	//LCD_print("Welcome!");
+	start_spi();
+	tdc_setup(io);
+	LCD_begin();
+	LCD_print("Ready!");
 	
 	//sets up new TCP
-	struct ip_addr dest;
-	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
-	TCPpcb = tcp_new();
-	tcp_arg(TCPpcb, NULL);
-	tcp_connect(TCPpcb, &dest, MC_PORT, client_connected);
+ 	struct ip_addr dest;
+ 	IP4_ADDR(&dest, workstationIP_0, workstationIP_1, workstationIP_2, workstationIP_3);
+ 	TCPpcb = tcp_new();
+ 	tcp_arg(TCPpcb, NULL);
+ 	tcp_connect(TCPpcb, &dest, MC_PORT, client_connected);
 
 	while (true) {
 		
-		//buttons = LCD_readButtons();	
+		buttons = LCD_readButtons();	
 
-		if(flags & flag_EthernetActivity)
+		if(flags & flag_TDCTrigger)
 		{
-			flags &= ~flag_EthernetActivity;
-			ethernetif_mac_input(&LWIP_MACIF_desc);
+			flags &= ~flag_TDCTrigger;
+			
+			//send start trigger
+			gpio_set_pin_level(TX_PULSE, true);
+			delay_us(1);
+			gpio_set_pin_level(TX_PULSE, false);
+			
+			delay_us(delayTime-10);
+			
+			gpio_set_pin_level(RX_PULSE, true);
+			delay_us(1);
+			gpio_set_pin_level(RX_PULSE, false);
 		}
-		if((flags & flag_PulseRecvd) && (state == state_listening))
-		{
-			flags &= ~flag_PulseRecvd;
-			state = state_wait;
-			secondConnect();
-		}
+		//add check if node result or remote result
 		if(flags & flag_TDCResults)
 		{
-			//do stuff
+			flags &= ~flag_TDCResults;
+			activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);
+			
+			if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
+			{
+				tof = -1;
+			}
+			else
+			{
+				tof = get_tof(io);			
+			}
+			
+			printTOF(tof);	
+			
+			if(flags & flag_remoteRun)
+			{
+				flags &= ~flag_remoteRun;
+				tcp_write(TCPpcb, bottomLine, strlen(bottomLine), 0);
+			}
 		}
+ 		if(flags & flag_EthernetActivity)
+ 		{
+ 			flags &= ~flag_EthernetActivity;
+ 			ethernetif_mac_input(&LWIP_MACIF_desc);
+ 		}
+  		if((flags & flag_PulseRecvd) && (state == state_listening))
+		{
+  			flags &= ~flag_PulseRecvd;
+  			state = state_wait;
+  			secondConnect();
+  		}
 		if(flags & flag_secConnection)
 		{
 			flags &= ~flag_secConnection;
@@ -103,7 +148,6 @@ int main(void)
 	}
 }
 
-
 void TDC_Trigger_ISR(void)
 {
 	if(!(isrEnable & isrEnable_TDC_Trigger))
@@ -114,8 +158,8 @@ void TDC_Trigger_ISR(void)
 	//TDC_DEBUG("Hit Trig ISR\n");
 	
 	//disables the interrupt
-	//ext_irq_register(TDC_TRIG, NULL);
-	//isrEnable &= ~isrEnable_TDC_Trigger;
+	ext_irq_register(TDC_TRIG, NULL);
+	isrEnable &= ~isrEnable_TDC_Trigger;
 }
 
 void TDC_Interrupt_ISR(void)
@@ -129,8 +173,8 @@ void TDC_Interrupt_ISR(void)
 	//TDC_DEBUG("Hit Interrupt ISR\n");
 	
 	//disables the interrupt
-	//ext_irq_register(TDC_INT, NULL);
-	//isrEnable &= ~isrEnable_TDC_INT;
+	ext_irq_register(TDC_INT, NULL);
+	isrEnable &= ~isrEnable_TDC_INT;
 }
 
 void TDC_LPBK_ISR(void)
@@ -146,7 +190,18 @@ void TDC_LPBK_ISR(void)
 	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
-double singleRun()
+void printTOF(float TOF)
+{
+	gcvt(TOF, 10, &bottomLine);
+	strncat(bottomLine, " us", sizeof(bottomLine)-strlen(bottomLine));
+	strcpy(LCD_Message, topLine);
+	strncat(LCD_Message, "\n", sizeof(LCD_Message)-strlen(LCD_Message));
+	strncat(LCD_Message, bottomLine, sizeof(LCD_Message)-strlen(LCD_Message));
+	
+	LCD_print(LCD_Message);
+}
+
+void startRun()
 {
 	//start ISR
 	ext_irq_register(TDC_TRIG, TDC_Trigger_ISR);
@@ -155,36 +210,6 @@ double singleRun()
 	
 	//start measure
 	start_tof_meas(io);
-
-	//wait for trigger
-	while(!(flags & flag_TDCTrigger)) {}
-	flags &= ~flag_TDCTrigger;
-		
-	//send start trigger
-	gpio_set_pin_level(TX_PULSE, true);	
-	delay_us(1);
-	gpio_set_pin_level(TX_PULSE, false);
-	
-	delay_us(1);
-	
-	gpio_set_pin_level(RX_PULSE, true);
-	delay_us(1);
-	gpio_set_pin_level(RX_PULSE, false);
-	
-	
-	
-	//wait for results
-	while(!(flags & flag_TDCResults)) {}
-		
-	uint8_t activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);	
-		
-	if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
-		return 0;
-		
-	delay_ms(10);
-	
-	return get_tof(io);	
-
 }
 
 void secondConnect()
@@ -200,23 +225,36 @@ void buttonClicked(uint8_t buttons)
 {
 	if(buttons & BUTTON_UP)
 	{
-		LCD_print("UP");
+		topLine = "Short Run";
+		LCD_print(topLine);
+		delayTime = 20;
+		startRun();
 	}
 	if(buttons & BUTTON_DOWN)
 	{
-		LCD_print("DOWN");
+		topLine = "Medium-Long Run";
+		LCD_print(topLine);
+		delayTime = 1000;
+		startRun();
 	}
 	if(buttons & BUTTON_RIGHT)
 	{
-		LCD_print("RIGHT");
+		topLine = "Short-Medium Run";
+		LCD_print(topLine);
+		delayTime = 500;
+		startRun();
 	}
 	if(buttons & BUTTON_LEFT)
 	{
-		LCD_print("LEFT");
+		topLine = "Long Run";
+		LCD_print(topLine);
+		delayTime = 2000;
+		startRun();
 	}
 	if(buttons & BUTTON_SELECT)
 	{
-		LCD_print("SELECT");
+		//display IP line 1
+		//display last time line 2
 	}
 }
 
@@ -224,27 +262,14 @@ void buttonClicked(uint8_t buttons)
 
 void runCommand(char *string)
 {
-	if(compareString(string, "Input", strlen("Input")) )
-	{
-		//calls function to check input fiber
-		printf("Input = True");
-		tcp_write(TCPpcb, "true", strlen("true"), 0);
-	}
-	else if (compareString(string, "Output", strlen("Output")))
-	{
-		//calls function to check output fiber
-		printf("Output = False");
-		tcp_write(TCPpcb, "false", strlen("false"), 0);
-	}
-	else if (compareString(string, "Send Ping", strlen("Send Ping")))
+	if (compareString(string, "Send Ping", strlen("Send Ping")))
 	{	
 		
 		gpio_set_pin_level(TX_PULSE, true);
 		delay_us(1);
 		gpio_set_pin_level(TX_PULSE, false);
 
-		printf("Ping Sent");
-		
+		//printf("Ping Sent");	
 	}
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
@@ -252,7 +277,7 @@ void runCommand(char *string)
 		ext_irq_register(PIO_PD25_IDX,  TDC_LPBK_ISR);
 		delay_us(10);
 		isrEnable |= isrEnable_TDC_LPBK;
-		printf("Listening");
+		//printf("Listening");
 	}
 	else if (compareString(string, "Stop Listening", strlen("Stop Listening")))
 	{
@@ -260,15 +285,19 @@ void runCommand(char *string)
 		ext_irq_register(PIO_PD25_IDX, NULL);
 		isrEnable &= ~isrEnable_TDC_LPBK;
 		
-		printf("Stopped Listening");
-		//tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);
-		
+		//printf("Stopped Listening");
+		//tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);	
 	}
 	else if (compareString(string, "Run", strlen("Run")))
 	{
 		//calls function to do time delay run
-		printf("Running");
-		tcp_write(TCPpcb, "100ns", strlen("100ns"), 0);
+		topLine = "Remote Run";
+		flags |= flag_remoteRun;
+		startRun();
+	}
+	else if (compareString(string, "Get Time", strlen("Get Time")))
+	{
+		tcp_write(TCPpcb, "1000 ns", strlen("1000 ns"), 0);
 	}
 	else if (compareString(string, "State", strlen("State")))
 	{

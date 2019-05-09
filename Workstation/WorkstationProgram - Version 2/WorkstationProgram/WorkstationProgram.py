@@ -64,6 +64,7 @@ def RunAll(NodeList):
             node.conn.settimeout(GEN_TIMEOUT)
         except socket.error as e:
             print("Running failed: Could not get response from node " + str(node.NodeNumber))
+            node.conn.settimeout(GEN_TIMEOUT)
             errorFile.write(str(datetime.datetime.now()) + " " + str(e))
             return NodeList
 
@@ -93,6 +94,7 @@ def SetUp():
     for node in Connections:
         node.NextNode = None
         node.PrevNode = None
+        node.Time = None
 
     for node in Connections:
         try: 
@@ -111,7 +113,7 @@ def SetUp():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(SC_TIMEOUT)
                 s.bind(('', SC_PORT))
-                s.listen(1)
+                s.listen(5)
                 newConn, addr = s.accept()
                 nextIP = str(addr[0])
                 newConn.close()

@@ -48,7 +48,7 @@
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t const commandbuf);
 uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t const commandbuf);
 void tdc_write(struct io_descriptor *const io, uint8_t const commandbuf, uint8_t const databuf);
-long double get_tof(struct io_descriptor *const io);
+double get_tof(struct io_descriptor *const io);
 void tdc_setup(struct io_descriptor *const io);
 uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples);
 uint32_t start_tof_meas(struct io_descriptor *const io);

@@ -41,9 +41,6 @@
 #include "tdc7200.h"
 #include "i2c_setup.h"
 #include "main.h"
-#include <hal_atomic.h>
-#define TDC_DEBUG_ON 1
-#define TDC_DEBUG(message) do{ if(TDC_DEBUG_ON) {	printf("%f\n", message);} } while(0)
 
 struct tcp_pcb *TCPpcb;
 struct tcp_pcb *tempPCB;
@@ -58,12 +55,12 @@ int delayTime = 10;
 char *topLine;
 char bottomLine[];
 char LCD_Message[32];
-char buff[16];
 
 int main(void)
 {
 	state = state_init;
 	uint8_t buttons = 0;
+	uint8_t activeInterrupts;
 	atmel_start_init();
 	//start_ethernet();
 	start_spi();
@@ -71,7 +68,7 @@ int main(void)
 	LCD_begin();
 	LCD_print("Welcome!");
 	
-	uint8_t activeInterrupts;
+	
 
 	//sets up new TCP
 	//struct ip_addr dest;
@@ -192,7 +189,7 @@ void TDC_LPBK_ISR(void)
 	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
-void printTOF(float TOF)
+void printTOF(double TOF)
 {
 	gcvt(tof, 10, bottomLine);
 	strcpy(LCD_Message, topLine);

@@ -50,7 +50,7 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 	return 0;
 }
 //fetches and calculates time of flight from tdc in picoseconds
-long double get_tof(struct io_descriptor *const io ){
+double get_tof(struct io_descriptor *const io ){
 	//ref section 7.4.2.2.1 of datasheet
 	
 	//fetch variables for math
@@ -72,12 +72,12 @@ long double get_tof(struct io_descriptor *const io ){
 	volatile double clock_period = 1.0 / REF_CLOCK_HZ;
 	
 	//math, see datasheet
-	volatile long double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
-	volatile long double normLSB = clock_period / cal_count;
-	volatile long double tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
+	volatile double cal_count = (calibration2 - calibration1)/(CALIBRATION2_PERIODS - 1.0);
+	volatile double normLSB = clock_period / cal_count;
+	volatile double tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
 
 	//return value of tof in picoseconds
-	volatile  long double tof_ps = tof1 * 1e6; //1e12 - CORRECTION_FACTOR;
+	volatile  double tof_ps = (tof1 * 1e6);//- CORRECTION_FACTOR;
 	//TDC_DEBUG(tof_ps);
 	return tof_ps;
 }

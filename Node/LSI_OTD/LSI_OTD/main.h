@@ -15,6 +15,8 @@
 #define flag_TDCResults			0x4
 #define flag_PulseRecvd			0x8
 #define flag_TDCTrigger			0x16
+#define flag_remoteRun			0x32
+#define flag_SendResult			0x64
 
 #define isrEnable_TDC_LPBK		0x1
 #define isrEnable_TDC_INT		0x2
@@ -35,7 +37,8 @@ void TDC_LPBK_ISR(void);
 void secondConnect();
 void buttonClicked(uint8_t buttons);
 
-double singleRun();
+void startRun();
+void printTOF(float TOF);
 
 
 #endif /* MAIN_H_ */
