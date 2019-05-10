@@ -70,7 +70,9 @@ int main(void)
 	start_spi();
 	tdc_setup(io);
 	LCD_begin();
-	LCD_print("Ready!");
+	
+	printIP();
+	
 	
 	//sets up new TCP
  	struct ip_addr dest;
@@ -102,6 +104,7 @@ int main(void)
 		if(flags & flag_TDCResults)
 		{
 			flags &= ~flag_TDCResults;
+			
 			activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);
 			
 			if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
@@ -190,6 +193,23 @@ void TDC_LPBK_ISR(void)
 	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
+void printIP()
+{
+	topLine = "Ready";
+	sprintf(bottomLine, "%u.%u.%u.%u",	((LWIP_MACIF_desc.ip_addr.addr & 0x000000FF)),
+										((LWIP_MACIF_desc.ip_addr.addr & 0x0000FF00) >> 8),
+										((LWIP_MACIF_desc.ip_addr.addr & 0x00FF0000) >> 16),
+										((LWIP_MACIF_desc.ip_addr.addr & 0xFF000000) >> 24)
+										 );
+										
+	
+	strcpy(LCD_Message, topLine);
+	strncat(LCD_Message, "\n", sizeof(LCD_Message)-strlen(LCD_Message));
+	strncat(LCD_Message, bottomLine, sizeof(LCD_Message)-strlen(LCD_Message));
+	
+	LCD_print(LCD_Message);	
+}
+
 void printTOF(float TOF)
 {
 	gcvt(TOF, 10, &bottomLine);
@@ -206,7 +226,8 @@ void startRun()
 	//start ISR
 	ext_irq_register(TDC_TRIG, TDC_Trigger_ISR);
 	ext_irq_register(TDC_INT, TDC_Interrupt_ISR);
-	isrEnable |= isrEnable_TDC_Trigger | isrEnable_TDC_INT;
+	isrEnable |= isrEnable_TDC_Trigger;
+	isrEnable |= isrEnable_TDC_INT;
 	
 	//start measure
 	start_tof_meas(io);
@@ -253,7 +274,6 @@ void buttonClicked(uint8_t buttons)
 	}
 	if(buttons & BUTTON_SELECT)
 	{
-		//display IP line 1
 		//display last time line 2
 	}
 }

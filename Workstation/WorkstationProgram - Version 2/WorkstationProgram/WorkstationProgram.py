@@ -68,6 +68,7 @@ def RunAll(NodeList):
             errorFile.write(str(datetime.datetime.now()) + " " + str(e))
             return NodeList
 
+
     #print the run data
     PrintRun(NodeList)
     print("Done Running.")
@@ -113,7 +114,7 @@ def SetUp():
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.settimeout(SC_TIMEOUT)
                 s.bind(('', SC_PORT))
-                s.listen(5)
+                s.listen(1)
                 newConn, addr = s.accept()
                 nextIP = str(addr[0])
                 newConn.close()
@@ -126,6 +127,7 @@ def SetUp():
             if nextIP == nextNode.addr:
                 currNode.NextNode = nextNode
                 nextNode.PrevNode = currNode
+        time.sleep(0.3)
 
     for node in setupNodes:
         try:

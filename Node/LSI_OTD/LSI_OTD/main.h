@@ -39,6 +39,7 @@ void buttonClicked(uint8_t buttons);
 
 void startRun();
 void printTOF(float TOF);
+void printIP();
 
 
 #endif /* MAIN_H_ */
