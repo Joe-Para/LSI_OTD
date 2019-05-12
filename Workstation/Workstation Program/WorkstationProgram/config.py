@@ -1,3 +1,5 @@
+#CONFIG FILE FOR WORKSTATION
+
 
 #Error File Name
 ERROR_FILE = "workstation_error.error"
@@ -25,5 +27,5 @@ RUN_TIMEOUT = 30.0
 #SC_TIMEOUT
 #This timeout is how long the workstation will wait 
 #for the second connection from a node during setup
-SC_TIMEOUT = 10.0
+SC_TIMEOUT = 5.0
 
