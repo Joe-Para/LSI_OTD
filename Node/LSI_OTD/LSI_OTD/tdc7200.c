@@ -2,7 +2,8 @@
  * tdc7200.c
  *
  * Created: 4/12/2019 7:08:00 PM
- *  Author: paran
+ *  Author: Joe + Jacob
+ * Description: This file has functions used for the TDC7200 chip. Some functions were implemented but not tested (marked). 
  */ 
 
 #include "tdc7200.h"
@@ -12,6 +13,7 @@
 uint32_t time1, time2, clock_count1, calibration1, calibration2 = 0;
 double clock_period, cal_count, normLSB, tof1, tof_us;
 
+//sets up TDC chip
 void tdc_setup(struct io_descriptor *const io){
 	
 	//enable tdc chip, needs clean rising edge some time after power up, fully ready 1.5ms after enable.
@@ -52,7 +54,8 @@ uint32_t start_tof_meas(struct io_descriptor *const io){
 
 	return 0;
 }
-//fetches and calculates time of flight from tdc in picoseconds
+
+//fetches and calculates time of flight from tdc in microseconds
 double get_tof(struct io_descriptor *const io ){
 	//ref section 7.4.2.2.1 of datasheet
 	
@@ -80,10 +83,12 @@ double get_tof(struct io_descriptor *const io ){
 	tof1 = (normLSB*time1)  + (clock_count1*clock_period) - (normLSB * time2);
 
 	//return value of tof in microseconds
-	tof_us = tof1 * 1e6; //- CORRECTION_FACTOR;
+	tof_us = tof1 * 1e6 - CORRECTION_FACTOR;
 	//TDC_DEBUG(tof_ps);
 	return tof_us;
 }
+
+//THIS FUNCTION WAS NOT TESTED 
 //input takes a multiple of 2 (1,2,4...128)
 uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples){
 	uint32_t err = 0;
@@ -113,13 +118,11 @@ uint32_t set_averaging(struct io_descriptor *const io, uint32_t samples){
 	TDC_DEBUG(samples);
 	uint8_t confold = tdc_read_8(io, TDC_CONFIG2);
 	//clear averaging bits [5:3]
-	confold &= 0xC7;
+	confold &= ~(0x111 << 3);
 	confold |= (conf2<<3);
-	tdc_write(io, TDC_CONFIG2, &confold);
+	tdc_write(io, TDC_CONFIG2, confold);
 	return err;
 }
-
-
 //writes one byte to TDC chip
 void tdc_write(struct io_descriptor *const io, uint8_t commandbuf, uint8_t databuf){
 	// need to write 2 bytes, one command one data
@@ -137,24 +140,18 @@ uint8_t tdc_read_8(struct io_descriptor *const io, uint8_t const commandbuf){
 	gpio_set_pin_level(SPI0_SS, false);
 	io_write(io, &commandbuf, 1);
 	io_read(io, &datain, 1);
-	//spi_custom_io_rw(io, &datain, &commandbuf, 2);
-	//datain = datain >> 9; //issue with MISO being 1 clock ahead
 	gpio_set_pin_level(SPI0_SS, true);
 	return datain;
 }
 //reads three bytes from TDC chip
 uint32_t tdc_read_24(struct io_descriptor *const io, uint8_t const commandbuf){
 	// need to write command byte and read 3 data bytes
-	uint8_t datain1 = 0;
-	uint8_t datain2 = 0;
-	uint8_t datain3 = 0;
+	uint8_t datain1, datain2, datain3 = 0;
 	gpio_set_pin_level(SPI0_SS, false);
 	io_write(io, &commandbuf, 1);
 	io_read(io, &datain1, 1);
 	io_read(io, &datain2, 1);
 	io_read(io, &datain3, 1);
-	//spi_custom_io_rw(io, &datain, &commandbuf, 3);
-	//datain = datain >> 1; //issue with MISO being 1 clock ahead
 	gpio_set_pin_level(SPI0_SS, true);
 	return (datain1 << 16) | (datain2 << 8) | datain3;
 }

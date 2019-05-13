@@ -4,7 +4,6 @@
  * This file is a merge of the Adafruit RGB LCD Shield library and the
  * MCP23017 I2C backpack library 
  * Author: Joe Leach
- * 
  */ 
 
 
@@ -25,6 +24,7 @@ uint8_t _button_pins[5];
 
 uint16_t i2cData = 0;
 
+//setup LCD
 void LCD_begin(void){
 	_data_pins[0] = 12;  // really d4
 	_data_pins[1] = 11;  // really d5
@@ -128,6 +128,7 @@ void LCD_begin(void){
     LCD_command(LCD_ENTRYMODESET | _displaymode);
 }
 
+//sets the pin modes on I2C expander
 void LCD_pinMode(uint8_t p, uint8_t d){
 	uint8_t iodir = 0;
 	uint8_t iodiraddr;
@@ -163,6 +164,7 @@ void LCD_pinMode(uint8_t p, uint8_t d){
 	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
+//writes to the I2C expander
 void LCD_digitalWrite(uint8_t p, uint8_t d) {
 	uint8_t gpio;
 	uint8_t gpioaddr, olataddr;
@@ -203,6 +205,7 @@ void LCD_digitalWrite(uint8_t p, uint8_t d) {
 	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
+//reads from the I2C expander
 uint8_t LCD_digitalRead(uint8_t p) {
 	uint8_t gpioaddr;
 	uint8_t gpioin = 0;
@@ -234,6 +237,7 @@ void LCD_setBacklight(uint8_t status) {
 	LCD_digitalWrite(6, ~status & 0x1);
 }
 
+//pull up resistors on I2C expander
 void LCD_pullUp(uint8_t p, uint8_t d) {
 	uint8_t gppu = 0;
 	uint8_t gppuaddr;
@@ -271,6 +275,7 @@ void LCD_pullUp(uint8_t p, uint8_t d) {
 	io_write(&(I2C_AT24MAC.io), &i2cData, 2);
 }
 
+//writing 4 bits for the LCD
 void LCD_write4bits(uint8_t value) {
 	
 		uint16_t out = 0;
@@ -299,6 +304,7 @@ void LCD_write4bits(uint8_t value) {
 		delay_us(100);
 }
 
+//write to GPIOA/B on I2C expander on LCD
 void LCD_writeGPIOAB(uint16_t ba) {
 	i2c_m_sync_set_slaveaddr(&I2C_AT24MAC, DISP_ADDR, I2C_M_SEVEN);
 	
@@ -321,6 +327,7 @@ void LCD_write8bits(uint8_t value) {
 	LCD_pulseEnable();
 }
 
+//pulses Enable pin on LCD
 void LCD_pulseEnable(void) {
 	LCD_digitalWrite(_enable_pin, LOW);
 	delay_us(1);
@@ -330,6 +337,7 @@ void LCD_pulseEnable(void) {
 	delay_us(100);   // commands need > 37us to settle
 }
 
+//reads buttons on LCD
 uint8_t LCD_readButtons(void) {
 	uint8_t reply = 0x1F;
 
@@ -339,6 +347,7 @@ uint8_t LCD_readButtons(void) {
 	return reply;
 }
 
+//reads GPIOA/B on I2C expander
 uint16_t LCD_readGPIOAB(void) {
 	uint16_t ba = 0;
 	uint8_t a;
@@ -359,11 +368,13 @@ uint16_t LCD_readGPIOAB(void) {
 	return ba;
 }
 
+//commands on LCD
  void LCD_command(uint8_t value) 
  {
 	LCD_send(value, LOW);
 }
 
+//values on LCD
 void LCD_write(uint8_t value)
 {
 	LCD_send(value, HIGH);
@@ -488,6 +499,9 @@ void LCD_createChar(uint8_t location, uint8_t charmap[]) {
 	LCD_command(LCD_SETDDRAMADDR);  // unfortunately resets the location to 0,0
 }
 
+
+//prints string to LCD
+//Can handle "\n" in string to print on next line
 void LCD_print(char message[])
 {
 	int i = 0;

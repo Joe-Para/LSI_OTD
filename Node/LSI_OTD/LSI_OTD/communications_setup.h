@@ -2,13 +2,14 @@
  * communications_setup.h
  *
  * Created: 4/12/19 2:05:24 AM
- *  Author: Jacob
+ *  Author: Jacob Candelaria
  */ 
 
 
 #ifndef COMMUNICATIONS_SETUP_H_
 #define COMMUNICATIONS_SETUP_H_
 
+//workstation IP address - must be sent on current network
 #define workstationIP_0		10
 #define workstationIP_1		0
 #define workstationIP_2		2

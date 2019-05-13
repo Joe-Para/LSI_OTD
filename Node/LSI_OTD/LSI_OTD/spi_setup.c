@@ -7,7 +7,7 @@
 
 #include "spi_setup.h"
 
-
+//starts the SPI interface on SAME70
 void start_spi()
 {
 		spi_m_sync_get_io_descriptor(&SPI_0, &io);

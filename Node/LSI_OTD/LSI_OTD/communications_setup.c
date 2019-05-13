@@ -2,7 +2,11 @@
  * communications_setup.c
  *
  * Created: 4/12/19 2:05:10 AM
- *  Author: Jacob
+ *  Author: Jacob Candelaria
+ *
+ * Description: This file has all the required functions for the TCP communication.
+ * Functions were either provided by Atmel or retrieved from https://lists.nongnu.org/archive/html/lwip-users/2008-07/msg00026.html
+ * and modified. 
  */ 
 
 #include <communications_setup.h>
@@ -29,11 +33,13 @@ void systick_enable(void)
 	SysTick_Config((CONF_CPU_FREQUENCY) / 1000);
 }
 
+//sets a flag when there is Ethernet activity (from Atmel)
 void mac_receive_cb(struct mac_async_descriptor *desc)
 {
 	flags |= flag_EthernetActivity;
 }
 
+//reads the mac address from the SAME70 (from Atmel)
 static void read_macaddress(u8_t *mac)
 {
 	#if CONF_AT24MAC_ADDRESS != 0
@@ -49,6 +55,7 @@ static void read_macaddress(u8_t *mac)
 	#endif
 }
 
+//starts up the ethernet connection (from Atmel)
 void start_ethernet()
 {
 	int32_t ret;
@@ -58,10 +65,10 @@ void start_ethernet()
 
 	systick_enable();
 
-	printf("\r\nHello ATMEL World!\r\n");
 	mac_async_register_callback(&MACIF, MAC_ASYNC_RECEIVE_CB, (FUNC_PTR)mac_receive_cb);
 	
 
+	//waits for Ethernet cable to plugged in 
 	eth_ipstack_init();
 	do {
 		ret = ethernet_phy_get_link_status(&MACIF_PHY_desc, &link_up);
@@ -69,6 +76,8 @@ void start_ethernet()
 			break;
 		}
 	} while (true);
+	
+	//initializes other Ethernet components
 	printf("Ethernet Connection established\n");
 	LWIP_MACIF_init(mac);
 	netif_set_up(&LWIP_MACIF_desc);
@@ -86,6 +95,7 @@ void start_ethernet()
 	
 }
 
+//TCP communication function, used to closes the PCB for communication
 void client_close(struct tcp_pcb *pcb)
 {
 	tcp_arg(pcb, NULL);
@@ -95,12 +105,15 @@ void client_close(struct tcp_pcb *pcb)
 	connectionCount -= 1;
 }
 
+//called when a TCP connection is made
 err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 {
+	//counts the number of connections
 	connectionCount += 1;
 	
 	LWIP_UNUSED_ARG(arg);
 	
+	//used for node - sets state to wait on first connection or on second connection it sets a flag
 	if (connectionCount == 1)
 		state = state_wait;
 	else if (connectionCount > 2)
@@ -109,6 +122,7 @@ err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 		return err;
 	}
 	
+	//sets callback functions for different TCP states
 	tcp_sent(pcb, client_sent);
 	tcp_recv(pcb, client_recv);
 	tcp_poll(pcb, client_poll, 4);
@@ -117,6 +131,7 @@ err_t client_connected(void *arg, struct tcp_pcb *pcb, err_t err)
 	return err;
 }
 
+//TCP sent callback
 err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
 {
 	LWIP_UNUSED_ARG(arg);
@@ -124,6 +139,7 @@ err_t client_sent(void *arg, struct tcp_pcb *pcb, u16_t len)
 	return ERR_OK;
 }
 
+//TCP received callback
 err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 {
 	char *string;
@@ -133,8 +149,10 @@ err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 	{
 		tcp_recved(pcb, p->tot_len);
 
+
+		//gets the string sent over TCP (commands from workstation)
 		string = p->payload;
-		
+		//runs the command
 		runCommand(string);
 		
 		pbuf_free(p);
@@ -146,6 +164,7 @@ err_t client_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err)
 	return ERR_OK;
 }
 
+//TCP client_poll callback
 err_t client_poll(void *arg, struct tcp_pcb *pcb)
 {
 	static int counter = 1;
@@ -157,6 +176,7 @@ err_t client_poll(void *arg, struct tcp_pcb *pcb)
 	return ERR_OK;
 }
 
+//TCP client_err callback
 err_t client_err(void *arg, err_t err)
 {
 	LWIP_UNUSED_ARG(arg);
@@ -165,6 +185,8 @@ err_t client_err(void *arg, err_t err)
 	return ERR_OK;
 }
 
+
+//used to compare strings from TCP and expected commmands
 bool compareString(char *string1, char *string2, int string2Len)
 {
 	for(int i = 0; i < string2Len; i++)
