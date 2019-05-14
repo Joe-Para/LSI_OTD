@@ -60,6 +60,7 @@ char *TCP_Message;
 
 int main(void)
 {
+	//initialization
 	state = state_init;
 	uint8_t buttons = 0;
 	uint8_t activeInterrupts;
@@ -71,6 +72,8 @@ int main(void)
 	tdc_setup(io);
 	LCD_begin();
 	
+	topLine = "Ready";
+	//prints the IP address
 	printIP();
 	
 	
@@ -83,8 +86,10 @@ int main(void)
 
 	while (true) {
 		
+		//checks button pressed
 		buttons = LCD_readButtons();	
 
+		//if TDC is ready for a trigger
 		if(flags & flag_TDCTrigger)
 		{
 			flags &= ~flag_TDCTrigger;
@@ -100,13 +105,14 @@ int main(void)
 			delay_us(1);
 			gpio_set_pin_level(RX_PULSE, false);
 		}
-		//add check if node result or remote result
+		//if TDC has results 
 		if(flags & flag_TDCResults)
 		{
 			flags &= ~flag_TDCResults;
 			
 			activeInterrupts = tdc_read_8(io, TDC_INT_STATUS);
 			
+			//if overflow occurs tof = -1
 			if ((activeInterrupts & TDC_CLOCK_CNTR_OVF_INT) || (activeInterrupts & TDC_COARSE_CNTR_OVF_INT))
 			{
 				tof = -1;
@@ -118,28 +124,33 @@ int main(void)
 			
 			printTOF(tof);	
 			
+			//if remote run, send time to workstation
 			if(flags & flag_remoteRun)
 			{
 				flags &= ~flag_remoteRun;
 				tcp_write(TCPpcb, bottomLine, strlen(bottomLine), 0);
 			}
 		}
+		//do ethernet stuff if theres ethernet Activity 
  		if(flags & flag_EthernetActivity)
  		{
  			flags &= ~flag_EthernetActivity;
  			ethernetif_mac_input(&LWIP_MACIF_desc);
  		}
+		 //when listening- make a second connection for workstation setup
   		if((flags & flag_PulseRecvd) && (state == state_listening))
 		{
   			flags &= ~flag_PulseRecvd;
   			state = state_wait;
   			secondConnect();
   		}
+		  //close the second connection once its established
 		if(flags & flag_secConnection)
 		{
 			flags &= ~flag_secConnection;
 			client_close(tempPCB);
 		}	
+		//perform the button click functions
 		if(buttons)
 		{
 			buttonClicked(buttons);
@@ -151,8 +162,10 @@ int main(void)
 	}
 }
 
+//ISR for TDC_trigger line
 void TDC_Trigger_ISR(void)
 {
+	//used because when activating ISR it calls the ISR and we don't want false flags
 	if(!(isrEnable & isrEnable_TDC_Trigger))
 		return;
 	
@@ -165,8 +178,10 @@ void TDC_Trigger_ISR(void)
 	isrEnable &= ~isrEnable_TDC_Trigger;
 }
 
+//ISR for TDC Interrupt line
 void TDC_Interrupt_ISR(void)
 {
+	//used because when activating ISR it calls the ISR and we don't want false flags
 	if(!(isrEnable & isrEnable_TDC_INT))
 		return;
 	
@@ -180,8 +195,10 @@ void TDC_Interrupt_ISR(void)
 	isrEnable &= ~isrEnable_TDC_INT;
 }
 
+//ISR for Loopback line
 void TDC_LPBK_ISR(void)
 {
+	//used because when activating ISR it calls the ISR and we don't want false flags
 	if(!(isrEnable & isrEnable_TDC_LPBK)) 
 		return;
 	
@@ -193,9 +210,9 @@ void TDC_LPBK_ISR(void)
 	isrEnable &= ~isrEnable_TDC_LPBK;
 }
 
+//prints IP address on LCD
 void printIP()
 {
-	topLine = "Ready";
 	sprintf(bottomLine, "%u.%u.%u.%u",	((LWIP_MACIF_desc.ip_addr.addr & 0x000000FF)),
 										((LWIP_MACIF_desc.ip_addr.addr & 0x0000FF00) >> 8),
 										((LWIP_MACIF_desc.ip_addr.addr & 0x00FF0000) >> 16),
@@ -210,6 +227,7 @@ void printIP()
 	LCD_print(LCD_Message);	
 }
 
+//prints TOF on the LCD
 void printTOF(float TOF)
 {
 	gcvt(TOF, 10, &bottomLine);
@@ -221,6 +239,7 @@ void printTOF(float TOF)
 	LCD_print(LCD_Message);
 }
 
+//tells the TDC to start measurement and enables ISR for TDC trigger + TDC interrrupt
 void startRun()
 {
 	//start ISR
@@ -233,6 +252,7 @@ void startRun()
 	start_tof_meas(io);
 }
 
+//makes a second connection to workstation for workstation setup
 void secondConnect()
 {
 	struct ip_addr dest;
@@ -241,6 +261,9 @@ void secondConnect()
 	tcp_arg(tempPCB, NULL);
 	tcp_connect(tempPCB, &dest, SC_PORT, client_connected);
 }
+
+//performs functions for buttons clicked
+//ideal select = run, up = show IP, right = show last run...down/left does whatever else needed
 
 void buttonClicked(uint8_t buttons)
 {
@@ -274,14 +297,16 @@ void buttonClicked(uint8_t buttons)
 	}
 	if(buttons & BUTTON_SELECT)
 	{
-		//display last time line 2
+		topLine = "IP:";
+		printIP();
 	}
 }
 
 
-
+//different commands that workstation should send
 void runCommand(char *string)
 {
+	//sends a ping to TX_Pulse line
 	if (compareString(string, "Send Ping", strlen("Send Ping")))
 	{	
 		
@@ -291,6 +316,7 @@ void runCommand(char *string)
 
 		//printf("Ping Sent");	
 	}
+	//sets node state to Listen
 	else if (compareString(string, "Listen", strlen("Listen")))
 	{
 		state = state_listening;
@@ -299,6 +325,7 @@ void runCommand(char *string)
 		isrEnable |= isrEnable_TDC_LPBK;
 		//printf("Listening");
 	}
+	//set node start to wait from listening
 	else if (compareString(string, "Stop Listening", strlen("Stop Listening")))
 	{
 		state = state_wait;
@@ -306,8 +333,8 @@ void runCommand(char *string)
 		isrEnable &= ~isrEnable_TDC_LPBK;
 		
 		//printf("Stopped Listening");
-		//tcp_write(TCPpcb, "Stopped Listening", strlen("Stopped Listening"), 0);	
 	}
+	//starts a remote run
 	else if (compareString(string, "Run", strlen("Run")))
 	{
 		//calls function to do time delay run
@@ -315,10 +342,7 @@ void runCommand(char *string)
 		flags |= flag_remoteRun;
 		startRun();
 	}
-	else if (compareString(string, "Get Time", strlen("Get Time")))
-	{
-		tcp_write(TCPpcb, "1000 ns", strlen("1000 ns"), 0);
-	}
+	//returns the node state to workstation
 	else if (compareString(string, "State", strlen("State")))
 	{
 		if(state == state_init)
@@ -328,25 +352,13 @@ void runCommand(char *string)
 		else if (state == state_wait)
 			tcp_write(TCPpcb, "Wait", strlen("Wait"), 0);
 	}
+	//closes TCP connection with workstation
 	else if (compareString(string, "Close Connection", strlen("Close Connection")))
 	{
 		//closes TCP connection
 		printf("Closing connection");
 		tcp_write(TCPpcb, "Closing Connection", strlen("Closing Connection"), 0);
 		client_close(TCPpcb);
-	}
-	//on & off are for debugging
-	else if (compareString(string, "On", strlen("On")))
-	{
-		printf("LED On");
-		tcp_write(TCPpcb, "LED On", strlen("LED On"), 0);
-		gpio_set_pin_level(LED0, false);
-	}
-	else if (compareString(string, "Off", strlen("Off")))
-	{
-		printf("LED Off");
-		tcp_write(TCPpcb, "LED Off", strlen("LED Off"), 0);
-		gpio_set_pin_level(LED0, true);
 	}
 	else
 	{
